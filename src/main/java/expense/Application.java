@@ -1,11 +1,7 @@
 package expense;
 
-import expense.model.Tag;
-import expense.service.TagService;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
@@ -18,7 +14,7 @@ public class Application {
         SpringApplication.run(Application.class);
     }
 
-    @Bean
+   /* @Bean
     public CommandLineRunner demo(TagService tagService) {
         return (args) -> {
 
@@ -32,6 +28,6 @@ public class Application {
                 System.out.println("TAG: {}" + tag);
             }
         };
-    }
+    }*/
 
 }

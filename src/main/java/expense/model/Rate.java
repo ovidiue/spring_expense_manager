@@ -1,5 +1,7 @@
 package expense.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -7,6 +9,7 @@ import java.util.Date;
  * Created by Ovidiu on 03-Oct-18.
  */
 @Entity
+@Data
 public class Rate {
     @Column
     private Double amount;
@@ -20,11 +23,4 @@ public class Rate {
     @Id
     @GeneratedValue
     private Long id;
-
-    public Rate(Double amount, Date date, String observation) {
-        this.amount = amount;
-        this.date = date;
-        this.observation = observation;
-    }
-
 }

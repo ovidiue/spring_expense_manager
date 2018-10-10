@@ -10,6 +10,10 @@ buildscript {
     }
 }
 
+plugins {
+    id 'net.ltgt.apt' version '0.10'
+}
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
@@ -21,6 +25,7 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven { url 'https://projectlombok.org/edge-releases' }
 }
 
 
@@ -31,4 +36,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     runtimeOnly('org.springframework.boot:spring-boot-devtools')
     compile('com.h2database:h2')
+    compileOnly 'org.projectlombok:lombok:edge-SNAPSHOT'
+
+    apt 'org.projectlombok:lombok:edge-SNAPSHOT'
 }
