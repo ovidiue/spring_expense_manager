@@ -1,7 +1,7 @@
 package expense;
 
 import expense.model.Tag;
-import expense.repository.TagServiceImpl;
+import expense.service.TagService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,7 +19,7 @@ public class Application {
     }
 
     @Bean
-    public CommandLineRunner demo(TagServiceImpl tagService) {
+    public CommandLineRunner demo(TagService tagService) {
         return (args) -> {
 
             tagService.save(new Tag("TEST"));

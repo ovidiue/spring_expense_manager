@@ -1,27 +1,25 @@
-package expense.repository;
+package expense.service;
 
 import expense.model.Tag;
+import expense.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
- * Created by Ovidiu on 08-Oct-18.
+ * Created by Ovidiu on 10-Oct-18.
  */
 @Service
-public class TagServiceImpl implements TagService {
+public class TagService {
     @Autowired
-    TagRepository tagRepository;
+    private TagRepository tagRepository;
 
-    @Override
     public List<Tag> findAll() {
         return tagRepository.findAll();
     }
 
-    @Override
-    public void save(Tag tag) {
-        tagRepository.save(tag);
+    public Tag save(Tag tag) {
+        return tagRepository.save(tag);
     }
-
 }

@@ -30,7 +30,7 @@ public class RateController {
         logger.info("Fetch tags");
         model.addAttribute("rates", rates);
         logger.info("Add rates on model {}", rates);
-        return "index";
+        return "index.html";
     }
 
 }
