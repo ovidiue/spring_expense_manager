@@ -1,33 +1,34 @@
 package expense;
 
 import expense.model.Tag;
-import expense.repository.TagRepository;
-import lombok.extern.slf4j.Slf4j;
+import expense.repository.TagServiceImpl;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * Created by Ovidiu on 04-Oct-18.
  */
 @SpringBootApplication
-@Slf4j
+@ComponentScan
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class);
     }
 
     @Bean
-    public CommandLineRunner demo(TagRepository tagRepository) {
+    public CommandLineRunner demo(TagServiceImpl tagService) {
         return (args) -> {
-            tagRepository.save(new Tag("TEST"));
-            tagRepository.save(new Tag("PORTOCALE"));
-            tagRepository.save(new Tag("BANANE"));
-            tagRepository.save(new Tag("ALBATROSI"));
+
+            tagService.save(new Tag("TEST"));
+            tagService.save(new Tag("PORTOCALE"));
+            tagService.save(new Tag("BANANE"));
+            tagService.save(new Tag("ALBATROSI"));
             System.out.println("Tags found with findAll:");
             System.out.println("________________________");
-            for (Tag tag : tagRepository.findAll()) {
+            for (Tag tag : tagService.findAll()) {
                 System.out.println("TAG: {}" + tag);
             }
         };

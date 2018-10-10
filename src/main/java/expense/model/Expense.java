@@ -1,7 +1,5 @@
 package expense.model;
 
-import lombok.Data;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,7 +9,7 @@ import java.util.List;
  * Created by Ovidiu on 03-Oct-18.
  */
 @Entity
-@Data
+
 public class Expense {
     @Column
     private String title;

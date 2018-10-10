@@ -1,7 +1,5 @@
 package expense.model;
 
-import lombok.Data;
-
 import javax.persistence.*;
 
 /**
@@ -9,7 +7,7 @@ import javax.persistence.*;
  */
 
 @Entity
-@Data
+
 public class Category {
     private static final String DEFAULT_COLOR = "#fff";
     @Column
@@ -20,7 +18,7 @@ public class Category {
     private String color;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     public Category() {
     }
