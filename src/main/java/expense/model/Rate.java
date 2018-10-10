@@ -19,7 +19,7 @@ public class Rate {
     private Expense expense;
     @Id
     @GeneratedValue
-    private int id;
+    private Long id;
 
     public Rate(Double amount, Date date, String observation) {
         this.amount = amount;

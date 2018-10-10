@@ -36,7 +36,7 @@ public class Expense {
     private List<Rate> payedRates;
     @Id
     @GeneratedValue
-    private int id;
+    private Long id;
 
     public Expense(String title,
                    String description,
