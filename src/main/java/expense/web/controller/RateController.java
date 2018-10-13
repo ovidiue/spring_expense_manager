@@ -20,17 +20,14 @@ public class RateController {
     TagRepository tagRepository;
     Logger logger = LoggerFactory.getLogger(RateController.class);
 
-    public RateController() {
-    }
-
-    @GetMapping("/")
+    @GetMapping("/rates")
     public String getRates(Model model) {
         logger.info("Access index");
         List<Tag> rates = tagRepository.findAll();
         logger.info("Fetch tags");
         model.addAttribute("rates", rates);
         logger.info("Add rates on model {}", rates);
-        return "index";
+        return "rates-listing";
     }
 
 }
