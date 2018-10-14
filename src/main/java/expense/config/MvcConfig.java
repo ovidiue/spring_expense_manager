@@ -23,6 +23,7 @@ public class MvcConfig extends WebMvcConfigurationSupport {
         templateResolver.setPrefix("templates/");
         templateResolver.setTemplateMode("HTML5");
         templateResolver.setCharacterEncoding("UTF-8");
+        templateResolver.setCacheable(false);
         return templateResolver;
     }
 
@@ -38,6 +39,7 @@ public class MvcConfig extends WebMvcConfigurationSupport {
         ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
         viewResolver.setTemplateEngine(getSpringTemplateEngine());
         viewResolver.setCharacterEncoding("UTF-8");
+        viewResolver.setCache(false);
         return viewResolver;
     }
 
