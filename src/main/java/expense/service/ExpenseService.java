@@ -16,6 +16,10 @@ public class ExpenseService {
     private ExpenseRepository expenseRepository;
 
     public List<Expense> findAll() {
-        return (List<Expense>) expenseRepository.findAll();
+        return expenseRepository.findAll();
+    }
+
+    public void save(Expense expense) {
+        expenseRepository.save(expense);
     }
 }
