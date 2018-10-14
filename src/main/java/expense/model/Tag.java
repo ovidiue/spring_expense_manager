@@ -19,6 +19,8 @@ public class Tag {
     private String name;
     @Column
     private String color;
+    @Column
+    private String description;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
