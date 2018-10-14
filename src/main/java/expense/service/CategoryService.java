@@ -18,4 +18,8 @@ public class CategoryService {
     public List<Category> findAll() {
         return (List<Category>) categoryRepository.findAll();
     }
+
+    public void save(Category category) {
+        this.categoryRepository.save(category);
+    }
 }
