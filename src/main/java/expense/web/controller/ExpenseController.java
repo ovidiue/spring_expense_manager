@@ -1,15 +1,18 @@
 package expense.web.controller;
 
 import expense.model.Expense;
+import expense.model.Tag;
 import expense.service.CategoryService;
 import expense.service.ExpenseService;
 import expense.service.TagService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -18,6 +21,7 @@ import java.util.List;
  * Created by Ovidiu on 13-Oct-18.
  */
 @Controller
+@Slf4j
 public class ExpenseController {
     @Autowired
     private ExpenseService expenseService;
@@ -29,6 +33,9 @@ public class ExpenseController {
     @GetMapping("/expenses")
     public String getExpenses(Model model) {
         List<Expense> expenses = expenseService.findAll();
+        expenses.forEach(expense -> {
+            log.info("expense: {}", expense);
+        });
         model.addAttribute("expenses", expenses);
         return "expenses-listing";
     }
@@ -42,7 +49,20 @@ public class ExpenseController {
     }
 
     @RequestMapping(value = {"/expenses"}, method = {RequestMethod.POST})
-    public String addNewExpense(Expense expense, RedirectAttributes redirectAttributes) {
+    public String addNewExpense(@RequestParam(name = "categoryId") Long categoryId,
+                                @RequestParam(name = "tagsIds") List<Long> tagIds,
+                                Expense expense,
+                                RedirectAttributes redirectAttributes) {
+        log.info("categoryId: {}", categoryId);
+        log.info("tagsIds: {}", tagIds);
+        categoryService.findById(categoryId)
+                .ifPresent(category -> {
+                    log.info("CATEGORY FOUND: {}", category);
+                    expense.setCategory(category);
+                });
+        List<Tag> tags = tagService.findAllByIds(tagIds);
+        log.info("save tags: {}", tags);
+        log.info("EXPENSE TO SAVE: {}", expense);
         expenseService.save(expense);
         return "redirect:/expenses";
     }
