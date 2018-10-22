@@ -1,6 +1,7 @@
 package expense.model;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.List;
  */
 @Entity
 @Data
+@Slf4j
 public class Expense {
     @Column
     private String title;
@@ -25,17 +27,13 @@ public class Expense {
     private Date dueDate;
     @Column
     private Double amount;
-    /*@Column*/
-    @OneToOne(fetch = FetchType.EAGER)
-    private Category category;
-    /*@Column*/
-    @ManyToMany(cascade = CascadeType.DETACH)
-    private List<Tag> tags;
-    @OneToMany(mappedBy = "expense",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    private List<Rate> payedRates;
     @Id
     @GeneratedValue
     private Long id;
+    @Transient
+    private List<Tag> tags;
+    @Transient
+    private Category category;
+    @Transient
+    private List<Rate> rates;
 }

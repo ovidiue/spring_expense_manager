@@ -17,7 +17,7 @@ public class Rate {
     private Date date;
     @Column
     private String observation;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "expense_id")
     private Expense expense;
     @Id

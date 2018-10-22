@@ -24,4 +24,7 @@ public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne
+    @JoinColumn(name = "tag_expense_id")
+    private Expense expense;
 }
