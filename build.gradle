@@ -36,4 +36,5 @@ dependencies {
     compile('com.h2database:h2')
     compileOnly 'org.projectlombok:lombok:edge-SNAPSHOT'
     apt 'org.projectlombok:lombok:edge-SNAPSHOT'
+    testCompile group: 'org.slf4j', name: 'slf4j-simple', version: '1.6.1'
 }
