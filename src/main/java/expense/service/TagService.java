@@ -22,4 +22,8 @@ public class TagService {
     public Tag save(Tag tag) {
         return tagRepository.save(tag);
     }
+
+    public List<Tag> findAllByIds(List<Long> ids) {
+        return tagRepository.findAllByIds(ids);
+    }
 }
