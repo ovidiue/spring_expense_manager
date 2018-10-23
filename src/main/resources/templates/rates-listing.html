@@ -5,18 +5,26 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <th:block th:replace="/fragments/styles::styles"></th:block>
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/v/bs4/dt-1.10.18/cr-1.5.0/rr-1.2.4/datatables.min.css"/>
 </head>
 <body>
 <div th:replace="index :: navigation"></div>
-<div class="container-fluid mar-top20">
+<div class="container mar-top20">
     <h3>Rates</h3>
+    <div class="row">
+        <div class="col">
+            <table id="ratesTable" class="table display" width="100%"></table>
+            <a class="btn btn-primary" th:href="@{/rates/add}">Add</a>
+        </div>
+    </div>
 </div>
 <script th:inline="javascript">
     RATES = [[${rates}]];
 </script>
-<script th:inline="javascript">
-    TAGS = [[${rates}]]
-</script>
 <div th:replace="fragments/scripts::scripts"></div>
+<script type="text/javascript"
+        src="https://cdn.datatables.net/v/bs4/dt-1.10.18/cr-1.5.0/rr-1.2.4/datatables.min.js"></script>
+<script th:src="@{js/rates-listing.js}" type="text/javascript"></script>
 </body>
 </html>

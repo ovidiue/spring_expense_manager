@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -63,6 +64,7 @@ public class ExpenseController {
         List<Tag> tags = tagService.findAllByIds(tagIds);
         log.info("save tags: {}", tags);
         log.info("EXPENSE TO SAVE: {}", expense);
+        expense.setCreatedOn(new Date());
         expenseService.save(expense);
         return "redirect:/expenses";
     }
