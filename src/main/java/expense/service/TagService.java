@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Ovidiu on 10-Oct-18.
@@ -23,7 +24,7 @@ public class TagService {
         return tagRepository.save(tag);
     }
 
-    public List<Tag> findAllByIds(List<Long> ids) {
-        return tagRepository.findAllByIds(ids);
+    public Optional<List<Tag>> findAllByIds(List<Long> ids) {
+        return Optional.ofNullable(this.tagRepository.findAllByIds(ids));
     }
 }

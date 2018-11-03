@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 
 /**
  * Created by Ovidiu on 03-Oct-18.
@@ -14,6 +15,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Transactional
 public class Tag {
     @Column
     private String name;
@@ -24,7 +26,7 @@ public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name = "tag_expense_id")
-    private Expense expense;
+    private Expense expense;*/
 }

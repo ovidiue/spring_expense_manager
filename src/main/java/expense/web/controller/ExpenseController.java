@@ -1,7 +1,6 @@
 package expense.web.controller;
 
 import expense.model.Expense;
-import expense.model.Tag;
 import expense.service.CategoryService;
 import expense.service.ExpenseService;
 import expense.service.TagService;
@@ -35,7 +34,7 @@ public class ExpenseController {
     public String getExpenses(Model model) {
         List<Expense> expenses = expenseService.findAll();
         expenses.forEach(expense -> {
-            log.info("expense: {}", expense);
+            log.info("\nexpense: {}\n", expense);
         });
         model.addAttribute("expenses", expenses);
         return "expenses-listing";
@@ -56,13 +55,16 @@ public class ExpenseController {
                                 RedirectAttributes redirectAttributes) {
         log.info("categoryId: {}", categoryId);
         log.info("tagsIds: {}", tagIds);
+
         categoryService.findById(categoryId)
                 .ifPresent(category -> {
                     log.info("CATEGORY FOUND: {}", category);
                     expense.setCategory(category);
                 });
-        List<Tag> tags = tagService.findAllByIds(tagIds);
-        log.info("save tags: {}", tags);
+        tagService.findAllByIds(tagIds)
+                .ifPresent(tags -> {
+                    expense.setTags(tags);
+                });
         log.info("EXPENSE TO SAVE: {}", expense);
         expense.setCreatedOn(new Date());
         expenseService.save(expense);

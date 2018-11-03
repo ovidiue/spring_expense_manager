@@ -33,7 +33,33 @@ let columns = [
     }
 ];
 
+let columnDefs = [
+    {
+        targets: 7,
+        render: function (data, type, row, meta) {
+            return extractArrAsString(data);
+        }
+    },
+    {
+        targets: 6,
+        render: function (data, type, row, meta) {
+            return data.name
+        }
+    }];
+
+function extractArrAsString(arr) {
+    if (arr) {
+        return arr.map(el => el.name)
+            .join(",");
+    }
+
+    return "";
+}
+
 $('#expensesTable').DataTable({
     data: EXPENSES,
-    columns: columns
+    columns: columns,
+    columnDefs: columnDefs
 });
+
+console.log("expense objects: ", EXPENSES);

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @Entity
 @Data
 @Slf4j
+@Transactional
 public class Expense {
     @Column
     private String title;
@@ -30,10 +32,10 @@ public class Expense {
     @Id
     @GeneratedValue
     private Long id;
-    @Transient
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Tag> tags;
-    @Transient
+    @ManyToOne
     private Category category;
-    @Transient
-    private List<Rate> rates;
+/*    @OneToMany
+    private List<Rate> rates;*/
 }
