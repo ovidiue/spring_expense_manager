@@ -32,7 +32,7 @@ public class Expense {
     @Id
     @GeneratedValue
     private Long id;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     private List<Tag> tags;
     @ManyToOne
     private Category category;

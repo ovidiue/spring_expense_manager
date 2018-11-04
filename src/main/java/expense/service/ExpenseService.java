@@ -1,6 +1,7 @@
 package expense.service;
 
 import expense.model.Expense;
+import expense.model.Tag;
 import expense.repository.ExpenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,5 +22,9 @@ public class ExpenseService {
 
     public void save(Expense expense) {
         expenseRepository.save(expense);
+    }
+
+    public List<Expense> findAllThatHaveTag(Tag tag) {
+        return expenseRepository.findAllWhereTag(tag);
     }
 }
