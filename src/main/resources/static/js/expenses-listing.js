@@ -43,7 +43,7 @@ let columnDefs = [
     {
         targets: 6,
         render: function (data, type, row, meta) {
-            return data.name
+            return data ? data.name : ""
         }
     }];
 

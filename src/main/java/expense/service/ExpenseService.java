@@ -1,5 +1,6 @@
 package expense.service;
 
+import expense.model.Category;
 import expense.model.Expense;
 import expense.model.Tag;
 import expense.repository.ExpenseRepository;
@@ -26,5 +27,9 @@ public class ExpenseService {
 
     public List<Expense> findAllThatHaveTag(Tag tag) {
         return expenseRepository.findAllWhereTag(tag);
+    }
+
+    public List<Expense> findAllWithCategory(Category category) {
+        return expenseRepository.findAllWithCategory(category);
     }
 }

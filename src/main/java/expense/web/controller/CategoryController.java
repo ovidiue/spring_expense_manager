@@ -2,12 +2,13 @@ package expense.web.controller;
 
 import expense.model.Category;
 import expense.service.CategoryService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import expense.service.ExpenseService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -18,11 +19,13 @@ import java.util.List;
  * Created by Ovidiu on 13-Oct-18.
  */
 @Controller
+@Slf4j
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    private Logger logger = LoggerFactory.getLogger(TagController.class);
+    @Autowired
+    private ExpenseService expenseService;
 
     public CategoryController() {
     }
@@ -36,9 +39,29 @@ public class CategoryController {
 
     @RequestMapping({"categories/add"})
     public String addCategory(Model model) {
-        logger.info("Fetch add view");
+        log.info("Fetch add view");
         model.addAttribute("category", new Category());
         return "category-add";
+    }
+
+    @RequestMapping(
+            value = {"categories/delete/{catId}"},
+            method = {RequestMethod.POST, RequestMethod.GET})
+    public String deleteCat(@PathVariable(name = "catId") Long catId, RedirectAttributes redirectAttributes) {
+        log.info("deleteCat called");
+        log.info("Cat id to delete: {}", catId);
+        categoryService.findById(catId)
+                .ifPresent(category -> {
+                    log.info("tag to delete: {}", category);
+                    expenseService.findAllWithCategory(category)
+                            .forEach(expense -> {
+                                log.info("expense category: {}", expense);
+                                expense.setCategory(null);
+                                expenseService.save(expense);
+                            });
+                    categoryService.deleteCategory(category);
+                });
+        return "redirect:/categories";
     }
 
     @RequestMapping(
@@ -46,7 +69,7 @@ public class CategoryController {
             method = {RequestMethod.POST}
     )
     public String addNewCategory(Category category, RedirectAttributes redirectAttributes) {
-        logger.info("Saving called for tag: {}", category);
+        log.info("Saving called for tag: {}", category);
         this.categoryService.save(category);
         return "redirect:/categories";
     }
