@@ -8,10 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Date;
@@ -68,6 +65,20 @@ public class ExpenseController {
         log.info("EXPENSE TO SAVE: {}", expense);
         expense.setCreatedOn(new Date());
         expenseService.save(expense);
+        return "redirect:/expenses";
+    }
+
+    @RequestMapping(
+            value = {"expenses/delete/{expId}"},
+            method = {RequestMethod.POST, RequestMethod.GET})
+    public String deleteExp(@PathVariable(name = "expId") Long expId, RedirectAttributes redirectAttributes) {
+        log.info("deleteExp called");
+        log.info("Exp id to delete: {}", expId);
+        expenseService.findById(expId)
+                .ifPresent(expense -> {
+                    log.info("expense to delete: {}", expense);
+                    expenseService.deleteExpense(expense);
+                });
         return "redirect:/expenses";
     }
 

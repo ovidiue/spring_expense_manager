@@ -30,7 +30,8 @@ let columns = [
     {
         title: "Tags",
         data: 'tags'
-    }
+    },
+    {title: "Delete"}
 ];
 
 let columnDefs = [
@@ -45,6 +46,12 @@ let columnDefs = [
         render: function (data, type, row, meta) {
             return data ? data.name : ""
         }
+    }, {
+        targets: -1,
+        render: function (data, type, row, meta) {
+            return "<button class='delete-expense btn btn-danger'>Delete</button>";
+        },
+        width: "10%"
     }];
 
 function extractArrAsString(arr) {
@@ -56,10 +63,35 @@ function extractArrAsString(arr) {
     return "";
 }
 
-$('#expensesTable').DataTable({
+const table = $('#expensesTable').DataTable({
     data: EXPENSES,
     columns: columns,
     columnDefs: columnDefs
+});
+
+$('#expensesTable tbody').on('click', '.delete-expense', function () {
+    const data = table.row($(this).parents('tr')).data();
+    console.log("DATA: ", data);
+    swal({
+        title: 'Delete expense: ' + data.title,
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        cancelButtonColor: '#3085d6',
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'DELETE!'
+    }).then((result) => {
+        console.log(result);
+        if (result.value) {
+            window.location.pathname = "/expenses/delete/" + data.id
+            /*swal(
+             'Deleted!',
+             'Your file has been deleted.',
+             'success'
+             )*/
+        }
+    })
+
 });
 
 console.log("expense objects: ", EXPENSES);
