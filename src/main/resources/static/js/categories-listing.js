@@ -11,7 +11,7 @@ let columns = [
         title: "Color",
         data: "color"
     },
-    {title: "Delete"}
+    {title: "Actions"}
 ];
 
 let columnDefs = [
@@ -23,7 +23,14 @@ let columnDefs = [
     }, {
         targets: -1,
         render: function (data, type, row, meta) {
-            return "<button class='delete-cat btn btn-danger'>Delete</button>";
+            //return "<button class='delete-cat btn btn-danger'>Delete</button>";
+            //<span><i class="fas fa-info view-cat"></i></span>
+            return `
+            <div>
+                <span><i class="far fa-edit edit-cat"></i></span>                
+                <span><i class="far fa-trash-alt delete-cat"></i></span>
+            </div>
+            `;
         },
         width: "10%"
     }
@@ -57,5 +64,12 @@ $('#catTable tbody').on('click', '.delete-cat', function () {
              )*/
         }
     })
+
+});
+
+$('#catTable tbody').on('click', '.edit-cat', function () {
+    const data = table.row($(this).parents('tr')).data();
+    console.log("DATA: ", data);
+    window.location.assign("/categories/edit/" + data.id);
 
 });

@@ -63,3 +63,21 @@ body {
     height: 24px;
     border-radius: 5px;
 }
+
+table .fa-edit,
+table .fa-trash-alt,
+table .fa-info {
+    cursor: pointer;
+}
+
+table .fa-edit {
+    color: green;
+}
+
+table .fa-trash-alt {
+    color: crimson;
+}
+
+table .fa-info {
+    color: cornflowerblue;
+}
