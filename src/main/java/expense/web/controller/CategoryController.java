@@ -44,6 +44,14 @@ public class CategoryController {
         return "category-add";
     }
 
+    @RequestMapping({"categories/edit/{catId}"})
+    public String editCategory(@PathVariable Long catId, Model model) {
+        log.info("Fetch edit view");
+        Category category = this.categoryService.findById(catId).get();
+        model.addAttribute("category", category);
+        return "category-edit";
+    }
+
     @RequestMapping(
             value = {"categories/delete/{catId}"},
             method = {RequestMethod.POST, RequestMethod.GET})
@@ -63,6 +71,27 @@ public class CategoryController {
                 });
         return "redirect:/categories";
     }
+
+    @RequestMapping(
+            value = {"categories/edit/{catId}/update"},
+            method = {RequestMethod.POST, RequestMethod.GET})
+    public String editCat(@PathVariable(name = "catId") Long catId, Category category, RedirectAttributes redirectAttributes) {
+        log.info("editCat called");
+        log.info("Cat id to update: {}", catId);
+        log.info("Cateogroy {}", category);
+        category.setId(catId);
+
+        expenseService.findAllWithCategory(category)
+                .forEach(expense -> {
+                    log.info("expense category: {}", expense);
+                    expense.setCategory(category);
+                    expenseService.save(expense);
+                });
+
+        this.categoryService.save(category);
+        return "redirect:/categories";
+    }
+
 
     @RequestMapping(
             value = {"/categories"},
