@@ -47,6 +47,38 @@ public class TagController {
         return "tag-add";
     }
 
+    @RequestMapping({"tags/edit/{tagId}"})
+    public String editTag(@PathVariable Long tagId, Model model) {
+        log.info("Fetch edit view");
+        Tag tag = this.tagService.findById(tagId).get();
+        model.addAttribute("tag", tag);
+        return "tag-edit";
+    }
+
+    @RequestMapping(
+            value = {"tags/edit/{tagId}/update"},
+            method = {RequestMethod.POST, RequestMethod.GET})
+    public String editCat(@PathVariable(name = "tagId") Long tagId, Tag tag, RedirectAttributes redirectAttributes) {
+        log.info("editTag called");
+        log.info("Tag id to update: {}", tagId);
+        log.info("Tag {}", tag);
+        tag.setId(tagId);
+
+        expenseService.findAllThatHaveTag(tag)
+                .forEach(expense -> {
+                    log.info("expense tag: {}", expense);
+                    expense.getTags().forEach(t -> {
+                        if (t.getId() == tagId) {
+                            t = tag;
+                        }
+                    });
+                    expenseService.save(expense);
+                });
+
+        this.tagService.save(tag);
+        return "redirect:/tags";
+    }
+
     @RequestMapping(
             value = {"tags/delete/{tagId}"},
             method = {RequestMethod.POST, RequestMethod.GET})

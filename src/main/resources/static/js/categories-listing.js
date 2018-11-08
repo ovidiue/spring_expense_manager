@@ -57,11 +57,6 @@ $('#catTable tbody').on('click', '.delete-cat', function () {
         console.log(result);
         if (result.value) {
             window.location.pathname = "/categories/delete/" + data.id
-            /*swal(
-             'Deleted!',
-             'Your file has been deleted.',
-             'success'
-             )*/
         }
     })
 
@@ -71,5 +66,4 @@ $('#catTable tbody').on('click', '.edit-cat', function () {
     const data = table.row($(this).parents('tr')).data();
     console.log("DATA: ", data);
     window.location.assign("/categories/edit/" + data.id);
-
 });

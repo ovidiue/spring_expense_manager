@@ -11,7 +11,7 @@ let columns = [
         title: "Color",
         data: 'color'
     },
-    {title: "Delete"}
+    {title: "Actions"}
 ];
 
 let columnDefs = [
@@ -23,7 +23,12 @@ let columnDefs = [
     }, {
         targets: -1,
         render: function (data, type, row, meta) {
-            return "<button class='delete-tag btn btn-danger'>Delete</button>";
+            return `
+            <div>
+                <span><i class="far fa-edit edit-tag"></i></span>                
+                <span><i class="far fa-trash-alt delete-tag"></i></span>
+            </div>
+            `;
         },
         width: "10%"
     }];
@@ -49,12 +54,13 @@ $('#tagsTable tbody').on('click', '.delete-tag', function () {
         console.log(result);
         if (result.value) {
             window.location.pathname = "/tags/delete/" + data.id
-            /*swal(
-             'Deleted!',
-             'Your file has been deleted.',
-             'success'
-             )*/
         }
     })
 
+});
+
+$('#tagsTable tbody').on('click', '.edit-tag', function () {
+    const data = table.row($(this).parents('tr')).data();
+    console.log("DATA: ", data);
+    window.location.assign("/tags/edit/" + data.id);
 });
