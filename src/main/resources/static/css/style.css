@@ -81,3 +81,7 @@ table .fa-trash-alt {
 table .fa-info {
     color: cornflowerblue;
 }
+
+.width50-p {
+    width: 50%;
+}
