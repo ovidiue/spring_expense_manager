@@ -31,7 +31,7 @@ let columns = [
         title: "Tags",
         data: 'tags'
     },
-    {title: "Delete"}
+    {title: "Actions"}
 ];
 
 let columnDefs = [
@@ -49,18 +49,23 @@ let columnDefs = [
     }, {
         targets: -1,
         render: function (data, type, row, meta) {
-            return "<button class='delete-expense btn btn-danger'>Delete</button>";
+            return `
+            <div>
+                <span><i class="far fa-edit ed-exp"></i></span>                
+                <span><i class="far fa-trash-alt del-exp"></i></span>
+            </div>
+            `;
         },
         width: "10%"
     }, {
         targets: 4,
         render: function (data) {
-            return moment(data).format('MM-DD-YYYY, H:mm');
+            return moment(data).format(DATE_FORMAT);
         }
     }, {
         targets: 5,
         render: function (data) {
-            return data ? moment(data).format('MM-DD-YYYY, H:mm') : '';
+            return data ? moment(data).format(DATE_FORMAT) : '';
         }
     }];
 
@@ -79,7 +84,7 @@ const table = $('#expensesTable').DataTable({
     columnDefs: columnDefs
 });
 
-$('#expensesTable tbody').on('click', '.delete-expense', function () {
+$('#expensesTable tbody').on('click', '.del-exp', function () {
     const data = table.row($(this).parents('tr')).data();
     console.log("DATA: ", data);
     swal({
@@ -94,14 +99,13 @@ $('#expensesTable tbody').on('click', '.delete-expense', function () {
         console.log(result);
         if (result.value) {
             window.location.pathname = "/expenses/delete/" + data.id
-            /*swal(
-             'Deleted!',
-             'Your file has been deleted.',
-             'success'
-             )*/
         }
     })
-
 });
 
-console.log("expense objects: ", EXPENSES);
+$('#expensesTable tbody').on('click', '.ed-exp', function () {
+    const data = table.row($(this).parents('tr')).data();
+    console.log("DATA: ", data);
+    window.location.assign("/expenses/edit/" + data.id);
+});
+

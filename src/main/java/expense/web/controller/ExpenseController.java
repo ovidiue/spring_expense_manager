@@ -37,6 +37,44 @@ public class ExpenseController {
         return "expenses-listing";
     }
 
+    @RequestMapping("expenses/edit/{expId}")
+    public String editExpense(@PathVariable("expId") Long expId, Model model) {
+        log.info("expense edit screen fetched");
+        Expense expense = this.expenseService.findById(expId).get();
+        model.addAttribute("expense", expense);
+        model.addAttribute("tags", tagService.findAll());
+        model.addAttribute("categories", categoryService.findAll());
+
+        return "expense-edit";
+    }
+
+    @RequestMapping("expenses/edit/{expId}/update")
+    public String updateEditedExpense(@PathVariable Long expId,
+                                      @RequestParam Long categoryId,
+                                      @RequestParam(required = false) List<Long> tagsIds,
+                                      Expense expense,
+                                      RedirectAttributes redirectAttributes) {
+        expense.setId(expId);
+        this.categoryService.findById(categoryId)
+                .ifPresent(category -> {
+                    expense.setCategory(category);
+                });
+        if (tagsIds != null) {
+            this.tagService.findAllByIds(tagsIds)
+                    .ifPresent(tags -> {
+                        expense.setTags(tags);
+                    });
+        } else {
+            expense.setTags(null);
+        }
+
+        log.debug("expense to update: {}", expense);
+
+        this.expenseService.save(expense);
+
+        return "redirect:/expenses";
+    }
+
     @RequestMapping({"expenses/add"})
     public String addExpense(Model model) {
         model.addAttribute("tags", tagService.findAll());
