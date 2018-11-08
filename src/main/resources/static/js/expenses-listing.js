@@ -52,6 +52,16 @@ let columnDefs = [
             return "<button class='delete-expense btn btn-danger'>Delete</button>";
         },
         width: "10%"
+    }, {
+        targets: 4,
+        render: function (data) {
+            return moment(data).format('MM-DD-YYYY, H:mm');
+        }
+    }, {
+        targets: 5,
+        render: function (data) {
+            return data ? moment(data).format('MM-DD-YYYY, H:mm') : '';
+        }
     }];
 
 function extractArrAsString(arr) {
