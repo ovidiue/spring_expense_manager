@@ -3,6 +3,7 @@ console.log(CATEGORIES);
 
 initializeSelect("selectTag", TAGS, true, formatEntryDisplay);
 initializeSelect("selectCat", CATEGORIES, false, formatEntryDisplay);
+initializeDatepicker("datepicker");
 
 function formatEntryDisplay(entry) {
     if (!entry.id) {
@@ -30,5 +31,12 @@ function initializeSelect(id, arr, multiple = false, templateResult) {
         multiple: multiple,
         allowClear: multiple,
         templateResult: templateResult
+    });
+}
+
+function initializeDatepicker(id) {
+    let today = new Date();
+    $("#" + id).datepicker({
+        minDate: today
     });
 }
