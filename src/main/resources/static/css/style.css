@@ -85,3 +85,15 @@ table .fa-info {
 .width50-p {
     width: 50%;
 }
+
+a.normal-text {
+    color: initial;
+}
+
+a.normal-text:hover,
+a.normal-text:active,
+a.normal-text:visited,
+a.normal-text:focus {
+    text-decoration: none;
+    color: initial;
+}

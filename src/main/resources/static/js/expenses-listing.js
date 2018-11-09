@@ -67,7 +67,27 @@ let columnDefs = [
         render: function (data) {
             return data ? moment(data).format(DATE_FORMAT) : '';
         }
-    }];
+    },
+    {
+        targets: 1,
+        render: function (data) {
+            if (data && data.length > 60) {
+                let shortData = data.substring(0, 60) + "...";
+                return "<span>" +
+                    "<a href='javascript:void(0)' class='normal-text' data-toggle='popover' data-content='" +
+                    data +
+                    "' data-trigger='focus'>" +
+                    shortData +
+                    "</a>" +
+                    "<i class='fas fa-info float-right'></i>" +
+                    "</span>";
+            } else {
+                return data;
+            }
+
+        }
+    }
+];
 
 function extractArrAsString(arr) {
     if (arr) {
@@ -107,5 +127,9 @@ $('#expensesTable tbody').on('click', '.ed-exp', function () {
     const data = table.row($(this).parents('tr')).data();
     console.log("DATA: ", data);
     window.location.assign("/expenses/edit/" + data.id);
+});
+
+$(function () {
+    $('[data-toggle="popover"]').popover({container: 'body'})
 });
 
