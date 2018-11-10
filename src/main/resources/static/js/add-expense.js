@@ -1,8 +1,8 @@
 initializeSelect("selectTag", TAGS, true, formatEntryDisplay);
 initializeSelect("selectCat", CATEGORIES, false, formatEntryDisplay);
-initializeDatepicker("datepicker", existingExpense);
+initializeDatepicker("datepicker");
 
-if (existingExpense) {
+if (typeof existingExpense !== 'undefined') {
     if (existingExpense.category && existingExpense.category.id) {
         $("#selectCat").val(existingExpense.category.id).change();
     }
@@ -47,10 +47,19 @@ function initializeSelect(id, arr, multiple = false, templateResult) {
     });
 }
 
-function initializeDatepicker(id, expense) {
+function initializeDatepicker(id) {
     let today = new Date();
+    /* let config = {
+     minDate: today
+     };
+
+     if (typeof existingExpense !== 'undefined')
+     config.value = moment(existingExpense.dueDate).format(DATE_FORMAT);
+
+     $("#" + id).datepicker(config);*/
+
     $("#" + id).datepicker({
         minDate: today,
-        value: expense && expense.dueDate ? moment(expense.dueDate).format(DATE_FORMAT) : ""
+        value: typeof  existingExpense !== 'undefined' && existingExpense.dueDate ? moment(existingExpense.dueDate).format(DATE_FORMAT) : ""
     })
 }
