@@ -39,8 +39,11 @@ let columnDefs = [
 const table = $('#catTable').DataTable({
     data: CATEGORIES,
     columns: columns,
-    columnDefs: columnDefs
+    columnDefs: columnDefs,
+    dom: '<"toolbar full-width"f>t<"custom-footer"ilpr>'
 });
+
+$("div.toolbar").append('<div class="add-btn float-right"><a class="btn btn-primary" href="/categories/add">Add category</a></div>');
 
 $('#catTable tbody').on('click', '.delete-cat', function () {
     const data = table.row($(this).parents('tr')).data();
