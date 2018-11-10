@@ -97,3 +97,20 @@ a.normal-text:focus {
     text-decoration: none;
     color: initial;
 }
+
+.custom-footer,
+.dataTables_info,
+.dataTables_length,
+.dataTables_filter,
+.add-btn,
+.dataTables_paginate {
+    display: inline-block;
+}
+
+.custom-footer {
+    width: 100%;
+}
+
+.dataTables_paginate {
+    float: right;
+}

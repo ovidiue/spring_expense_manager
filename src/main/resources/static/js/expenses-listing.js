@@ -101,8 +101,11 @@ function extractArrAsString(arr) {
 const table = $('#expensesTable').DataTable({
     data: EXPENSES,
     columns: columns,
-    columnDefs: columnDefs
+    columnDefs: columnDefs,
+    dom: '<"toolbar full-width"f>t<"custom-footer"ilpr>'
 });
+
+$("div.toolbar").append('<div class="add-btn float-right"><a class="btn btn-primary" href="/expenses/add">Add expense</a></div>');
 
 $('#expensesTable tbody').on('click', '.del-exp', function () {
     const data = table.row($(this).parents('tr')).data();
