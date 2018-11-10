@@ -1,7 +1,3 @@
-console.log(TAGS);
-console.log(CATEGORIES);
-console.log(existingExpense);
-
 initializeSelect("selectTag", TAGS, true, formatEntryDisplay);
 initializeSelect("selectCat", CATEGORIES, false, formatEntryDisplay);
 initializeDatepicker("datepicker", existingExpense);

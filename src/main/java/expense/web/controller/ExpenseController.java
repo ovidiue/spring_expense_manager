@@ -83,7 +83,7 @@ public class ExpenseController {
         return "expense-add";
     }
 
-    @RequestMapping(value = {"/expenses"}, method = {RequestMethod.POST})
+    @RequestMapping(value = {"/expenses/save"}, method = {RequestMethod.POST})
     public String addNewExpense(@RequestParam(name = "categoryId") Long categoryId,
                                 @RequestParam(name = "tagsIds") List<Long> tagIds,
                                 Expense expense,
