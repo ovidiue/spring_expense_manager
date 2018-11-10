@@ -36,8 +36,11 @@ let columnDefs = [
 const table = $('#tagsTable').DataTable({
     data: TAGS,
     columns: columns,
-    columnDefs: columnDefs
+    columnDefs: columnDefs,
+    dom: '<"toolbar full-width"f>t<"custom-footer"ilpr>'
 });
+
+$("div.toolbar").append('<div class="add-btn float-right"><a class="btn btn-primary" href="/expenses/add">Add tag</a></div>');
 
 $('#tagsTable tbody').on('click', '.delete-tag', function () {
     const data = table.row($(this).parents('tr')).data();
