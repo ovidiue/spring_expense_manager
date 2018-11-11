@@ -26,12 +26,12 @@
                 <textarea class="form-control" th:field="*{observation}"></textarea>
             </div>
             <div class="form-group">
-                <label>Due date</label>
-                <input id="datepicker" th:field="*{payedOn}" width="50%" class="width50-p"/>
+                <label for="selectExp">Expense</label>
+                <select name="expId" id="selectExp" class="form-control"></select>
             </div>
             <div class="form-group">
-                <label for="selectExp">Expense</label>
-                <select name="expenseId" id="selectExp" class="form-control"></select>
+                <label>Payed on</label>
+                <input id="datepicker" th:field="*{payedOn}" width="50%" class="width50-p"/>
             </div>
             <div class="form-group float-right">
                 <a th:href="@{/rates}" class="btn btn-secondary">Cancel</a>

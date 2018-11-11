@@ -18,7 +18,7 @@ public class Rate {
     private Double amount;
     @Column
     private Date creationDate;
-    @Column
+    @Column(columnDefinition = "clob")
     private String observation;
     @Column
     private Date payedOn;

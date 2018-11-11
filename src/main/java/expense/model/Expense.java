@@ -38,7 +38,7 @@ public class Expense {
     private List<Tag> tags;
     @ManyToOne
     private Category category;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Rate> rates;
 }
