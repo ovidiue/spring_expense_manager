@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Ovidiu on 10-Oct-18.
@@ -21,5 +22,9 @@ public class RateService {
 
     public void save(Rate rate) {
         this.rateRepository.save(rate);
+    }
+
+    public Optional<Rate> findById(Long id) {
+        return this.rateRepository.findById(id);
     }
 }
