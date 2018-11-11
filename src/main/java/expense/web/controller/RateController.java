@@ -1,10 +1,10 @@
 package expense.web.controller;
 
 import expense.model.Rate;
+import expense.repository.ExpenseIdsTitles;
+import expense.service.ExpenseService;
 import expense.service.RateService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,21 +24,25 @@ import java.util.List;
 public class RateController {
     @Autowired
     RateService rateService;
-    Logger logger = LoggerFactory.getLogger(RateController.class);
+    @Autowired
+    ExpenseService expenseService;
 
     @GetMapping("/rates")
     public String getRates(Model model) {
-        logger.info("Access index");
+        log.info("Access index");
         List<Rate> rates = rateService.findAll();
-        logger.info("Fetch rates");
+        log.info("Fetch rates");
         model.addAttribute("rates", rates);
-        logger.info("Add rates on model {}", rates);
+        log.info("Add rates on model {}", rates);
         return "rates-listing";
     }
 
     @RequestMapping("/rates/add")
     public String getAddRateView(Model model) {
         model.addAttribute("rate", new Rate());
+        List<ExpenseIdsTitles> expenses = expenseService.getExpensesNames();
+        log.info("rate expenses: {}", expenses);
+        model.addAttribute("expenses", expenses);
         return "rate-add";
     }
 

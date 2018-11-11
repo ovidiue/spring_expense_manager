@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <th:block th:replace="/fragments/styles::styles"></th:block>
     <link rel="stylesheet" type="text/css" th:href="@{/vendors/gijgo-datepicker/gijgo.min.css}"/>
+    <link rel="stylesheet" th:href="@{/vendors/select2-4.0.6-rc.1/select2.css}" type="text/css">
 </head>
 <body>
 <div th:replace="index :: navigation"></div>
@@ -27,6 +28,10 @@
                 <label>Due date</label>
                 <input id="datepicker" th:field="*{payedOn}" width="50%" class="width50-p"/>
             </div>
+            <div class="form-group">
+                <label for="selectExp">Expense</label>
+                <select name="expenseId" id="selectExp" class="form-control"></select>
+            </div>
             <div class="form-group float-right">
                 <a th:href="@{/rates}" class="btn btn-secondary">Cancel</a>
                 <button class="btn btn-success">Save</button>
@@ -36,7 +41,11 @@
 </div>
 
 <div th:replace="fragments/scripts::scripts"></div>
+<script th:inline="javascript">
+    const expenses = [[${expenses}]];
+</script>
 <script type="text/javascript" th:src="@{/vendors/gijgo-datepicker/gijgo.min.js}"></script>
+<script type="text/javascript" th:src="@{/vendors/select2-4.0.6-rc.1/select2.full.js}"></script>
 <script type="text/javascript" th:src="@{/js/add-rate.js}"></script>
 </body>
 </html>
