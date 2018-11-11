@@ -20,6 +20,8 @@ public class Rate {
     private Date creationDate;
     @Column
     private String observation;
+    @Column
+    private Date payedOn;
     @Id
     @GeneratedValue
     private Long id;

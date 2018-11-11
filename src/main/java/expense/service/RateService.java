@@ -18,4 +18,8 @@ public class RateService {
     public List<Rate> findAll() {
         return rateRepository.findAll();
     }
+
+    public void save(Rate rate) {
+        this.rateRepository.save(rate);
+    }
 }
