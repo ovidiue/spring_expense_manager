@@ -2,6 +2,8 @@ package expense.model;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
@@ -37,5 +39,6 @@ public class Expense {
     @ManyToOne
     private Category category;
     @OneToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Rate> rates;
 }
