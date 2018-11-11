@@ -1,10 +1,22 @@
 let columns = [
-    {title: "Observation"},
-    {title: "Amount"},
-    {title: "Created On"}
+    {
+        title: "Observation",
+        data: "observation"
+    },
+    {
+        title: "Amount",
+        data: "amount"
+    },
+    {
+        title: "Created On",
+        data: "creationDate"
+    }
 ];
 
 $('#ratesTable').DataTable({
     data: RATES,
-    columns: columns
+    columns: columns,
+    dom: '<"toolbar full-width"f>t<"custom-footer"ilpr>'
 });
+
+$("div.toolbar").append('<div class="add-btn float-right"><a class="btn btn-primary" href="/rates/add">Add category</a></div>');
