@@ -25,4 +25,8 @@ public class Rate {
     @Id
     @GeneratedValue
     private Long id;
+
+    public Rate() {
+        this.creationDate = new Date();
+    }
 }
