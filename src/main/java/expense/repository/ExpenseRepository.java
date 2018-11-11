@@ -22,4 +22,7 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
     @Query("select e from Expense e where e.category=:category")
     List<Expense> findAllWithCategory(@Param("category") Category category);
+
+    @Query("select e from Expense e")
+    List<ExpenseIdsTitles> getAllNamesWithIds();
 }

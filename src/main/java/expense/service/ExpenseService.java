@@ -3,7 +3,9 @@ package expense.service;
 import expense.model.Category;
 import expense.model.Expense;
 import expense.model.Tag;
+import expense.repository.ExpenseIdsTitles;
 import expense.repository.ExpenseRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import java.util.Optional;
  * Created by Ovidiu on 10-Oct-18.
  */
 @Service
+@Slf4j
 public class ExpenseService {
     @Autowired
     private ExpenseRepository expenseRepository;
@@ -40,5 +43,9 @@ public class ExpenseService {
 
     public void deleteExpense(Expense expense) {
         this.expenseRepository.delete(expense);
+    }
+
+    public List<ExpenseIdsTitles> getExpensesNames() {
+        return this.expenseRepository.getAllNamesWithIds();
     }
 }
