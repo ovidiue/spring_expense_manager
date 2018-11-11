@@ -36,6 +36,6 @@ public class Expense {
     private List<Tag> tags;
     @ManyToOne
     private Category category;
-/*    @OneToMany
-    private List<Rate> rates;*/
+    @OneToMany
+    private List<Rate> rates;
 }
