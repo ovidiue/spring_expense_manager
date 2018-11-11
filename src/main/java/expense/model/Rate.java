@@ -2,7 +2,10 @@ package expense.model;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Date;
 
 /**
@@ -14,12 +17,9 @@ public class Rate {
     @Column
     private Double amount;
     @Column
-    private Date date;
+    private Date creationDate;
     @Column
     private String observation;
-    @ManyToOne
-    @JoinColumn(name = "expense_id")
-    private Expense expense;
     @Id
     @GeneratedValue
     private Long id;
