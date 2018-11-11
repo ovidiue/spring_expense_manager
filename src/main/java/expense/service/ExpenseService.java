@@ -2,6 +2,7 @@ package expense.service;
 
 import expense.model.Category;
 import expense.model.Expense;
+import expense.model.Rate;
 import expense.model.Tag;
 import expense.repository.ExpenseIdsTitles;
 import expense.repository.ExpenseRepository;
@@ -47,5 +48,9 @@ public class ExpenseService {
 
     public List<ExpenseIdsTitles> getExpensesNames() {
         return this.expenseRepository.getAllNamesWithIds();
+    }
+
+    public List<Expense> findAllWithRate(Rate rate) {
+        return this.expenseRepository.findAllWithRate(rate);
     }
 }

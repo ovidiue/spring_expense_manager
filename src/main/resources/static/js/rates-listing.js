@@ -42,7 +42,7 @@ $('#ratesTable tbody').on('click', '.delete-rate', function () {
     const data = table.row($(this).parents('tr')).data();
     console.log("DATA: ", data);
     swal({
-        title: 'Delete rate: ' + data.name,
+        title: 'Delete rate: ' + data.amount,
         text: "You won't be able to revert this!",
         type: 'warning',
         showCancelButton: true,

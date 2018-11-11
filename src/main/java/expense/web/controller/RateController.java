@@ -1,5 +1,6 @@
 package expense.web.controller;
 
+import expense.model.Expense;
 import expense.model.Rate;
 import expense.repository.ExpenseIdsTitles;
 import expense.service.ExpenseService;
@@ -53,11 +54,25 @@ public class RateController {
         return "rate-add";
     }
 
-
     @RequestMapping(value = {"/rates/save"}, method = {RequestMethod.POST})
     public String saveRate(Rate rate, RedirectAttributes redirectAttributes) {
         log.info("rate: {}", rate);
         this.rateService.save(rate);
+        return "redirect:/rates";
+    }
+
+    @RequestMapping(value = "rates/delete/{rateId}",
+            method = {RequestMethod.POST, RequestMethod.GET})
+    public String deleteRate(@PathVariable Long rateId, RedirectAttributes redirectAttributes) {
+        this.rateService.findById(rateId)
+                .ifPresent(r -> {
+                    List<Expense> expensesWithRate = this.expenseService.findAllWithRate(r);
+                    expensesWithRate.forEach(ex -> {
+                        ex.getRates().remove(r);
+                        this.expenseService.save(ex);
+                    });
+                    this.rateService.delete(r);
+                });
         return "redirect:/rates";
     }
 

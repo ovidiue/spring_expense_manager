@@ -27,4 +27,8 @@ public class RateService {
     public Optional<Rate> findById(Long id) {
         return this.rateRepository.findById(id);
     }
+
+    public void delete(Rate r) {
+        this.rateRepository.delete(r);
+    }
 }
