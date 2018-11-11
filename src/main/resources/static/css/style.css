@@ -114,3 +114,7 @@ a.normal-text:focus {
 .dataTables_paginate {
     float: right;
 }
+
+table th {
+    white-space: nowrap;
+}
