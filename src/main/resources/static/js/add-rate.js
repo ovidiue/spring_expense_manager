@@ -1,6 +1,10 @@
 initializeDatepicker("datepicker");
 initializeSelect('selectExp', expenses);
 
+if (typeof previousExpense !== 'undefined' && previousExpense !== null && previousExpense.id) {
+    $("#selectExp").val(previousExpense.id).change();
+}
+
 function initializeDatepicker(id) {
     $("#" + id).datepicker({
         value: typeof  existingExpense !== 'undefined' && existingExpense.dueDate ? moment(existingExpense.dueDate).format(DATE_FORMAT) : ""
@@ -19,7 +23,7 @@ function initializeSelect(id, arr, multiple = false) {
         id = "#" + id;
         $(id).select2({
             data: arrForSelect,
-            multiple: multiple,
+            multiple: false,
             allowClear: true,
             placeholder: 'Select'
         });
