@@ -41,6 +41,7 @@ public class RateController {
         List<ExpenseIdsTitles> expenses = expenseService.getExpensesNames();
         log.info("rate expenses: {}", expenses);
         model.addAttribute("expenses", expenses);
+        model.addAttribute("formAction", "/rates/save");
         return "rate-add";
     }
 
@@ -48,6 +49,13 @@ public class RateController {
     public String getEditRateView(@PathVariable Long rateId, Model model) {
         Rate rate = this.rateService.findById(rateId).get();
         model.addAttribute("rate", rate);
+        List<ExpenseIdsTitles> expenses = expenseService.getExpensesNames();
+        Expense previousSetExpense = this.expenseService.findExpenseByRate(rate);
+        log.info("previousExpense: {}", previousSetExpense);
+        model.addAttribute("expense", previousSetExpense);
+        log.info("rate expenses: {}", expenses);
+        model.addAttribute("expenses", expenses);
+        model.addAttribute("formAction", "/rates/update");
         return "rate-add";
     }
 
@@ -56,6 +64,7 @@ public class RateController {
                            Rate rate,
                            RedirectAttributes redirectAttributes) {
         log.info("rate: {}", rate);
+
         if (expId != null) {
             this.expenseService.findById(expId)
                     .ifPresent(expense -> {
@@ -64,6 +73,46 @@ public class RateController {
                         this.expenseService.save(expense);
                     });
         } else {
+            this.rateService.save(rate);
+        }
+
+        return "redirect:/rates";
+    }
+
+    @RequestMapping(value = {"/rates/update"}, method = {RequestMethod.POST})
+    public String updateRate(@RequestParam(required = false) Long expId,
+                             Rate rate,
+                             RedirectAttributes redirectAttributes) {
+        log.info("rate: {}", rate);
+        Rate initialRate = this.rateService.findById(rate.getId()).get();
+
+        Expense previousSetExpense = this.expenseService.findExpenseByRate(rate);
+        log.info("previousSetExpense: {}", previousSetExpense);
+        if (expId != null && previousSetExpense != null) {
+            log.info("expId not null: {}", expId);
+            if (expId == previousSetExpense.getId()) {
+                log.info("in equal ids");
+                this.rateService.save(rate);
+            } else if (expId != previousSetExpense.getId()) {
+                log.info("in different ids");
+                previousSetExpense.getRates().remove(initialRate);
+                this.expenseService.save(previousSetExpense);
+                Expense newChosenExpense = this.expenseService.findById(expId).get();
+                newChosenExpense.getRates().add(rate);
+                this.expenseService.save(newChosenExpense);
+            }
+        } else if (expId != null && previousSetExpense == null) {
+            this.expenseService.findById(expId)
+                    .ifPresent(expense -> {
+                        expense.getRates().add(rate);
+                        this.expenseService.save(expense);
+                    });
+        } else {
+            log.info("expId is null");
+            if (previousSetExpense != null) {
+                previousSetExpense.getRates().remove(initialRate);
+                this.expenseService.save(previousSetExpense);
+            }
             this.rateService.save(rate);
         }
 
