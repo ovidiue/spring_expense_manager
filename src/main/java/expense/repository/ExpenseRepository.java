@@ -30,6 +30,10 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     @Query("select e from Expense e where :rate member e.rates")
     List<Expense> findAllWithRate(@Param("rate") Rate rate);
 
+    Expense findByRatesIs(Rate rate);
+
     @Query("select e from Expense e where id in :ids")
     List<Expense> findAllByIds(@Param("ids") List<Long> expIds);
+
+
 }

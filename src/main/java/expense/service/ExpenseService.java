@@ -54,7 +54,13 @@ public class ExpenseService {
         return this.expenseRepository.findAllWithRate(rate);
     }
 
+    public Expense findExpenseByRate(Rate rate) {
+        return this.expenseRepository.findByRatesIs(rate);
+    }
+
     public List<Expense> findAllByIds(List<Long> ids) {
         return this.expenseRepository.findAllByIds(ids);
     }
+
+
 }
