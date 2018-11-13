@@ -7,7 +7,7 @@ if (typeof previousExpense !== 'undefined' && previousExpense !== null && previo
 
 function initializeDatepicker(id) {
     $("#" + id).datepicker({
-        value: typeof  existingExpense !== 'undefined' && existingExpense.dueDate ? moment(existingExpense.dueDate).format(DATE_FORMAT) : ""
+        value: typeof existingRate !== 'undefined' && existingRate !== null && existingRate.payedOn ? moment(existingRate.payedOn).format(DATE_FORMAT) : ""
     })
 }
 
