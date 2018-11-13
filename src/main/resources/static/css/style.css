@@ -118,3 +118,10 @@ a.normal-text:focus {
 table th {
     white-space: nowrap;
 }
+
+.tag-underline {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    margin: 0 5px;
+    padding: 2px;
+}

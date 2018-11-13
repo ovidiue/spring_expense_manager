@@ -38,7 +38,7 @@ let columnDefs = [
     {
         targets: 7,
         render: function (data, type, row, meta) {
-            return extractArrAsString(data);
+            return extractArrAsSpan(data);
         }
     },
     {
@@ -89,9 +89,10 @@ let columnDefs = [
     }
 ];
 
-function extractArrAsString(arr) {
+function extractArrAsSpan(arr) {
     if (arr) {
-        return arr.map(el => el.name)
+        return arr.map(el =>
+        "<span class='tag-underline' style='border-bottom: 6px solid " + el.color + "'>" + el.name + "</span>")
             .join(",");
     }
 
