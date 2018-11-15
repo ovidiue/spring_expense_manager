@@ -1,11 +1,11 @@
 let columns = [
     {
-        title: "Observation",
-        data: "observation"
-    },
-    {
         title: "Amount",
         data: "amount"
+    },
+    {
+        title: "Observation",
+        data: "observation"
     },
     {
         title: "Created On",
