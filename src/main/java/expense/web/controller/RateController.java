@@ -9,9 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -37,7 +39,9 @@ public class RateController {
 
     @RequestMapping("/rates/add")
     public String getAddRateView(Model model) {
-        model.addAttribute("rate", new Rate());
+        if (!model.containsAttribute("rate")) {
+            model.addAttribute("rate", new Rate());
+        }
         List<ExpenseIdsTitles> expenses = expenseService.getExpensesNames();
         log.info("rate expenses: {}", expenses);
         model.addAttribute("expenses", expenses);
@@ -47,8 +51,13 @@ public class RateController {
 
     @GetMapping("/rates/edit/{rateId}")
     public String getEditRateView(@PathVariable Long rateId, Model model) {
-        Rate rate = this.rateService.findById(rateId).get();
-        model.addAttribute("rate", rate);
+        //Rate rate = this.rateService.findById(rateId).get();
+        Rate rate = model.containsAttribute("rate") ?
+                (Rate) model.asMap().get("rate") :
+                this.rateService.findById(rateId).get();
+        if (!model.containsAttribute("rate")) {
+            model.addAttribute("rate", rate);
+        }
         List<ExpenseIdsTitles> expenses = expenseService.getExpensesNames();
         Expense previousSetExpense = this.expenseService.findExpenseByRate(rate);
         log.info("previousExpense: {}", previousSetExpense);
@@ -61,10 +70,16 @@ public class RateController {
 
     @RequestMapping(value = {"/rates/save"}, method = {RequestMethod.POST})
     public String saveRate(@RequestParam(required = false) Long expId,
-                           Rate rate,
+                           @Valid Rate rate,
+                           BindingResult result,
                            RedirectAttributes redirectAttributes) {
         log.info("rate: {}", rate);
-
+        if (result.hasErrors()) {
+            log.info("result {}", result);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.rate", result);
+            redirectAttributes.addFlashAttribute("rate", rate);
+            return "redirect:/rates/add";
+        }
         if (expId != null) {
             this.expenseService.findById(expId)
                     .ifPresent(expense -> {
@@ -81,9 +96,15 @@ public class RateController {
 
     @RequestMapping(value = {"/rates/update"}, method = {RequestMethod.POST})
     public String updateRate(@RequestParam(required = false) Long expId,
-                             Rate rate,
+                             @Valid Rate rate,
+                             BindingResult result,
                              RedirectAttributes redirectAttributes) {
         log.info("rate: {}", rate);
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.rate", result);
+            redirectAttributes.addFlashAttribute("rate", rate);
+            return "redirect:/rates/add";
+        }
         Rate initialRate = this.rateService.findById(rate.getId()).get();
 
         Expense previousSetExpense = this.expenseService.findExpenseByRate(rate);
