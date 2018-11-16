@@ -124,6 +124,7 @@ table th {
     border-bottom-right-radius: 5px;
     margin: 0 5px;
     padding: 2px;
+    white-space: nowrap;
 }
 
 .form-error {
