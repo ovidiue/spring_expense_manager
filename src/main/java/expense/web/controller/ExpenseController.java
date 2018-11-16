@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +45,9 @@ public class ExpenseController {
     public String getEditExpenseRoute(@PathVariable("expId") Long expId, Model model) {
         log.info("expense edit screen fetched");
         Expense expense = this.expenseService.findById(expId).get();
-        model.addAttribute("expense", expense);
+        if (!model.containsAttribute("expense")) {
+            model.addAttribute("expense", expense);
+        }
         model.addAttribute("pageTitle", "Edit Expense " + expense.getTitle());
         model.addAttribute("formAction", "/expenses/update");
         model.addAttribute("tags", tagService.findAll());
@@ -53,10 +57,19 @@ public class ExpenseController {
     }
 
     @RequestMapping("expenses/update")
-    public String updateEditedExpense(@RequestParam Long categoryId,
+    public String updateEditedExpense(@RequestParam(required = false) Long categoryId,
                                       @RequestParam(required = false) List<Long> tagsIds,
-                                      Expense expense,
+                                      @Valid Expense expense,
+                                      BindingResult result,
                                       RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.expense", result);
+            redirectAttributes.addFlashAttribute("expense", expense);
+            redirectAttributes.addFlashAttribute("categoryId", categoryId);
+            redirectAttributes.addFlashAttribute("tagsIds", tagsIds);
+            return "redirect:/expenses/edit/" + expense.getId();
+        }
 
         this.categoryService.findById(categoryId)
                 .ifPresent(category -> {
@@ -80,22 +93,32 @@ public class ExpenseController {
 
     @RequestMapping({"expenses/add"})
     public String getAddExpenseRoute(Model model) {
+        if (!model.containsAttribute("expense")) {
+            model.addAttribute("expense", new Expense());
+        }
         model.addAttribute("tags", tagService.findAll());
         model.addAttribute("categories", categoryService.findAll());
         model.addAttribute("pageTitle", "Add Expense");
         model.addAttribute("formAction", "/expenses/save");
-        model.addAttribute("expense", new Expense());
+
         return "expense-add";
     }
 
     @RequestMapping(value = {"/expenses/save"}, method = {RequestMethod.POST})
-    public String addNewExpense(@RequestParam(name = "categoryId") Long categoryId,
-                                @RequestParam(name = "tagsIds") List<Long> tagIds,
-                                Expense expense,
-                                RedirectAttributes redirectAttributes) {
+    public String saveNewExpense(@RequestParam(name = "categoryId", required = false) Long categoryId,
+                                 @RequestParam(name = "tagsIds", required = false) List<Long> tagIds,
+                                 @Valid Expense expense,
+                                 BindingResult result,
+                                 RedirectAttributes redirectAttributes) {
         log.info("categoryId: {}", categoryId);
         log.info("tagsIds: {}", tagIds);
-
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.expense", result);
+            redirectAttributes.addFlashAttribute("expense", expense);
+            redirectAttributes.addFlashAttribute("categoryId", categoryId);
+            redirectAttributes.addFlashAttribute("tagIds", tagIds);
+            return "redirect:/expenses/add";
+        }
         categoryService.findById(categoryId)
                 .ifPresent(category -> {
                     log.info("CATEGORY FOUND: {}", category);

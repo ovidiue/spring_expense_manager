@@ -7,6 +7,8 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +21,8 @@ import java.util.List;
 @Transactional
 public class Expense {
     @Column
+    @NotNull(message = "Required")
+    @NotEmpty(message = "Required")
     private String title;
     @Column(columnDefinition = "clob")
     @Lob
@@ -30,6 +34,7 @@ public class Expense {
     @Column
     private Date dueDate;
     @Column
+    @NotNull(message = "Required:: must be a number")
     private Double amount;
     @Id
     @GeneratedValue
