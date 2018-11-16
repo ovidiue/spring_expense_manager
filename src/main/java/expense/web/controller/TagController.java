@@ -4,8 +4,6 @@ import expense.model.Tag;
 import expense.service.ExpenseService;
 import expense.service.TagService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,14 +25,13 @@ public class TagController {
     @Autowired
     private ExpenseService expenseService;
 
-    private Logger logger = LoggerFactory.getLogger(TagController.class);
 
     public TagController() {
     }
 
     @RequestMapping({"/tags"})
     public String getTags(Model model) {
-        logger.info("Fetching tags route");
+        log.info("Fetching tags route");
         List<Tag> tags = tagService.findAll();
         model.addAttribute("tags", tags);
         return "tags-listing";
@@ -42,39 +39,26 @@ public class TagController {
 
     @RequestMapping({"tags/add"})
     public String addTag(Model model) {
-        logger.info("Fetch add view");
+        log.info("Fetch add view");
         model.addAttribute("tag", new Tag());
+        model.addAttribute("formAction", "/tags/save/");
+        model.addAttribute("pageTitle", "Add Tag");
         return "tag-add";
     }
 
     @RequestMapping({"tags/edit/{tagId}"})
     public String editTag(@PathVariable Long tagId, Model model) {
-        log.info("Fetch edit view");
         Tag tag = this.tagService.findById(tagId).get();
         model.addAttribute("tag", tag);
-        return "tag-edit";
+        model.addAttribute("formAction", "/tags/update");
+        model.addAttribute("pageTitle", "Edit Tag " + tag.getName());
+        return "tag-add";
     }
 
     @RequestMapping(
-            value = {"tags/edit/{tagId}/update"},
-            method = {RequestMethod.POST, RequestMethod.GET})
-    public String editCat(@PathVariable(name = "tagId") Long tagId, Tag tag, RedirectAttributes redirectAttributes) {
-        log.info("editTag called");
-        log.info("Tag id to update: {}", tagId);
-        log.info("Tag {}", tag);
-        tag.setId(tagId);
-
-        expenseService.findAllThatHaveTag(tag)
-                .forEach(expense -> {
-                    log.info("expense tag: {}", expense);
-                    expense.getTags().forEach(t -> {
-                        if (t.getId() == tagId) {
-                            t = tag;
-                        }
-                    });
-                    expenseService.save(expense);
-                });
-
+            value = {"tags/update"},
+            method = {RequestMethod.POST})
+    public String editCat(Tag tag, RedirectAttributes redirectAttributes) {
         this.tagService.save(tag);
         return "redirect:/tags";
     }
@@ -99,11 +83,11 @@ public class TagController {
     }
 
     @RequestMapping(
-            value = {"/tags"},
+            value = {"/tags/save"},
             method = {RequestMethod.POST}
     )
     public String addNewTag(Tag tag, RedirectAttributes redirectAttributes) {
-        logger.info("Saving called for tag: {}", tag);
+        log.info("Saving called for tag: {}", tag);
         this.tagService.save(tag);
         return "redirect:/tags";
     }

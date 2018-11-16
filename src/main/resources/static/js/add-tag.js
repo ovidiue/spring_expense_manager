@@ -3,3 +3,7 @@ $("#color").colorpicker()
         $('#chosen')
             .css('background-color', e.value);
     });
+
+if (typeof existingTag !== 'undefined' && existingTag !== null) {
+    $("#color").change();
+}
