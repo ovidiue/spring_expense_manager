@@ -7,12 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -40,17 +42,21 @@ public class CategoryController {
     @RequestMapping({"categories/add"})
     public String getAddCatRoute(Model model) {
         log.info("Fetch add view");
-        model.addAttribute("category", new Category());
+        if (!model.containsAttribute("category")) {
+            model.addAttribute("category", new Category());
+        }
         model.addAttribute("formAction", "/categories/save");
         model.addAttribute("pageTitle", "Add Category");
         return "category-add";
     }
 
     @RequestMapping({"categories/edit/{catId}"})
-    public String editCategory(@PathVariable Long catId, Model model) {
+    public String editCategoryRoute(@PathVariable Long catId, Model model) {
         log.info("Fetch edit view");
         Category category = this.categoryService.findById(catId).get();
-        model.addAttribute("category", category);
+        if (!model.containsAttribute("category")) {
+            model.addAttribute("category", category);
+        }
         model.addAttribute("formAction", "/categories/update");
         model.addAttribute("pageTitle", "Edit Category " + category.getName());
         return "category-add";
@@ -79,7 +85,14 @@ public class CategoryController {
     @RequestMapping(
             value = {"categories/update"},
             method = {RequestMethod.POST})
-    public String editCat(Category category, RedirectAttributes redirectAttributes) {
+    public String editCat(@Valid Category category,
+                          BindingResult result,
+                          RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
+            redirectAttributes.addFlashAttribute("category", category);
+            return "redirect:/categories/edit/" + category.getId();
+        }
         this.categoryService.save(category);
         return "redirect:/categories";
     }
@@ -89,8 +102,15 @@ public class CategoryController {
             value = {"/categories/save"},
             method = {RequestMethod.POST}
     )
-    public String addNewCategory(Category category, RedirectAttributes redirectAttributes) {
+    public String saveNewCategory(@Valid Category category,
+                                  BindingResult result,
+                                  RedirectAttributes redirectAttributes) {
         log.info("Saving called for tag: {}", category);
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", result);
+            redirectAttributes.addFlashAttribute("category", category);
+            return "redirect:/categories/add";
+        }
         this.categoryService.save(category);
         return "redirect:/categories";
     }
