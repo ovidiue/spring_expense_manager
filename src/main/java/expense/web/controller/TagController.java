@@ -7,11 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -38,18 +40,23 @@ public class TagController {
     }
 
     @RequestMapping({"tags/add"})
-    public String addTag(Model model) {
-        log.info("Fetch add view");
-        model.addAttribute("tag", new Tag());
+    public String addTagRoute(Model model) {
+        log.info("add tag route called");
+        if (!model.containsAttribute("tag")) {
+            model.addAttribute("tag", new Tag());
+        }
         model.addAttribute("formAction", "/tags/save/");
         model.addAttribute("pageTitle", "Add Tag");
         return "tag-add";
     }
 
     @RequestMapping({"tags/edit/{tagId}"})
-    public String editTag(@PathVariable Long tagId, Model model) {
+    public String editTagRoute(@PathVariable Long tagId, Model model) {
+        log.info("edit tag route called");
         Tag tag = this.tagService.findById(tagId).get();
-        model.addAttribute("tag", tag);
+        if (!model.containsAttribute("tag")) {
+            model.addAttribute("tag", tag);
+        }
         model.addAttribute("formAction", "/tags/update");
         model.addAttribute("pageTitle", "Edit Tag " + tag.getName());
         return "tag-add";
@@ -58,7 +65,15 @@ public class TagController {
     @RequestMapping(
             value = {"tags/update"},
             method = {RequestMethod.POST})
-    public String editCat(Tag tag, RedirectAttributes redirectAttributes) {
+    public String updateEditedTag(@Valid Tag tag,
+                                  BindingResult result,
+                                  RedirectAttributes redirectAttributes) {
+        log.info("tags update called");
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.tag", result);
+            redirectAttributes.addFlashAttribute("tag", tag);
+            return "redirect:/tags/edit/" + tag.getId();
+        }
         this.tagService.save(tag);
         return "redirect:/tags";
     }
@@ -66,7 +81,7 @@ public class TagController {
     @RequestMapping(
             value = {"tags/delete/{tagId}"},
             method = {RequestMethod.POST, RequestMethod.GET})
-    public String deleteTag(@PathVariable(name = "tagId") Long tagId, RedirectAttributes redirectAttributes) {
+    public String deleteTag(@PathVariable(name = "tagId") Long tagId) {
         log.info("deleteTag called");
         log.info("Tag id to delete: {}", tagId);
         tagService.findById(tagId)
@@ -84,10 +99,18 @@ public class TagController {
 
     @RequestMapping(
             value = {"/tags/save"},
-            method = {RequestMethod.POST}
-    )
-    public String addNewTag(Tag tag, RedirectAttributes redirectAttributes) {
+            method = {RequestMethod.POST})
+    public String addNewTag(@Valid Tag tag,
+                            BindingResult result,
+                            RedirectAttributes redirectAttributes) {
+        log.info("save tag called");
         log.info("Saving called for tag: {}", tag);
+        if (result.hasErrors()) {
+            log.info("in has errors");
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.tag", result);
+            redirectAttributes.addFlashAttribute("tag", tag);
+            return "redirect:/tags/add";
+        }
         this.tagService.save(tag);
         return "redirect:/tags";
     }

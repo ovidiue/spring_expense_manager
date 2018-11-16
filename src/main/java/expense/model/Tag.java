@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by Ovidiu on 03-Oct-18.
@@ -18,6 +20,8 @@ import javax.transaction.Transactional;
 @Transactional
 public class Tag {
     @Column
+    @NotNull(message = "Required")
+    @NotEmpty(message = "Required")
     private String name;
     @Column
     private String color;
