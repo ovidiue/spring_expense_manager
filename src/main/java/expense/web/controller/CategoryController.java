@@ -38,9 +38,11 @@ public class CategoryController {
     }
 
     @RequestMapping({"categories/add"})
-    public String addCategory(Model model) {
+    public String getAddCatRoute(Model model) {
         log.info("Fetch add view");
         model.addAttribute("category", new Category());
+        model.addAttribute("formAction", "/categories/save");
+        model.addAttribute("pageTitle", "Add Category");
         return "category-add";
     }
 
@@ -49,7 +51,9 @@ public class CategoryController {
         log.info("Fetch edit view");
         Category category = this.categoryService.findById(catId).get();
         model.addAttribute("category", category);
-        return "category-edit";
+        model.addAttribute("formAction", "/categories/update");
+        model.addAttribute("pageTitle", "Edit Category " + category.getName());
+        return "category-add";
     }
 
     @RequestMapping(
@@ -73,28 +77,16 @@ public class CategoryController {
     }
 
     @RequestMapping(
-            value = {"categories/edit/{catId}/update"},
-            method = {RequestMethod.POST, RequestMethod.GET})
-    public String editCat(@PathVariable(name = "catId") Long catId, Category category, RedirectAttributes redirectAttributes) {
-        log.info("editCat called");
-        log.info("Cat id to update: {}", catId);
-        log.info("Cateogroy {}", category);
-        category.setId(catId);
-
-        expenseService.findAllWithCategory(category)
-                .forEach(expense -> {
-                    log.info("expense category: {}", expense);
-                    expense.setCategory(category);
-                    expenseService.save(expense);
-                });
-
+            value = {"categories/update"},
+            method = {RequestMethod.POST})
+    public String editCat(Category category, RedirectAttributes redirectAttributes) {
         this.categoryService.save(category);
         return "redirect:/categories";
     }
 
 
     @RequestMapping(
-            value = {"/categories"},
+            value = {"/categories/save"},
             method = {RequestMethod.POST}
     )
     public String addNewCategory(Category category, RedirectAttributes redirectAttributes) {
