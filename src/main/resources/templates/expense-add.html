@@ -13,10 +13,11 @@
 <div th:replace="index :: navigation"></div>
 <div class="container-fluid">
     <div class="container-fluid mar-top20">
-        <h3>Add Category</h3>
+        <h3 th:text="${pageTitle}">Add Category</h3>
     </div>
     <div class="col-lg-6 col-xs-12 mx-auto">
-        <form th:action="@{/expenses/save}" method="post" th:object="${expense}">
+        <form th:action="@{${formAction}}" method="post" th:object="${expense}">
+            <input type="hidden" th:field="*{id}">
             <div class="form-group">
                 <label>Title</label>
                 <input type="text" class="form-control" th:field="*{title}">
@@ -59,6 +60,7 @@
 <script th:inline="javascript">
     const CATEGORIES = [[${categories}]];
     const TAGS = [[${tags}]];
+    const existingExpense = [[${expense}]];
 </script>
 <div th:replace="fragments/scripts::scripts"></div>
 <script type="text/javascript" th:src="@{/vendors/colorpicker-2.5.2/bootstrap-colorpicker.js}"></script>

@@ -40,23 +40,24 @@ public class ExpenseController {
     }
 
     @RequestMapping("expenses/edit/{expId}")
-    public String editExpense(@PathVariable("expId") Long expId, Model model) {
+    public String getEditExpenseRoute(@PathVariable("expId") Long expId, Model model) {
         log.info("expense edit screen fetched");
         Expense expense = this.expenseService.findById(expId).get();
         model.addAttribute("expense", expense);
+        model.addAttribute("pageTitle", "Edit Expense " + expense.getTitle());
+        model.addAttribute("formAction", "/expenses/update");
         model.addAttribute("tags", tagService.findAll());
         model.addAttribute("categories", categoryService.findAll());
 
-        return "expense-edit";
+        return "expense-add";
     }
 
-    @RequestMapping("expenses/edit/{expId}/update")
-    public String updateEditedExpense(@PathVariable Long expId,
-                                      @RequestParam Long categoryId,
+    @RequestMapping("expenses/update")
+    public String updateEditedExpense(@RequestParam Long categoryId,
                                       @RequestParam(required = false) List<Long> tagsIds,
                                       Expense expense,
                                       RedirectAttributes redirectAttributes) {
-        expense.setId(expId);
+
         this.categoryService.findById(categoryId)
                 .ifPresent(category -> {
                     expense.setCategory(category);
@@ -78,9 +79,11 @@ public class ExpenseController {
     }
 
     @RequestMapping({"expenses/add"})
-    public String addExpense(Model model) {
+    public String getAddExpenseRoute(Model model) {
         model.addAttribute("tags", tagService.findAll());
         model.addAttribute("categories", categoryService.findAll());
+        model.addAttribute("pageTitle", "Add Expense");
+        model.addAttribute("formAction", "/expenses/save");
         model.addAttribute("expense", new Expense());
         return "expense-add";
     }
