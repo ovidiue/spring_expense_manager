@@ -42,8 +42,9 @@ function initializeSelect(id, arr, multiple = false, templateResult) {
     $(id).select2({
         data: arrForSelect,
         multiple: multiple,
-        allowClear: multiple,
-        templateResult: templateResult
+        templateResult: templateResult,
+        placeholder: "Select",
+        allowClear: true
     });
 }
 
