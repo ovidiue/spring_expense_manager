@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -70,21 +69,21 @@ public class ExpenseController {
             redirectAttributes.addFlashAttribute("tagsIds", tagsIds);
             return "redirect:/expenses/edit/" + expense.getId();
         }
+        if (categoryId != null) {
+            this.categoryService.findById(categoryId)
+                    .ifPresent(category -> {
+                        expense.setCategory(category);
+                    });
+        }
 
-        this.categoryService.findById(categoryId)
-                .ifPresent(category -> {
-                    expense.setCategory(category);
-                });
         if (tagsIds != null) {
             this.tagService.findAllByIds(tagsIds)
                     .ifPresent(tags -> {
                         expense.setTags(tags);
                     });
-        } else {
-            expense.setTags(null);
         }
 
-        log.debug("expense to update: {}", expense);
+        log.info("expense to update: {}", expense);
 
         this.expenseService.save(expense);
 
@@ -112,24 +111,43 @@ public class ExpenseController {
                                  RedirectAttributes redirectAttributes) {
         log.info("categoryId: {}", categoryId);
         log.info("tagsIds: {}", tagIds);
+
         if (result.hasErrors()) {
+            log.info("expense evaluated {}", expense);
+            log.info("in has errors");
+            result.getFieldErrors().forEach(fieldError -> {
+                log.info("field: {}", fieldError.getField());
+                log.info("field: {}", fieldError.getRejectedValue());
+            });
+            result.getAllErrors()
+                    .forEach(err -> {
+                        log.info("err: {}", err.getObjectName());
+                        log.info("err: {}", err.getCode());
+                        log.info("err: {}", err.getCodes());
+                        log.info("err: {}", err.getDefaultMessage());
+
+                    });
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.expense", result);
             redirectAttributes.addFlashAttribute("expense", expense);
             redirectAttributes.addFlashAttribute("categoryId", categoryId);
             redirectAttributes.addFlashAttribute("tagIds", tagIds);
             return "redirect:/expenses/add";
         }
-        categoryService.findById(categoryId)
-                .ifPresent(category -> {
-                    log.info("CATEGORY FOUND: {}", category);
-                    expense.setCategory(category);
-                });
-        tagService.findAllByIds(tagIds)
-                .ifPresent(tags -> {
-                    expense.setTags(tags);
-                });
+        if (categoryId != null) {
+            categoryService.findById(categoryId)
+                    .ifPresent(category -> {
+                        log.info("CATEGORY FOUND: {}", category);
+                        expense.setCategory(category);
+                    });
+        }
+        if (tagIds != null) {
+            tagService.findAllByIds(tagIds)
+                    .ifPresent(tags -> {
+                        expense.setTags(tags);
+                    });
+        }
         log.info("EXPENSE TO SAVE: {}", expense);
-        expense.setCreatedOn(new Date());
+
         expenseService.save(expense);
         return "redirect:/expenses";
     }

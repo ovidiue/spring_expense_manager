@@ -36,9 +36,8 @@ function initializeSelect(id, arr, multiple = false, templateResult) {
                 text: e.name,
                 color: e.color
             };
-        }
-    );
-    id = "#" + id;
+        }),
+        id = "#" + id;
     $(id).select2({
         data: arrForSelect,
         multiple: multiple,
@@ -50,17 +49,10 @@ function initializeSelect(id, arr, multiple = false, templateResult) {
 
 function initializeDatepicker(id) {
     let today = new Date();
-    /* let config = {
-     minDate: today
-     };
+    let $ctrl = $("#" + id);
 
-     if (typeof existingExpense !== 'undefined')
-     config.value = moment(existingExpense.dueDate).format(DATE_FORMAT);
-
-     $("#" + id).datepicker(config);*/
-
-    $("#" + id).datepicker({
+    $ctrl.datepicker({
         minDate: today,
-        value: typeof  existingExpense !== 'undefined' && existingExpense.dueDate ? moment(existingExpense.dueDate).format(DATE_FORMAT) : ""
-    })
+        format: "dd-mm-yyyy"
+    });
 }

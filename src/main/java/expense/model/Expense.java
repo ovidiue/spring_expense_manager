@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
@@ -32,9 +33,10 @@ public class Expense {
     @Column
     private Date createdOn;
     @Column
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date dueDate;
     @Column
-    @NotNull(message = "Required:: must be a number")
+    @NotNull(message = "Required: must be a number")
     private Double amount;
     @Id
     @GeneratedValue
@@ -46,4 +48,8 @@ public class Expense {
     @OneToMany(cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Rate> rates;
+
+    public Expense() {
+        this.createdOn = new Date();
+    }
 }
