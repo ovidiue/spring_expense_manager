@@ -137,3 +137,5 @@ $(function () {
     $('[data-toggle="popover"]').popover({container: 'body'})
 });
 
+NOTIFY.display(notificationInfo);
+

@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Ovidiu on 13-Oct-18.
@@ -86,6 +88,11 @@ public class ExpenseController {
         log.info("expense to update: {}", expense);
 
         this.expenseService.save(expense);
+        Map<String, String> notification = new HashMap<String, String>() {{
+            put("type", "success");
+            put("text", "Successfully updated expense " + expense.getTitle());
+        }};
+        redirectAttributes.addFlashAttribute("notification", notification);
 
         return "redirect:/expenses";
     }
@@ -136,6 +143,11 @@ public class ExpenseController {
         log.info("EXPENSE TO SAVE: {}", expense);
 
         expenseService.save(expense);
+        Map<String, String> notification = new HashMap<String, String>() {{
+            put("type", "success");
+            put("text", "Successfully saved expense " + expense.getTitle());
+        }};
+        redirectAttributes.addFlashAttribute("notification", notification);
         return "redirect:/expenses";
     }
 
@@ -149,7 +161,13 @@ public class ExpenseController {
                 .ifPresent(expense -> {
                     log.info("expense to delete: {}", expense);
                     expenseService.deleteExpense(expense);
+                    Map<String, String> notification = new HashMap<String, String>() {{
+                        put("type", "success");
+                        put("text", "Successfully deleted expense " + expense.getTitle());
+                    }};
+                    redirectAttributes.addFlashAttribute("notification", notification);
                 });
+
         return "redirect:/expenses";
     }
 
