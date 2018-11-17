@@ -70,3 +70,5 @@ $('#catTable tbody').on('click', '.edit-cat', function () {
     console.log("DATA: ", data);
     window.location.assign("/categories/edit/" + data.id);
 });
+
+NOTIFY.display(notificationInfo);

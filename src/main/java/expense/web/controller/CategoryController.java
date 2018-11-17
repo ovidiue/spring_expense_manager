@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Ovidiu on 13-Oct-18.
@@ -78,6 +80,11 @@ public class CategoryController {
                                 expenseService.save(expense);
                             });
                     categoryService.deleteCategory(category);
+                    Map<String, String> notification = new HashMap<String, String>() {{
+                        put("type", "success");
+                        put("text", "Successfully deleted category " + category.getName());
+                    }};
+                    redirectAttributes.addFlashAttribute("notification", notification);
                 });
         return "redirect:/categories";
     }
@@ -94,6 +101,11 @@ public class CategoryController {
             return "redirect:/categories/edit/" + category.getId();
         }
         this.categoryService.save(category);
+        Map<String, String> notification = new HashMap<String, String>() {{
+            put("type", "success");
+            put("text", "Successfully updated category " + category.getName());
+        }};
+        redirectAttributes.addFlashAttribute("notification", notification);
         return "redirect:/categories";
     }
 
@@ -112,6 +124,11 @@ public class CategoryController {
             return "redirect:/categories/add";
         }
         this.categoryService.save(category);
+        Map<String, String> notification = new HashMap<String, String>() {{
+            put("type", "success");
+            put("text", "Successfully saved category " + category.getName());
+        }};
+        redirectAttributes.addFlashAttribute("notification", notification);
         return "redirect:/categories";
     }
 }
