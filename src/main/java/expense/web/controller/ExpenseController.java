@@ -61,14 +61,6 @@ public class ExpenseController {
                                       @Valid Expense expense,
                                       BindingResult result,
                                       RedirectAttributes redirectAttributes) {
-
-        if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.expense", result);
-            redirectAttributes.addFlashAttribute("expense", expense);
-            redirectAttributes.addFlashAttribute("categoryId", categoryId);
-            redirectAttributes.addFlashAttribute("tagsIds", tagsIds);
-            return "redirect:/expenses/edit/" + expense.getId();
-        }
         if (categoryId != null) {
             this.categoryService.findById(categoryId)
                     .ifPresent(category -> {
@@ -81,6 +73,14 @@ public class ExpenseController {
                     .ifPresent(tags -> {
                         expense.setTags(tags);
                     });
+        }
+
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.expense", result);
+            redirectAttributes.addFlashAttribute("expense", expense);
+            redirectAttributes.addFlashAttribute("categoryId", categoryId);
+            redirectAttributes.addFlashAttribute("tagsIds", tagsIds);
+            return "redirect:/expenses/edit/" + expense.getId();
         }
 
         log.info("expense to update: {}", expense);
@@ -112,27 +112,6 @@ public class ExpenseController {
         log.info("categoryId: {}", categoryId);
         log.info("tagsIds: {}", tagIds);
 
-        if (result.hasErrors()) {
-            log.info("expense evaluated {}", expense);
-            log.info("in has errors");
-            result.getFieldErrors().forEach(fieldError -> {
-                log.info("field: {}", fieldError.getField());
-                log.info("field: {}", fieldError.getRejectedValue());
-            });
-            result.getAllErrors()
-                    .forEach(err -> {
-                        log.info("err: {}", err.getObjectName());
-                        log.info("err: {}", err.getCode());
-                        log.info("err: {}", err.getCodes());
-                        log.info("err: {}", err.getDefaultMessage());
-
-                    });
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.expense", result);
-            redirectAttributes.addFlashAttribute("expense", expense);
-            redirectAttributes.addFlashAttribute("categoryId", categoryId);
-            redirectAttributes.addFlashAttribute("tagIds", tagIds);
-            return "redirect:/expenses/add";
-        }
         if (categoryId != null) {
             categoryService.findById(categoryId)
                     .ifPresent(category -> {
@@ -145,6 +124,14 @@ public class ExpenseController {
                     .ifPresent(tags -> {
                         expense.setTags(tags);
                     });
+        }
+
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.expense", result);
+            redirectAttributes.addFlashAttribute("expense", expense);
+            redirectAttributes.addFlashAttribute("categoryId", categoryId);
+            redirectAttributes.addFlashAttribute("tagIds", tagIds);
+            return "redirect:/expenses/add";
         }
         log.info("EXPENSE TO SAVE: {}", expense);
 

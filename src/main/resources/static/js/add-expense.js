@@ -31,14 +31,14 @@ function formatEntryDisplay(entry) {
 
 function initializeSelect(id, arr, multiple = false, templateResult) {
     let arrForSelect = arr.map(e => {
-            return {
-                id: e.id,
-                text: e.name,
-                color: e.color
-            };
-        }),
-        id = "#" + id;
-    $(id).select2({
+        return {
+            id: e.id,
+            text: e.name,
+            color: e.color
+        };
+    });
+    let $ctrl = $("#" + id);
+    $ctrl.select2({
         data: arrForSelect,
         multiple: multiple,
         templateResult: templateResult,
