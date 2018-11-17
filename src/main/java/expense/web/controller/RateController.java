@@ -74,19 +74,24 @@ public class RateController {
                            BindingResult result,
                            RedirectAttributes redirectAttributes) {
         log.info("rate: {}", rate);
+
+        Expense expense = null;
+
+        if (expId != null) {
+            expense = this.expenseService.findById(expId).get();
+        }
+
         if (result.hasErrors()) {
             log.info("result {}", result);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.rate", result);
+            redirectAttributes.addFlashAttribute("expense", expense);
             redirectAttributes.addFlashAttribute("rate", rate);
             return "redirect:/rates/add";
         }
-        if (expId != null) {
-            this.expenseService.findById(expId)
-                    .ifPresent(expense -> {
-                        log.info("rate chosen expense: {}", expense);
-                        expense.getRates().add(rate);
-                        this.expenseService.save(expense);
-                    });
+        if (expense != null) {
+            expense.getRates().add(rate);
+            this.expenseService.save(expense);
+
         } else {
             this.rateService.save(rate);
         }
@@ -100,10 +105,16 @@ public class RateController {
                              BindingResult result,
                              RedirectAttributes redirectAttributes) {
         log.info("rate: {}", rate);
+        Expense newChosenExpense = null;
+        if (expId != null) {
+            newChosenExpense = this.expenseService.findById(expId).get();
+        }
         if (result.hasErrors()) {
+            log.info("in has errors newChosenExpense {}", newChosenExpense);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.rate", result);
             redirectAttributes.addFlashAttribute("rate", rate);
-            return "redirect:/rates/add";
+            redirectAttributes.addFlashAttribute("expense", newChosenExpense);
+            return "redirect:/rates/edit/" + rate.getId();
         }
         Rate initialRate = this.rateService.findById(rate.getId()).get();
 
@@ -118,16 +129,12 @@ public class RateController {
                 log.info("in different ids");
                 previousSetExpense.getRates().remove(initialRate);
                 this.expenseService.save(previousSetExpense);
-                Expense newChosenExpense = this.expenseService.findById(expId).get();
                 newChosenExpense.getRates().add(rate);
                 this.expenseService.save(newChosenExpense);
             }
         } else if (expId != null && previousSetExpense == null) {
-            this.expenseService.findById(expId)
-                    .ifPresent(expense -> {
-                        expense.getRates().add(rate);
-                        this.expenseService.save(expense);
-                    });
+            newChosenExpense.getRates().add(rate);
+            this.expenseService.save(newChosenExpense);
         } else {
             log.info("expId is null");
             if (previousSetExpense != null) {
