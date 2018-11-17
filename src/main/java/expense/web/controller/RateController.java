@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Ovidiu on 07-Oct-18.
@@ -95,7 +97,11 @@ public class RateController {
         } else {
             this.rateService.save(rate);
         }
-
+        Map<String, String> notification = new HashMap<String, String>() {{
+            put("type", "success");
+            put("text", "Successfully saved rate " + rate.getAmount());
+        }};
+        redirectAttributes.addFlashAttribute("notification", notification);
         return "redirect:/rates";
     }
 
@@ -143,7 +149,11 @@ public class RateController {
             }
             this.rateService.save(rate);
         }
-
+        Map<String, String> notification = new HashMap<String, String>() {{
+            put("type", "success");
+            put("text", "Successfully updated rate " + rate.getAmount());
+        }};
+        redirectAttributes.addFlashAttribute("notification", notification);
         return "redirect:/rates";
     }
 
@@ -158,7 +168,13 @@ public class RateController {
                         this.expenseService.save(ex);
                     });
                     this.rateService.delete(r);
+                    Map<String, String> notification = new HashMap<String, String>() {{
+                        put("type", "success");
+                        put("text", "Successfully deleted rate " + r.getAmount());
+                    }};
+                    redirectAttributes.addFlashAttribute("notification", notification);
                 });
+
         return "redirect:/rates";
     }
 

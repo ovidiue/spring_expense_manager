@@ -80,3 +80,5 @@ $('#ratesTable tbody').on('click', '.edit-rate', function () {
     console.log("DATA: ", data);
     window.location.assign("/rates/edit/" + data.id);
 });
+
+NOTIFY.display(notificationInfo);
