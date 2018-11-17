@@ -1,6 +1,7 @@
 package expense.model;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +24,7 @@ public class Rate {
     @Column(columnDefinition = "clob")
     private String observation;
     @Column
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date payedOn;
     @Id
     @GeneratedValue
