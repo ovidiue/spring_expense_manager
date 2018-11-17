@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Ovidiu on 13-Oct-18.
@@ -75,13 +77,19 @@ public class TagController {
             return "redirect:/tags/edit/" + tag.getId();
         }
         this.tagService.save(tag);
+        Map<String, String> notification = new HashMap<String, String>() {{
+            put("type", "success");
+            put("text", "Successfully updated tag " + tag.getName());
+        }};
+        redirectAttributes.addFlashAttribute("notification", notification);
         return "redirect:/tags";
     }
 
     @RequestMapping(
             value = {"tags/delete/{tagId}"},
             method = {RequestMethod.POST, RequestMethod.GET})
-    public String deleteTag(@PathVariable(name = "tagId") Long tagId) {
+    public String deleteTag(@PathVariable(name = "tagId") Long tagId,
+                            RedirectAttributes redirectAttributes) {
         log.info("deleteTag called");
         log.info("Tag id to delete: {}", tagId);
         tagService.findById(tagId)
@@ -93,7 +101,13 @@ public class TagController {
                         expenseService.save(expense);
                     });
                     tagService.deleteTag(tag);
+                    Map<String, String> notification = new HashMap<String, String>() {{
+                        put("type", "success");
+                        put("text", "Successfully deleted tag " + tag.getName());
+                    }};
+                    redirectAttributes.addFlashAttribute("notification", notification);
                 });
+
         return "redirect:/tags";
     }
 
@@ -112,6 +126,11 @@ public class TagController {
             return "redirect:/tags/add";
         }
         this.tagService.save(tag);
+        Map<String, String> notification = new HashMap<String, String>() {{
+            put("type", "success");
+            put("text", "Successfully added tag " + tag.getName());
+        }};
+        redirectAttributes.addFlashAttribute("notification", notification);
         return "redirect:/tags";
     }
 

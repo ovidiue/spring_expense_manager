@@ -67,3 +67,5 @@ $('#tagsTable tbody').on('click', '.edit-tag', function () {
     console.log("DATA: ", data);
     window.location.assign("/tags/edit/" + data.id);
 });
+
+NOTIFY.display(notificationInfo);
