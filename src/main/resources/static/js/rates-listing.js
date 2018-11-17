@@ -11,6 +11,10 @@ let columns = [
         title: "Created On",
         data: "creationDate"
     },
+    {
+        title: "Payed On",
+        data: "payedOn"
+    },
     {title: "Actions"}
 ];
 
@@ -26,12 +30,20 @@ let columnDefs = [
             `;
         },
         width: "10%"
-    }, {
+    },
+    {
         targets: 2,
         render: function (data) {
             return moment(data).format(DATE_FORMAT);
         }
+    },
+    {
+        targets: 3,
+        render: function (data) {
+            return moment(data).format(DATE_FORMAT);
+        }
     }
+
 ];
 
 const table = $('#ratesTable').DataTable({
