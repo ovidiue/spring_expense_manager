@@ -58,21 +58,14 @@ $("div.toolbar").append('<div class="add-btn float-right"><a class="btn btn-prim
 $('#ratesTable tbody').on('click', '.delete-rate', function () {
     const data = table.row($(this).parents('tr')).data();
     console.log("DATA: ", data);
-    swal({
-        title: 'Delete rate: ' + data.amount,
-        text: "You won't be able to revert this!",
-        type: 'warning',
-        showCancelButton: true,
-        cancelButtonColor: '#3085d6',
-        confirmButtonColor: '#d33',
-        confirmButtonText: 'DELETE!'
-    }).then((result) => {
-        console.log(result);
-        if (result.value) {
-            window.location.pathname = "/rates/delete/" + data.id
-        }
-    })
-
+    SWAL.delete('Delete rate: ' + data.amount)
+        .then((result) => {
+                console.log(result);
+                if (result) {
+                    window.location.assign("/rates/delete/" + data.id);
+                }
+            }
+        );
 });
 
 $('#ratesTable tbody').on('click', '.edit-rate', function () {

@@ -48,21 +48,14 @@ $("div.toolbar").append('<div class="add-btn float-right"><a class="btn btn-prim
 $('#catTable tbody').on('click', '.delete-cat', function () {
     const data = table.row($(this).parents('tr')).data();
     console.log("DATA: ", data);
-    swal({
-        title: 'Delete category: ' + data.name,
-        text: "You won't be able to revert this!",
-        type: 'warning',
-        showCancelButton: true,
-        cancelButtonColor: '#3085d6',
-        confirmButtonColor: '#d33',
-        confirmButtonText: 'DELETE!'
-    }).then((result) => {
-        console.log(result);
-        if (result.value) {
-            window.location.pathname = "/categories/delete/" + data.id
-        }
-    })
-
+    SWAL.delete('Delete category: ' + data.name)
+        .then((result) => {
+                console.log(result);
+                if (result) {
+                    window.location.assign("/categories/delete/" + data.id);
+                }
+            }
+        );
 });
 
 $('#catTable tbody').on('click', '.edit-cat', function () {
