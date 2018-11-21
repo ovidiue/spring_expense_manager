@@ -6,12 +6,28 @@ body {
     margin-top: 20px;
 }
 
+.mar-btm20 {
+    margin-bottom: 20px;
+}
+
 .full-width {
     width: 100%;
 }
 
 .height100 {
     height: 100px;
+}
+
+.minw-100 {
+    min-width: 100px;
+}
+
+.title-container {
+    padding: 10px;
+    background: linear-gradient(lightgray, #a3a2a2);
+    text-shadow: 1px 1px 4px gray;
+    border-radius: 5px;
+    color: #fff;
 }
 
 #chosen {
@@ -130,4 +146,24 @@ table th {
 .form-error {
     font-style: italic;
     color: crimson;
+}
+
+.swal-title {
+    margin: 0px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.21);
+    margin-bottom: 28px;
+    color: white;
+}
+
+.swal-footer {
+    background-color: black;
+    overflow: hidden;
+}
+
+.swal-modal {
+    background-color: rgba(57, 57, 57, 0.90);
+}
+
+.swal-text {
+    color: white;
 }
