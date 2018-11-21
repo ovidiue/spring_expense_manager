@@ -34,13 +34,15 @@ let columnDefs = [
     {
         targets: 2,
         render: function (data) {
-            return moment(data).format(DATE_FORMAT);
+            let value = data ? moment(data).format(DATE_FORMAT) : "";
+            return value;
         }
     },
     {
         targets: 3,
         render: function (data) {
-            return moment(data).format(DATE_FORMAT);
+            let value = data ? moment(data).format(DATE_FORMAT) : "";
+            return value;
         }
     }
 
