@@ -15,6 +15,10 @@ let columns = [
         title: "Payed On",
         data: "payedOn"
     },
+    {
+        title: "Expense",
+        data: "expense.title"
+    },
     {title: "Actions"}
 ];
 
@@ -43,6 +47,13 @@ let columnDefs = [
         render: function (data) {
             let value = data ? moment(data).format(DATE_FORMAT) : "";
             return value;
+        }
+    }
+    ,
+    {
+        targets: 4,
+        render: function (data) {
+            return data ? data : "";
         }
     }
 

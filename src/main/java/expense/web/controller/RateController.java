@@ -40,7 +40,7 @@ public class RateController {
     }
 
     @RequestMapping("/rates/add")
-    public String getAddRateView(Model model) {
+    public String getAddRateRoute(Model model) {
         if (!model.containsAttribute("rate")) {
             model.addAttribute("rate", new Rate());
         }
@@ -52,7 +52,7 @@ public class RateController {
     }
 
     @GetMapping("/rates/edit/{rateId}")
-    public String getEditRateView(@PathVariable Long rateId, Model model) {
+    public String getEditRateRoute(@PathVariable Long rateId, Model model) {
         //Rate rate = this.rateService.findById(rateId).get();
         Rate rate = model.containsAttribute("rate") ?
                 (Rate) model.asMap().get("rate") :
@@ -92,6 +92,7 @@ public class RateController {
         }
         if (expense != null) {
             expense.getRates().add(rate);
+            rate.setExpense(expense);
             this.expenseService.save(expense);
 
         } else {
@@ -136,10 +137,12 @@ public class RateController {
                 previousSetExpense.getRates().remove(initialRate);
                 this.expenseService.save(previousSetExpense);
                 newChosenExpense.getRates().add(rate);
+                rate.setExpense(newChosenExpense);
                 this.expenseService.save(newChosenExpense);
             }
         } else if (expId != null && previousSetExpense == null) {
             newChosenExpense.getRates().add(rate);
+            rate.setExpense(newChosenExpense);
             this.expenseService.save(newChosenExpense);
         } else {
             log.info("expId is null");
@@ -147,6 +150,7 @@ public class RateController {
                 previousSetExpense.getRates().remove(initialRate);
                 this.expenseService.save(previousSetExpense);
             }
+            rate.setExpense(null);
             this.rateService.save(rate);
         }
         Map<String, String> notification = new HashMap<String, String>() {{

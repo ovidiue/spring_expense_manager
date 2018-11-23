@@ -1,5 +1,6 @@
 package expense.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.LazyCollection;
@@ -47,6 +48,7 @@ public class Expense {
     private Category category;
     @OneToMany(cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonManagedReference
     private List<Rate> rates;
 
     public Expense() {
