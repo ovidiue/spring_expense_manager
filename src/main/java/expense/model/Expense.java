@@ -1,7 +1,8 @@
 package expense.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -19,6 +20,7 @@ import java.util.List;
  */
 @Entity
 @Data
+@ToString(exclude = "rates")
 @Slf4j
 @Transactional
 public class Expense {
@@ -46,9 +48,9 @@ public class Expense {
     private List<Tag> tags;
     @ManyToOne
     private Category category;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.DETACH, mappedBy = "expense")
     @LazyCollection(LazyCollectionOption.FALSE)
-    @JsonManagedReference
+    @JsonBackReference
     private List<Rate> rates;
 
     public Expense() {

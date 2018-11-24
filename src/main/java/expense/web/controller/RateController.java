@@ -94,7 +94,7 @@ public class RateController {
             expense.getRates().add(rate);
             rate.setExpense(expense);
             this.expenseService.save(expense);
-
+            this.rateService.save(rate);
         } else {
             this.rateService.save(rate);
         }
@@ -139,11 +139,13 @@ public class RateController {
                 newChosenExpense.getRates().add(rate);
                 rate.setExpense(newChosenExpense);
                 this.expenseService.save(newChosenExpense);
+                this.rateService.save(rate);
             }
         } else if (expId != null && previousSetExpense == null) {
             newChosenExpense.getRates().add(rate);
             rate.setExpense(newChosenExpense);
             this.expenseService.save(newChosenExpense);
+            this.rateService.save(rate);
         } else {
             log.info("expId is null");
             if (previousSetExpense != null) {
@@ -166,12 +168,18 @@ public class RateController {
     public String deleteRate(@PathVariable Long rateId, RedirectAttributes redirectAttributes) {
         this.rateService.findById(rateId)
                 .ifPresent(r -> {
+                    log.info("delete rate {}", r);
+                    if (r.getExpense() != null) {
+                        r.setExpense(null);
+                    }
+                    this.rateService.delete(r);
                     List<Expense> expensesWithRate = this.expenseService.findAllWithRate(r);
                     expensesWithRate.forEach(ex -> {
+                        log.info("expense that has rate {}", ex);
                         ex.getRates().remove(r);
                         this.expenseService.save(ex);
                     });
-                    this.rateService.delete(r);
+
                     Map<String, String> notification = new HashMap<String, String>() {{
                         put("type", "success");
                         put("text", "Successfully deleted rate " + r.getAmount());

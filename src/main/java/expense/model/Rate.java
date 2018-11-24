@@ -1,8 +1,8 @@
 package expense.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,6 +16,7 @@ import java.util.Date;
  */
 @Entity
 @Data
+@ToString(exclude = "expense")
 public class Rate {
     @Column
     @NotNull(message = "Required: must be a number")
@@ -31,10 +32,9 @@ public class Rate {
     @GeneratedValue
     private Long id;
 
-    //@JsonBackReference
     @LazyCollection(LazyCollectionOption.FALSE)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @ManyToOne
+    @JsonManagedReference
     private Expense expense;
 
     public Rate() {
