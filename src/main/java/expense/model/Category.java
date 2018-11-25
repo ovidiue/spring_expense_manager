@@ -18,7 +18,8 @@ public class Category {
     @NotNull(message = "Required")
     @NotEmpty(message = "Required")
     private String name;
-    @Column
+    @Column(columnDefinition = "clob")
+    @Lob
     private String description;
     @Column
     private String color;

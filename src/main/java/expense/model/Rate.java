@@ -24,6 +24,7 @@ public class Rate {
     @Column
     private Date creationDate;
     @Column(columnDefinition = "clob")
+    @Lob
     private String observation;
     @Column
     @DateTimeFormat(pattern = "dd-MM-yyyy")

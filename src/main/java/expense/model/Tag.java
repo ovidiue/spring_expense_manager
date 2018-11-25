@@ -25,7 +25,8 @@ public class Tag {
     private String name;
     @Column
     private String color;
-    @Column
+    @Column(columnDefinition = "clob")
+    @Lob
     private String description;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
