@@ -184,3 +184,11 @@ table th {
     -o-transition-duration: .2s;
     transition-duration: .2s;
 }*/
+
+.nav-link:hover,
+.navbar li.active > a {
+    background: linear-gradient(#9b7d3c, #e57553);
+    color: white !important;
+    border-radius: 5px;
+    transition-duration: .3s;
+}
