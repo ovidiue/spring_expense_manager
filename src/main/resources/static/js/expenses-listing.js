@@ -97,6 +97,36 @@ function extractArrAsSpan(arr) {
     return "";
 }
 
+function createTableElementFromArr(arr) {
+    let getDomEl = function (el) {
+        return document.createElement(el);
+    };
+
+    let titles = ["Value", "Payed On"];
+
+    let table = getDomEl("table");
+    table.className = "table table-striped table-dark";
+    let tHead = table.appendChild(getDomEl("thead"));
+    let tHeadRow = table.tHead.appendChild(getDomEl("tr"));
+    titles.forEach(el => {
+        let th = tHeadRow.appendChild(getDomEl("th"));
+        th.textContent = el;
+    });
+
+    let tBody = table.appendChild(getDomEl("tBody"));
+    arr.forEach(el => {
+        let tr = tBody.appendChild(getDomEl("tr"));
+        for (let key in el) {
+            if (key === 'amount' || key === 'payedOn') {
+                let td = tr.appendChild(getDomEl("td"));
+                td.textContent = el[key];
+            }
+        }
+    });
+
+    return table;
+}
+
 const table = $('#expensesTable').DataTable({
     data: EXPENSES,
     columns: columns,
@@ -127,8 +157,27 @@ $('#expensesTable tbody').on('click', '.ed-exp', function () {
 
 $('#expensesTable tbody').on('click', '.vw-r', function () {
     const data = table.row($(this).parents('tr')).data();
-    console.log("DATA: ", data);
-    window.location.assign("rates/" + data.id);
+    axios.get("http://localhost:8080/api/rates/get-all/" + data.id)
+        .then(resp => {
+            console.table(resp);
+            if (resp.data) {
+                let domTable = createTableElementFromArr(resp.data);
+                swal({
+                    buttons: {
+                        details: {
+                            value: 'details',
+                            text: "See more details"
+                        },
+                        ok: true
+                    },
+                    content: domTable
+                }).then(value => {
+                    if (value === 'details') {
+                        window.location.assign("rates/" + data.id);
+                    }
+                })
+            }
+        })
 });
 
 $(function () {
