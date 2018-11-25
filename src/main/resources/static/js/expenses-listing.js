@@ -168,12 +168,19 @@ $('#expensesTable tbody').on('click', '.vw-r', function () {
                             value: 'details',
                             text: "See more details"
                         },
+                        add: {
+                            value: 'add',
+                            text: "Add new"
+                        },
                         ok: true
                     },
                     content: domTable
                 }).then(value => {
                     if (value === 'details') {
                         window.location.assign("rates/" + data.id);
+                    }
+                    if (value === "add") {
+                        window.location.assign("rates/add");
                     }
                 })
             }
