@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -29,13 +30,15 @@ public class RateController {
     @Autowired
     ExpenseService expenseService;
 
-    @GetMapping("/rates")
-    public String getRates(Model model) {
-        log.info("Access index");
-        List<Rate> rates = rateService.findAll();
-        log.info("Fetch rates");
+    @GetMapping(value = {"/rates/{expId}", "/rates"})
+    public String getRatesByExpense(@PathVariable(required = false) Long expId, Model model, HttpServletRequest request) {
+        log.info("rate for expId {}", expId);
+        String uri = request.getRequestURI();
+        List<Rate> rates = uri.equalsIgnoreCase("/rates") ?
+                this.rateService.findAll() :
+                this.rateService.findByExpenseId(expId);
+        log.info("rate for expId {}", rates);
         model.addAttribute("rates", rates);
-        log.info("Add rates on model {}", rates);
         return "rates-listing";
     }
 

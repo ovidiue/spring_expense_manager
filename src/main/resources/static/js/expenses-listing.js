@@ -49,12 +49,10 @@ let columnDefs = [
     }, {
         targets: -1,
         render: function (data, type, row, meta) {
-            return `
-            <div>
-                <span><i class="far fa-edit ed-exp"></i></span>                
-                <span><i class="far fa-trash-alt del-exp"></i></span>
-            </div>
-            `;
+            return $("<div><span><i class='far fa-edit ed-exp'></i></span>" +
+                "<span><i class='far fa-trash-alt del-exp'></i></span>" +
+                "<span><i class='fas fa-list-ul vw-r'></i></span>" +
+                "</div>").html();
         },
         width: "10%"
     }, {
@@ -125,6 +123,12 @@ $('#expensesTable tbody').on('click', '.ed-exp', function () {
     const data = table.row($(this).parents('tr')).data();
     console.log("DATA: ", data);
     window.location.assign("/expenses/edit/" + data.id);
+});
+
+$('#expensesTable tbody').on('click', '.vw-r', function () {
+    const data = table.row($(this).parents('tr')).data();
+    console.log("DATA: ", data);
+    window.location.assign("rates/" + data.id);
 });
 
 $(function () {

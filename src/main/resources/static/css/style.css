@@ -82,6 +82,7 @@ body {
 
 table .fa-edit,
 table .fa-trash-alt,
+table .fa-list-ul,
 table .fa-info {
     cursor: pointer;
 }
@@ -96,6 +97,10 @@ table .fa-trash-alt {
 
 table .fa-info {
     color: cornflowerblue;
+}
+
+i {
+    margin: 0 2px;
 }
 
 .width50-p {
@@ -167,3 +172,15 @@ table th {
 .swal-text {
     color: white;
 }
+
+/*
+.form-control:focus {
+    -webkit-box-shadow: lightgray 0px 2px 9px 5px !important;
+    -moz-box-shadow: lightgray 0px 2px 9px 5px !important;
+    box-shadow: lightgray 0px 2px 9px 5px !important;
+    -webkit-transition-duration: .2s;
+    -moz-transition-duration: .2s;
+    -ms-transition-duration: .2s;
+    -o-transition-duration: .2s;
+    transition-duration: .2s;
+}*/

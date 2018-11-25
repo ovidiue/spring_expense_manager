@@ -31,4 +31,8 @@ public class RateService {
     public void delete(Rate r) {
         this.rateRepository.delete(r);
     }
+
+    public List<Rate> findByExpenseId(Long expId) {
+        return this.rateRepository.findAllByExpense_Id(expId);
+    }
 }
