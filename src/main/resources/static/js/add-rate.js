@@ -6,7 +6,10 @@ if (typeof previousExpense !== 'undefined' && previousExpense !== null && previo
 }
 
 function initializeDatepicker(id) {
+    let today = new Date();
+
     $("#" + id).datepicker({
+        maxDate: today,
         format: "dd-mm-yyyy"
     })
 }
