@@ -24,13 +24,14 @@ import java.util.Map;
  */
 @Controller
 @Slf4j
+@RequestMapping("/rates")
 public class RateController {
     @Autowired
     RateService rateService;
     @Autowired
     ExpenseService expenseService;
 
-    @GetMapping(value = {"/rates/{expId}", "/rates"})
+    @GetMapping(value = {"/{expId}", "/rates"})
     public String getRatesByExpense(@PathVariable(required = false) Long expId, Model model, HttpServletRequest request) {
         log.info("rate for expId {}", expId);
         String uri = request.getRequestURI();
@@ -42,7 +43,7 @@ public class RateController {
         return "rates-listing";
     }
 
-    @RequestMapping("/rates/add")
+    @RequestMapping("/add")
     public String getAddRateRoute(Model model) {
         if (!model.containsAttribute("rate")) {
             model.addAttribute("rate", new Rate());
@@ -54,7 +55,7 @@ public class RateController {
         return "rate-add";
     }
 
-    @GetMapping("/rates/edit/{rateId}")
+    @GetMapping("/edit/{rateId}")
     public String getEditRateRoute(@PathVariable Long rateId, Model model) {
         //Rate rate = this.rateService.findById(rateId).get();
         Rate rate = model.containsAttribute("rate") ?
@@ -73,7 +74,7 @@ public class RateController {
         return "rate-add";
     }
 
-    @RequestMapping(value = {"/rates/save"}, method = {RequestMethod.POST})
+    @RequestMapping(value = {"/save"}, method = {RequestMethod.POST})
     public String saveRate(@RequestParam(required = false) Long expId,
                            @Valid Rate rate,
                            BindingResult result,
@@ -109,7 +110,7 @@ public class RateController {
         return "redirect:/rates";
     }
 
-    @RequestMapping(value = {"/rates/update"}, method = {RequestMethod.POST})
+    @RequestMapping(value = {"/update"}, method = {RequestMethod.POST})
     public String updateRate(@RequestParam(required = false) Long expId,
                              @Valid Rate rate,
                              BindingResult result,
@@ -166,7 +167,7 @@ public class RateController {
         return "redirect:/rates";
     }
 
-    @RequestMapping(value = "rates/delete/{rateId}",
+    @RequestMapping(value = "/delete/{rateId}",
             method = {RequestMethod.POST, RequestMethod.GET})
     public String deleteRate(@PathVariable Long rateId, RedirectAttributes redirectAttributes) {
         this.rateService.findById(rateId)

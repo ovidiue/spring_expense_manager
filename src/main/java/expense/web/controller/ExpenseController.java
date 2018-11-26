@@ -26,6 +26,7 @@ import java.util.Map;
 @Controller
 @Slf4j
 @Transactional
+@RequestMapping("/expenses")
 public class ExpenseController {
     @Autowired
     private ExpenseService expenseService;
@@ -36,7 +37,7 @@ public class ExpenseController {
     @Autowired
     private RateService rateService;
 
-    @GetMapping("/expenses")
+    @GetMapping("")
     public String getExpenses(Model model) {
         List<Expense> expenses = expenseService.findAll();
         expenses.forEach(expense -> {
@@ -46,7 +47,7 @@ public class ExpenseController {
         return "expenses-listing";
     }
 
-    @RequestMapping("expenses/edit/{expId}")
+    @RequestMapping("/edit/{expId}")
     public String getEditExpenseRoute(@PathVariable("expId") Long expId, Model model) {
         log.info("expense edit screen fetched");
         Expense expense = this.expenseService.findById(expId).get();
@@ -61,7 +62,7 @@ public class ExpenseController {
         return "expense-add";
     }
 
-    @RequestMapping("expenses/update")
+    @RequestMapping("/update")
     public String updateEditedExpense(@RequestParam(required = false) Long categoryId,
                                       @RequestParam(required = false) List<Long> tagsIds,
                                       @Valid Expense expense,
@@ -101,7 +102,7 @@ public class ExpenseController {
         return "redirect:/expenses";
     }
 
-    @RequestMapping({"expenses/add"})
+    @RequestMapping({"/add"})
     public String getAddExpenseRoute(Model model) {
         if (!model.containsAttribute("expense")) {
             model.addAttribute("expense", new Expense());
@@ -114,7 +115,7 @@ public class ExpenseController {
         return "expense-add";
     }
 
-    @RequestMapping(value = {"/expenses/save"}, method = {RequestMethod.POST})
+    @RequestMapping(value = {"/save"}, method = {RequestMethod.POST})
     public String saveNewExpense(@RequestParam(name = "categoryId", required = false) Long categoryId,
                                  @RequestParam(name = "tagsIds", required = false) List<Long> tagIds,
                                  @Valid Expense expense,
@@ -156,7 +157,7 @@ public class ExpenseController {
     }
 
     @RequestMapping(
-            value = {"expenses/delete/{expId}"},
+            value = {"/delete/{expId}"},
             method = {RequestMethod.POST, RequestMethod.GET})
     public String deleteExp(@PathVariable(name = "expId") Long expId, RedirectAttributes redirectAttributes) {
         log.info("deleteExp called");
@@ -176,7 +177,7 @@ public class ExpenseController {
     }
 
     @RequestMapping(
-            value = {"expenses/delete-rates/{expId}"},
+            value = {"/delete-rates/{expId}"},
             method = {RequestMethod.POST, RequestMethod.GET})
     public String deleteExpAndRates(@PathVariable(name = "expId") Long expId, RedirectAttributes redirectAttributes) {
         log.info("deleteExpRates called");

@@ -23,6 +23,7 @@ import java.util.Map;
  */
 @Controller
 @Slf4j
+@RequestMapping("/tags")
 public class TagController {
     @Autowired
     private TagService tagService;
@@ -33,7 +34,7 @@ public class TagController {
     public TagController() {
     }
 
-    @RequestMapping({"/tags"})
+    @RequestMapping({""})
     public String getTags(Model model) {
         log.info("Fetching tags route");
         List<Tag> tags = tagService.findAll();
@@ -41,7 +42,7 @@ public class TagController {
         return "tags-listing";
     }
 
-    @RequestMapping({"tags/add"})
+    @RequestMapping({"/add"})
     public String addTagRoute(Model model) {
         log.info("add tag route called");
         if (!model.containsAttribute("tag")) {
@@ -52,7 +53,7 @@ public class TagController {
         return "tag-add";
     }
 
-    @RequestMapping({"tags/edit/{tagId}"})
+    @RequestMapping({"/edit/{tagId}"})
     public String editTagRoute(@PathVariable Long tagId, Model model) {
         log.info("edit tag route called");
         Tag tag = this.tagService.findById(tagId).get();
@@ -65,7 +66,7 @@ public class TagController {
     }
 
     @RequestMapping(
-            value = {"tags/update"},
+            value = {"/update"},
             method = {RequestMethod.POST})
     public String updateEditedTag(@Valid Tag tag,
                                   BindingResult result,
@@ -86,7 +87,7 @@ public class TagController {
     }
 
     @RequestMapping(
-            value = {"tags/delete/{tagId}"},
+            value = {"/delete/{tagId}"},
             method = {RequestMethod.POST, RequestMethod.GET})
     public String deleteTag(@PathVariable(name = "tagId") Long tagId,
                             RedirectAttributes redirectAttributes) {
@@ -112,7 +113,7 @@ public class TagController {
     }
 
     @RequestMapping(
-            value = {"/tags/save"},
+            value = {"/save"},
             method = {RequestMethod.POST})
     public String addNewTag(@Valid Tag tag,
                             BindingResult result,

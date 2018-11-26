@@ -24,6 +24,7 @@ import java.util.Map;
  */
 @Controller
 @Slf4j
+@RequestMapping("/categories")
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
@@ -34,14 +35,14 @@ public class CategoryController {
     public CategoryController() {
     }
 
-    @GetMapping("/categories")
+    @GetMapping("")
     public String getCategories(Model model) {
         List<Category> categories = categoryService.findAll();
         model.addAttribute("categories", categories);
         return "categories-listing";
     }
 
-    @RequestMapping({"categories/add"})
+    @RequestMapping({"/add"})
     public String getAddCatRoute(Model model) {
         log.info("Fetch add view");
         if (!model.containsAttribute("category")) {
@@ -52,7 +53,7 @@ public class CategoryController {
         return "category-add";
     }
 
-    @RequestMapping({"categories/edit/{catId}"})
+    @RequestMapping({"/edit/{catId}"})
     public String editCategoryRoute(@PathVariable Long catId, Model model) {
         log.info("Fetch edit view");
         Category category = this.categoryService.findById(catId).get();
@@ -65,7 +66,7 @@ public class CategoryController {
     }
 
     @RequestMapping(
-            value = {"categories/delete/{catId}"},
+            value = {"/delete/{catId}"},
             method = {RequestMethod.POST, RequestMethod.GET})
     public String deleteCat(@PathVariable(name = "catId") Long catId, RedirectAttributes redirectAttributes) {
         log.info("deleteCat called");
@@ -90,7 +91,7 @@ public class CategoryController {
     }
 
     @RequestMapping(
-            value = {"categories/update"},
+            value = {"/update"},
             method = {RequestMethod.POST})
     public String editCat(@Valid Category category,
                           BindingResult result,
@@ -111,7 +112,7 @@ public class CategoryController {
 
 
     @RequestMapping(
-            value = {"/categories/save"},
+            value = {"/save"},
             method = {RequestMethod.POST}
     )
     public String saveNewCategory(@Valid Category category,
