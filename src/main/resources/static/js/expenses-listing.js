@@ -143,15 +143,40 @@ $("div.toolbar").append('<div class="add-btn float-right"><a class="btn btn-prim
 $('#expensesTable tbody').on('click', '.del-exp', function () {
 	const data = table.row($(this).parents('tr')).data();
 	console.log("DATA: ", data);
-	SWAL.delete('Delete expense: ' + data.title)
-	.then((result) => {
-			console.log(result);
-			if (result) {
-				window.location.assign("/expenses/delete/" + data.id);
-			}
+	/*SWAL.delete('Delete expense: ' + data.title)
+	 .then((result) => {
+	 console.log(result);
+	 if (result) {
+	 window.location.assign("/expenses/delete/" + data.id);
+	 }
+	 }
+	 );*/
+	swal({
+		text: 'Delete expense: ' + data.title,
+		icon: "warning",
+		dangerMode: true,
+		title: "Delete",
+		buttons: {
+			delete: {
+				value: 'delete',
+				text: "Delete expense"
+			},
+			deleteRates: {
+				value: 'andRates',
+				text: "Delete also rates"
+			},
+			cancel: 'Cancel'
 		}
-	);
-});
+	}).then(value => {
+		if (value === 'delete') {
+			window.location.assign("/expenses/delete/" + data.id);
+		}
+		if (value === "andRates") {
+			window.location.assign("/expenses/delete-rates/" + data.id);
+		}
+	})
+})
+;
 
 $('#expensesTable tbody').on('click', '.ed-exp', function () {
 	const data = table.row($(this).parents('tr')).data();

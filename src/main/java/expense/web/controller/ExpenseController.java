@@ -1,8 +1,10 @@
 package expense.web.controller;
 
 import expense.model.Expense;
+import expense.model.Rate;
 import expense.service.CategoryService;
 import expense.service.ExpenseService;
+import expense.service.RateService;
 import expense.service.TagService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,8 @@ public class ExpenseController {
     private CategoryService categoryService;
     @Autowired
     private TagService tagService;
+    @Autowired
+    private RateService rateService;
 
     @GetMapping("/expenses")
     public String getExpenses(Model model) {
@@ -164,6 +168,31 @@ public class ExpenseController {
                     Map<String, String> notification = new HashMap<String, String>() {{
                         put("type", "success");
                         put("text", "Successfully deleted expense " + expense.getTitle());
+                    }};
+                    redirectAttributes.addFlashAttribute("notification", notification);
+                });
+
+        return "redirect:/expenses";
+    }
+
+    @RequestMapping(
+            value = {"expenses/delete-rates/{expId}"},
+            method = {RequestMethod.POST, RequestMethod.GET})
+    public String deleteExpAndRates(@PathVariable(name = "expId") Long expId, RedirectAttributes redirectAttributes) {
+        log.info("deleteExpRates called");
+        log.info("Exp id to delete: {}", expId);
+
+        expenseService.findById(expId)
+                .ifPresent(expense -> {
+                    log.info("expense to delete: {}", expense);
+                    List<Rate> rates = expense.getRates();
+                    rates.forEach(r -> {
+                        this.rateService.delete(r);
+                    });
+                    expenseService.deleteExpense(expense);
+                    Map<String, String> notification = new HashMap<String, String>() {{
+                        put("type", "success");
+                        put("text", "Successfully deleted expense " + expense.getTitle() + " and its rates");
                     }};
                     redirectAttributes.addFlashAttribute("notification", notification);
                 });
