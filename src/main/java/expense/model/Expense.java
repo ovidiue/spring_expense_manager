@@ -44,6 +44,8 @@ public class Expense {
     @Id
     @GeneratedValue
     private Long id;
+    @Column
+    private Double payed;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     private List<Tag> tags;
     @ManyToOne
@@ -55,5 +57,16 @@ public class Expense {
 
     public Expense() {
         this.createdOn = new Date();
+        this.payed = 0.0;
+    }
+
+    public void addRate(Rate rate) {
+        this.rates.add(rate);
+        this.payed += rate.getAmount();
+    }
+
+    public void removeRate(Rate rate) {
+        this.rates.remove(rate);
+        this.payed -= rate.getAmount();
     }
 }

@@ -94,7 +94,7 @@ public class RateController {
             return "redirect:/rates/add";
         }
         if (expense != null) {
-            expense.getRates().add(rate);
+            expense.addRate(rate);
             rate.setExpense(expense);
             this.expenseService.save(expense);
             this.rateService.save(rate);
@@ -137,22 +137,22 @@ public class RateController {
                 this.rateService.save(rate);
             } else if (expId != previousSetExpense.getId()) {
                 log.info("in different ids");
-                previousSetExpense.getRates().remove(initialRate);
+                previousSetExpense.removeRate(initialRate);
                 this.expenseService.save(previousSetExpense);
-                newChosenExpense.getRates().add(rate);
+                newChosenExpense.addRate(rate);
                 rate.setExpense(newChosenExpense);
                 this.expenseService.save(newChosenExpense);
                 this.rateService.save(rate);
             }
         } else if (expId != null && previousSetExpense == null) {
-            newChosenExpense.getRates().add(rate);
+            newChosenExpense.addRate(rate);
             rate.setExpense(newChosenExpense);
             this.expenseService.save(newChosenExpense);
             this.rateService.save(rate);
         } else {
             log.info("expId is null");
             if (previousSetExpense != null) {
-                previousSetExpense.getRates().remove(initialRate);
+                previousSetExpense.removeRate(initialRate);
                 this.expenseService.save(previousSetExpense);
             }
             rate.setExpense(null);
@@ -171,17 +171,20 @@ public class RateController {
     public String deleteRate(@PathVariable Long rateId, RedirectAttributes redirectAttributes) {
         this.rateService.findById(rateId)
                 .ifPresent(r -> {
+                    List<Expense> expensesWithRate = this.expenseService.findAllWithRate(r);
+                    expensesWithRate.forEach(ex -> {
+                        log.info("expense that has rate {}", ex);
+                        ex.removeRate(r);
+                        log.info("expense after calculation {}", ex);
+                        this.expenseService.save(ex);
+                    });
+
                     log.info("delete rate {}", r);
                     if (r.getExpense() != null) {
                         r.setExpense(null);
                     }
+
                     this.rateService.delete(r);
-                    List<Expense> expensesWithRate = this.expenseService.findAllWithRate(r);
-                    expensesWithRate.forEach(ex -> {
-                        log.info("expense that has rate {}", ex);
-                        ex.getRates().remove(r);
-                        this.expenseService.save(ex);
-                    });
 
                     Map<String, String> notification = new HashMap<String, String>() {{
                         put("type", "success");
