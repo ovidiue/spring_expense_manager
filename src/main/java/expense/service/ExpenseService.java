@@ -15,7 +15,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -97,15 +99,17 @@ public class ExpenseService {
         Root<Expense> r = query.from(Expense.class);
         query.select(r);
 
+        List<Predicate> predicates = new ArrayList<>();
+
         if (filter.getTitle() != null) {
-            query.where(
+            predicates.add(
                     criteriaBuilder.like(
-                            r.get("title"), "%" + filter.getTitle() + "%")
-            );
+                            r.get("title"), "%" + filter.getTitle() + "%"
+                    ));
         }
 
         if (filter.getDueDateFrom() != null && filter.getDueDateTo() != null) {
-            query.where(
+            predicates.add(
                     criteriaBuilder.between(
                             r.get("dueDate"), filter.getDueDateFrom(), filter.getDueDateTo()
                     )
@@ -113,12 +117,14 @@ public class ExpenseService {
         }
 
         if (filter.getCreatedFrom() != null && filter.getCreatedTo() != null) {
-            query.where(
+            predicates.add(
                     criteriaBuilder.between(
                             r.get("createdOn"), filter.getCreatedFrom(), filter.getCreatedTo()
                     )
             );
         }
+
+        query.select(r).where(predicates.toArray(new Predicate[]{}));
 
 
         return this.em.createQuery(query).getResultList();
