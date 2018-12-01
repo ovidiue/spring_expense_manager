@@ -6,6 +6,7 @@ import expense.model.Rate;
 import expense.model.Tag;
 import expense.repository.ExpenseIdsTitles;
 import expense.repository.ExpenseRepository;
+import expense.web.controller.ExpenseFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
@@ -70,6 +70,7 @@ public class ExpenseService {
         return this.expenseRepository.findAllByIds(ids);
     }
 
+/*
     public List<Expense> findAll(List<SearchCriteria> params) {
         log.info("findAll with SearchCriteria called");
         CriteriaBuilder criteriaBuilder = this.em.getCriteriaBuilder();
@@ -84,6 +85,41 @@ public class ExpenseService {
         params.stream().forEach(searchConsumer);
         predicate = searchConsumer.getPredicate();
         query.where(predicate);
+
+        return this.em.createQuery(query).getResultList();
+    }
+*/
+
+    public List<Expense> findAll(ExpenseFilter filter) {
+        log.info("findAll with SearchCriteria called {}", filter);
+        CriteriaBuilder criteriaBuilder = this.em.getCriteriaBuilder();
+        CriteriaQuery<Expense> query = criteriaBuilder.createQuery(Expense.class);
+        Root<Expense> r = query.from(Expense.class);
+        query.select(r);
+
+        if (filter.getTitle() != null) {
+            query.where(
+                    criteriaBuilder.like(
+                            r.get("title"), "%" + filter.getTitle() + "%")
+            );
+        }
+
+        if (filter.getDueDateFrom() != null && filter.getDueDateTo() != null) {
+            query.where(
+                    criteriaBuilder.between(
+                            r.get("dueDate"), filter.getDueDateFrom(), filter.getDueDateTo()
+                    )
+            );
+        }
+
+        if (filter.getCreatedFrom() != null && filter.getCreatedTo() != null) {
+            query.where(
+                    criteriaBuilder.between(
+                            r.get("createdOn"), filter.getCreatedFrom(), filter.getCreatedTo()
+                    )
+            );
+        }
+
 
         return this.em.createQuery(query).getResultList();
     }

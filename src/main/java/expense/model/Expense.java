@@ -34,6 +34,7 @@ public class Expense {
     @Column
     private boolean recurrent;
     @Column
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date createdOn;
     @Column
     @DateTimeFormat(pattern = "dd-MM-yyyy")

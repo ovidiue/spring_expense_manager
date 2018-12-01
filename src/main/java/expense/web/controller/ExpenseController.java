@@ -52,7 +52,7 @@ public class ExpenseController {
         model.addAttribute("expenses", expenses);
         model.addAttribute("filter", new ExpenseFilter());
         List<SearchCriteria> params = new ArrayList<>();
-        SimpleDateFormat format = new SimpleDateFormat("dd-mm-yyyy'T'HH:mm:ssX");
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         if (filter != null) {
             if (filter.getFrom() != null) {
                 params.add(new SearchCriteria("amount", ">", filter.getFrom()));
@@ -65,13 +65,13 @@ public class ExpenseController {
             if (filter.getDueDateFrom() != null) {
                 log.info("dueDateFrom {}", filter.getDueDateFrom());
                 log.info("dueDateFrom String value {}", String.valueOf(filter.getDueDateFrom()));
-                params.add(new SearchCriteria("dueDate", ">", format.parse(String.valueOf(filter.getDueDateFrom()))));
+                params.add(new SearchCriteria("dueDate", ">", format.format(filter.getDueDateFrom())));
 
             }
 
             if (filter.getDueDateTo() != null) {
                 log.info("dueDateTo {}", filter.getDueDateTo());
-                params.add(new SearchCriteria("dueDate", "<", format.parse(String.valueOf(filter.getDueDateTo()))));
+                params.add(new SearchCriteria("dueDate", "<", format.format(filter.getDueDateTo())));
             }
 
             if (filter.getTitle() != null) {
@@ -81,7 +81,7 @@ public class ExpenseController {
 
             if (params.size() > 0) {
                 log.info("in params size {}", params);
-                List<Expense> list = this.expenseService.findAll(params);
+                List<Expense> list = this.expenseService.findAll(filter);
                 model.addAttribute("test", list);
             }
         }

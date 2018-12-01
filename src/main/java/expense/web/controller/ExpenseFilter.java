@@ -15,8 +15,12 @@ public class ExpenseFilter {
     private Long from;
     private Long to;
     private String title;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date dueDateFrom;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date dueDateTo;
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    private Date createdFrom;
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    private Date createdTo;
 }

@@ -241,18 +241,28 @@ function setBehaviourForFiltersDisplay() {
 }
 
 function initializeDatepickers() {
-	let $from = $("#datepickerFrom");
-	let $to = $("#datepickerTo");
+	/*let $from = $("#datepickerFrom");
+	 let $to = $("#datepickerTo");
+	 let $crTo = $("#datepickerToCr");
+	 let $crFrom = $("#datepickerToCr");
 
-	$from.datepicker({
-		format: "dd-mm-yyyy",
-		uiLibrary: "bootstrap4"
-	});
+	 $from.datepicker({
+	 format: "dd-mm-yyyy",
+	 uiLibrary: "bootstrap4"
+	 });
 
-	$to.datepicker({
-		format: "dd-mm-yyyy",
-		uiLibrary: "bootstrap4"
-	});
+	 $to.datepicker({
+	 format: "dd-mm-yyyy",
+	 uiLibrary: "bootstrap4"
+	 });*/
+
+	let $ids = [$("#datepickerFrom"), $("#datepickerTo"), $("#datepickerFromCr"), $("#datepickerToCr")];
+	$ids.forEach(el => {
+		el.datepicker({
+			format: "dd-mm-yyyy",
+			uiLibrary: "bootstrap4"
+		});
+	})
 }
 
 NOTIFY.display(notificationInfo);
