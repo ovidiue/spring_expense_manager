@@ -220,5 +220,42 @@ $(function () {
 	$('[data-toggle="popover"]').popover({container: 'body'})
 });
 
+function setBehaviourForFiltersDisplay() {
+	let toggle = $('.filter-toggle');
+	let filterHolder = $('.filter');
+	// TODO fix switching the icons
+
+	toggle.off('click')
+	.on('click', function () {
+		filterHolder.toggleClass("not-shown");
+		$(this).toggleClass(function () {
+			if ($(this).parent().hasClass('not-shown')) {
+				return "fa-plus";
+			} else {
+				return "fa-minus";
+			}
+		});
+
+	});
+
+}
+
+function initializeDatepickers() {
+	let $from = $("#datepickerFrom");
+	let $to = $("#datepickerTo");
+
+	$from.datepicker({
+		format: "dd-mm-yyyy",
+		uiLibrary: "bootstrap4"
+	});
+
+	$to.datepicker({
+		format: "dd-mm-yyyy",
+		uiLibrary: "bootstrap4"
+	});
+}
+
 NOTIFY.display(notificationInfo);
+setBehaviourForFiltersDisplay();
+initializeDatepickers();
 

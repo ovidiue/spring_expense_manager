@@ -192,3 +192,26 @@ table th {
     border-radius: 5px;
     transition-duration: .3s;
 }
+
+.filter {
+    background: lightgray;
+    margin: 25px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.filter.not-shown {
+    height: 45px;
+    overflow: hidden;
+    transition-duration: 1s;
+}
+
+.row.filter h4,
+.row.filter i {
+    display: inline-block;
+}
+
+.filter-toggle {
+    line-height: 30px;
+    cursor: pointer;
+}

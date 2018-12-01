@@ -7,6 +7,7 @@
     <th:block th:replace="/fragments/styles::styles"></th:block>
     <link rel="stylesheet" type="text/css"
           href="https://cdn.datatables.net/v/bs4/dt-1.10.18/cr-1.5.0/rr-1.2.4/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/vendors/gijgo-datepicker/gijgo.min.css}"/>
 </head>
 <body>
 <div th:replace="index :: navigation"></div>
@@ -14,7 +15,39 @@
     <div class="col-xs-12 title-container mar-btm20">
         <h3>Expenses</h3>
     </div>
-    <div class="row">
+    <div class="row filter not-shown">
+        <div class="col-lg-12">
+            <h4>Filters</h4>
+            <i class="fas fa-plus float-right filter-toggle"></i>
+        </div>
+        <div class="col">
+            <form action="expenses" th:object="${filter}" method="post">
+                <div class="form-row">
+                    <div class="col-12 form-group">
+                        <input type="text" class="form-control" placeholder="Title" th:field="*{title}">
+                    </div>
+                    <div class="col-6 form-group">
+                        <input type="text" class="form-control" placeholder="Amount from" th:field="*{from}">
+                    </div>
+                    <div class="col-6 form-group">
+                        <input type="text" class="form-control" placeholder="Amount to" th:field="*{to}">
+                    </div>
+                    <!--<div class="col-6 form-group">
+                        <input id="datepickerFrom" th:field="*{dueDateFrom}" placeholder="Due date from"/>
+                    </div>
+                    <div class="col-6 form-group">
+                        <input id="datepickerTo" th:field="*{dueDateTo}" placeholder="Due date to"/>
+                    </div>-->
+                    <div class="col-12 form-group">
+                        <button type="submit" class="btn btn-primary float-right">Search</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <div class=" row
+                        ">
         <div class="col">
             <table id="expensesTable" class="table display" width="100%"></table>
         </div>
@@ -23,9 +56,12 @@
 <div th:replace="fragments/scripts::scripts"></div>
 <script type="text/javascript"
         src="https://cdn.datatables.net/v/bs4/dt-1.10.18/cr-1.5.0/rr-1.2.4/datatables.min.js"></script>
+<script type="text/javascript" th:src="@{/vendors/gijgo-datepicker/gijgo.min.js}"></script>
 <script th:inline="javascript">
-    EXPENSES = [[${expenses}]];
-    const notificationInfo = [[${notification}]];
+	EXPENSES = [[${expenses}]];
+	test = [[${test}]];
+	console.log(test);
+	const notificationInfo = [[${notification}]];
 </script>
 <script th:src="@{js/expenses-listing.js}" type="text/javascript"></script>
 </body>

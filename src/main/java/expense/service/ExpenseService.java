@@ -10,6 +10,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +25,8 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class ExpenseService {
+    @PersistenceContext
+    EntityManager em;
     @Autowired
     private ExpenseRepository expenseRepository;
 
@@ -60,6 +68,24 @@ public class ExpenseService {
 
     public List<Expense> findAllByIds(List<Long> ids) {
         return this.expenseRepository.findAllByIds(ids);
+    }
+
+    public List<Expense> findAll(List<SearchCriteria> params) {
+        log.info("findAll with SearchCriteria called");
+        CriteriaBuilder criteriaBuilder = this.em.getCriteriaBuilder();
+        CriteriaQuery<Expense> query = criteriaBuilder.createQuery(Expense.class);
+
+        Root<Expense> r = query.from(this.em.getMetamodel().entity(Expense.class));
+        Predicate predicate = criteriaBuilder.conjunction();
+
+        ExpenseSearchQueryCriteriaConsumer searchConsumer =
+                new ExpenseSearchQueryCriteriaConsumer(predicate, criteriaBuilder, r);
+
+        params.stream().forEach(searchConsumer);
+        predicate = searchConsumer.getPredicate();
+        query.where(predicate);
+
+        return this.em.createQuery(query).getResultList();
     }
 
 

@@ -2,20 +2,23 @@ package expense.web.controller;
 
 import expense.model.Expense;
 import expense.model.Rate;
-import expense.service.CategoryService;
-import expense.service.ExpenseService;
-import expense.service.RateService;
-import expense.service.TagService;
+import expense.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,13 +40,52 @@ public class ExpenseController {
     @Autowired
     private RateService rateService;
 
-    @GetMapping("")
-    public String getExpenses(Model model) {
+    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST},
+            value = "")
+    public String getExpenses(ExpenseFilter filter, Model model) throws ParseException {
+        log.info("filter {}", filter);
+
         List<Expense> expenses = expenseService.findAll();
         expenses.forEach(expense -> {
-            log.info("\nexpense: {}\n", expense);
+            log.info("expense: {}\n", expense);
         });
         model.addAttribute("expenses", expenses);
+        model.addAttribute("filter", new ExpenseFilter());
+        List<SearchCriteria> params = new ArrayList<>();
+        SimpleDateFormat format = new SimpleDateFormat("dd-mm-yyyy'T'HH:mm:ssX");
+        if (filter != null) {
+            if (filter.getFrom() != null) {
+                params.add(new SearchCriteria("amount", ">", filter.getFrom()));
+            }
+
+            if (filter.getTo() != null) {
+                params.add(new SearchCriteria("amount", "<", filter.getTo()));
+            }
+
+            if (filter.getDueDateFrom() != null) {
+                log.info("dueDateFrom {}", filter.getDueDateFrom());
+                log.info("dueDateFrom String value {}", String.valueOf(filter.getDueDateFrom()));
+                params.add(new SearchCriteria("dueDate", ">", format.parse(String.valueOf(filter.getDueDateFrom()))));
+
+            }
+
+            if (filter.getDueDateTo() != null) {
+                log.info("dueDateTo {}", filter.getDueDateTo());
+                params.add(new SearchCriteria("dueDate", "<", format.parse(String.valueOf(filter.getDueDateTo()))));
+            }
+
+            if (filter.getTitle() != null) {
+                params.add(new SearchCriteria("title", ":", filter.getTitle()));
+            }
+
+
+            if (params.size() > 0) {
+                log.info("in params size {}", params);
+                List<Expense> list = this.expenseService.findAll(params);
+                model.addAttribute("test", list);
+            }
+        }
+
         return "expenses-listing";
     }
 
