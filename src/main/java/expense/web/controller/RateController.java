@@ -31,7 +31,7 @@ public class RateController {
     @Autowired
     ExpenseService expenseService;
 
-    @GetMapping(value = {"/{expId}", "/rates"})
+    @GetMapping(value = {"/{expId}", ""})
     public String getRatesByExpense(@PathVariable(required = false) Long expId, Model model, HttpServletRequest request) {
         log.info("rate for expId {}", expId);
         String uri = request.getRequestURI();
