@@ -23,4 +23,5 @@ public class ExpenseFilter {
     private Date createdFrom;
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date createdTo;
+    private String description;
 }

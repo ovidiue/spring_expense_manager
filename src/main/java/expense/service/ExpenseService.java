@@ -72,26 +72,6 @@ public class ExpenseService {
         return this.expenseRepository.findAllByIds(ids);
     }
 
-/*
-    public List<Expense> findAll(List<SearchCriteria> params) {
-        log.info("findAll with SearchCriteria called");
-        CriteriaBuilder criteriaBuilder = this.em.getCriteriaBuilder();
-        CriteriaQuery<Expense> query = criteriaBuilder.createQuery(Expense.class);
-
-        Root<Expense> r = query.from(this.em.getMetamodel().entity(Expense.class));
-        Predicate predicate = criteriaBuilder.conjunction();
-
-        ExpenseSearchQueryCriteriaConsumer searchConsumer =
-                new ExpenseSearchQueryCriteriaConsumer(predicate, criteriaBuilder, r);
-
-        params.stream().forEach(searchConsumer);
-        predicate = searchConsumer.getPredicate();
-        query.where(predicate);
-
-        return this.em.createQuery(query).getResultList();
-    }
-*/
-
     public List<Expense> findAll(ExpenseFilter filter) {
         log.info("findAll with SearchCriteria called {}", filter);
         CriteriaBuilder criteriaBuilder = this.em.getCriteriaBuilder();
@@ -121,6 +101,13 @@ public class ExpenseService {
                     criteriaBuilder.between(
                             r.get("createdOn"), filter.getCreatedFrom(), filter.getCreatedTo()
                     )
+            );
+        }
+
+        if (filter.getDescription() != null) {
+            predicates.add(
+                    criteriaBuilder.like(
+                            r.get("description"), "%" + filter.getDescription() + "%")
             );
         }
 
