@@ -24,4 +24,5 @@ public class ExpenseFilter {
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date createdTo;
     private String description;
+    private boolean recurrent;
 }

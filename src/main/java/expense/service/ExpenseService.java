@@ -111,6 +111,14 @@ public class ExpenseService {
             );
         }
 
+        if (filter.isRecurrent()) {
+            predicates.add(
+                    criteriaBuilder.equal(
+                            r.get("recurrent"), filter.isRecurrent()
+                    )
+            );
+        }
+
         query.select(r).where(predicates.toArray(new Predicate[]{}));
 
 
