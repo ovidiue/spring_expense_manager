@@ -119,6 +119,14 @@ public class ExpenseService {
             );
         }
 
+        if (filter.getAmountFrom() != null && filter.getAmountTo() != null) {
+            predicates.add(
+                    criteriaBuilder.between(
+                            r.get("amount"), filter.getAmountFrom(), filter.getAmountTo()
+                    )
+            );
+        }
+
         query.select(r).where(predicates.toArray(new Predicate[]{}));
 
 
