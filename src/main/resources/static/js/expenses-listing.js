@@ -172,7 +172,22 @@ $('#expensesTable tbody').on('click', '.del-exp', function () {
 			window.location.assign("/expenses/delete/" + data.id);
 		}
 		if (value === "andRates") {
-			window.location.assign("/expenses/delete-rates/" + data.id);
+			swal({
+				title: 'Delete',
+				text: 'Are you sure you want to delete also the rates ?',
+				dangerMode: true,
+				buttons: {
+					delete: {
+						value: 'delete',
+						text: "Yes Delete ALL"
+					},
+					cancel: 'Cancel'
+				}
+			}).then(value => {
+				if (value === 'delete') {
+					window.location.assign("/expenses/delete-rates/" + data.id);
+				}
+			});
 		}
 	})
 })
@@ -241,21 +256,6 @@ function setBehaviourForFiltersDisplay() {
 }
 
 function initializeDatepickers() {
-	/*let $from = $("#datepickerFrom");
-	 let $to = $("#datepickerTo");
-	 let $crTo = $("#datepickerToCr");
-	 let $crFrom = $("#datepickerToCr");
-
-	 $from.datepicker({
-	 format: "dd-mm-yyyy",
-	 uiLibrary: "bootstrap4"
-	 });
-
-	 $to.datepicker({
-	 format: "dd-mm-yyyy",
-	 uiLibrary: "bootstrap4"
-	 });*/
-
 	let $ids = [$("#datepickerFrom"), $("#datepickerTo"), $("#datepickerFromCr"), $("#datepickerToCr")];
 	$ids.forEach(el => {
 		el.datepicker({
