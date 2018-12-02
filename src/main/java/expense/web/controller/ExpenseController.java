@@ -45,6 +45,7 @@ public class ExpenseController {
             value = "")
     public String getExpenses(ExpenseFilter filter, Model model) throws ParseException {
         log.info("filter {}", filter);
+        log.info("model {}", model);
 
         List<Expense> expenses;
 
@@ -55,7 +56,7 @@ public class ExpenseController {
         }
 
         model.addAttribute("expenses", expenses);
-        model.addAttribute("filter", new ExpenseFilter());
+        model.addAttribute("filter", filter == null ? new ExpenseFilter() : filter);
 
         return "expenses-listing";
     }
