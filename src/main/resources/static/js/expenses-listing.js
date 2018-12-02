@@ -204,7 +204,7 @@ $('#expensesTable tbody').on('click', '.vw-r', function () {
 	axios.get("http://localhost:8080/api/rates/get-all/" + data.id)
 	.then(resp => {
 		console.table(resp);
-		if (resp.data) {
+		if (resp.data && resp.data.length) {
 			let domTable = createTableElementFromArr(resp.data);
 			swal({
 				buttons: {
@@ -227,6 +227,11 @@ $('#expensesTable tbody').on('click', '.vw-r', function () {
 					window.location.assign("rates/add");
 				}
 			})
+		} else {
+			swal({
+				title: "Rates",
+				text: data.title + " doesn't have any rates attached"
+			});
 		}
 	})
 });
