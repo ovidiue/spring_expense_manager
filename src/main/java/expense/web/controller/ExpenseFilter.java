@@ -12,8 +12,8 @@ import java.util.Date;
 @Data
 @Component
 public class ExpenseFilter {
-    private Long from;
-    private Long to;
+    private Double amountFrom;
+    private Double amountTo;
     private String title;
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date dueDateFrom;
