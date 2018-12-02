@@ -25,4 +25,5 @@ public class ExpenseFilter {
     private Date createdTo;
     private String description;
     private boolean recurrent;
+    private Long categoryId;
 }

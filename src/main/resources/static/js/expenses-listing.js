@@ -230,10 +230,27 @@ $('#expensesTable tbody').on('click', '.vw-r', function () {
 		} else {
 			swal({
 				title: "Rates",
-				text: data.title + " doesn't have any rates attached"
+				text: data.title + " doesn't have any rates attached",
+				buttons: {
+					close: 'Close',
+					add: {
+						text: 'Add new',
+						value: 'add'
+					}
+				}
+			}).then(value => {
+				if (value === 'add') {
+					window.location.assign("rates/add");
+				}
 			});
 		}
 	})
+});
+
+$("#catId").select2({
+	placeholder: "Select category",
+	allowClear: true,
+	width: "100%"
 });
 
 $(function () {

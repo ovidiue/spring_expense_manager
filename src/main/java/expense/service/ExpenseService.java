@@ -73,7 +73,7 @@ public class ExpenseService {
     }
 
     public List<Expense> findAll(ExpenseFilter filter) {
-        log.info("findAll with SearchCriteria called {}", filter);
+        log.info("findAll with filter called {}", filter);
         CriteriaBuilder criteriaBuilder = this.em.getCriteriaBuilder();
         CriteriaQuery<Expense> query = criteriaBuilder.createQuery(Expense.class);
         Root<Expense> r = query.from(Expense.class);
@@ -123,6 +123,14 @@ public class ExpenseService {
             predicates.add(
                     criteriaBuilder.between(
                             r.get("amount"), filter.getAmountFrom(), filter.getAmountTo()
+                    )
+            );
+        }
+
+        if (filter.getCategoryId() != null) {
+            predicates.add(
+                    criteriaBuilder.equal(
+                            r.get("category").get("id"), filter.getCategoryId()
                     )
             );
         }

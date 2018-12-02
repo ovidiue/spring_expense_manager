@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +42,7 @@ public class ExpenseController {
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST},
             value = "")
-    public String getExpenses(ExpenseFilter filter, Model model) throws ParseException {
+    public String getExpenses(ExpenseFilter filter, Model model) {
         log.info("filter {}", filter);
         log.info("model {}", model);
 
@@ -55,6 +54,7 @@ public class ExpenseController {
             expenses = this.expenseService.findAll();
         }
 
+        model.addAttribute("categories", this.categoryService.findAll());
         model.addAttribute("expenses", expenses);
         model.addAttribute("filter", filter == null ? new ExpenseFilter() : filter);
 

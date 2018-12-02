@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css"
           href="https://cdn.datatables.net/v/bs4/dt-1.10.18/cr-1.5.0/rr-1.2.4/datatables.min.css"/>
     <link rel="stylesheet" type="text/css" th:href="@{/vendors/gijgo-datepicker/gijgo.min.css}"/>
+    <link rel="stylesheet" th:href="@{/vendors/select2-4.0.6-rc.1/select2.css}" type="text/css">
 </head>
 <body>
 <div th:replace="index :: navigation"></div>
@@ -51,6 +52,12 @@
                         <input type="checkbox" th:field="*{recurrent}" id="rec"/>
                         <label class="form-check-label" for="rec">Recurrent</label>
                     </div>
+                    <div class="col-6 form-group">
+                        <select th:field="*{categoryId}" id="catId">
+                            <option value=""></option>
+                            <option th:each="cat :${categories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                        </select>
+                    </div>
                     <div class="col-12 form-group">
                         <a th:href="@{/expenses}" class="btn btn-secondary minw-100">Clear filters</a>
                         <button type="submit" class="btn btn-primary float-right">Search</button>
@@ -71,6 +78,7 @@
 <script type="text/javascript"
         src="https://cdn.datatables.net/v/bs4/dt-1.10.18/cr-1.5.0/rr-1.2.4/datatables.min.js"></script>
 <script type="text/javascript" th:src="@{/vendors/gijgo-datepicker/gijgo.min.js}"></script>
+<script type="text/javascript" th:src="@{/vendors/select2-4.0.6-rc.1/select2.full.js}"></script>
 <script th:inline="javascript">
 	EXPENSES = [[${expenses}]];
 	test = [[${test}]];
