@@ -28,4 +28,18 @@ public class ExpenseFilter {
     private boolean recurrent;
     private Long categoryId;
     private ArrayList<Long> tagIds;
+
+    public boolean isEmpty() {
+        return this.amountFrom == null &&
+                this.amountTo == null &&
+                this.title == null &&
+                this.dueDateFrom == null &&
+                this.dueDateTo == null &&
+                this.createdFrom == null &&
+                this.createdTo == null &&
+                this.description == null &&
+                this.recurrent == false &&
+                this.categoryId == null &&
+                this.tagIds == null;
+    }
 }

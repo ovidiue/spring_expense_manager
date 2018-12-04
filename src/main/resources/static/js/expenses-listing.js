@@ -282,6 +282,10 @@ function setBehaviourForFiltersDisplay() {
 
 	});
 
+	if (isFilterEmpty == false) {
+		$(".row.filter").removeClass('not-shown');
+	}
+
 }
 
 function initializeDatepickers() {

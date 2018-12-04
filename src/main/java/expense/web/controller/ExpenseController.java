@@ -54,7 +54,9 @@ public class ExpenseController {
             expenses = this.expenseService.findAll();
         }
         // TODO just fetch tags id and title
+        // TODO refactor into map of pageparams
         model.addAttribute("tags", this.tagService.findAll());
+        model.addAttribute("isFilterEmpty", filter.isEmpty());
         model.addAttribute("categories", this.categoryService.findAll());
         model.addAttribute("expenses", expenses);
         model.addAttribute("filter", filter == null ? new ExpenseFilter() : filter);
