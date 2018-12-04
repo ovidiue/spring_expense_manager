@@ -133,122 +133,129 @@ function createTableElementFromArr(arr) {
   return table;
 }
 
-const table = $('#expensesTable').DataTable({
-  data: EXPENSES,
-  columns: columns,
-  columnDefs: columnDefs,
-  dom: '<"toolbar full-width"f>t<"custom-footer"ilpr>'
-});
+function initializeTable() {
+  const table = $('#expensesTable').DataTable({
+    data: EXPENSES,
+    columns: columns,
+    columnDefs: columnDefs,
+    dom: '<"toolbar full-width"f>t<"custom-footer"ilpr>'
+  });
+  return table;
+}
 
-$("div.toolbar").append(
-    '<div class="add-btn float-right"><a class="btn btn-primary" href="/expenses/add">Add expense</a></div>');
+function setTableAddBtn() {
+  $("div.toolbar").append(
+      [
+        '<div class="add-btn float-right">',
+        '<a class="btn btn-primary" href="/expenses/add">',
+        'Add expense',
+        '</a>',
+        '</div>'].join("")
+  );
+}
 
-$('#expensesTable tbody').on('click', '.del-exp', function () {
-  const data = table.row($(this).parents('tr')).data();
-  console.log("DATA: ", data);
-  /*SWAL.delete('Delete expense: ' + data.title)
-   .then((result) => {
-   console.log(result);
-   if (result) {
-   window.location.assign("/expenses/delete/" + data.id);
-   }
-   }
-   );*/
-  swal({
-    text: 'Delete expense: ' + data.title,
-    icon: "warning",
-    dangerMode: true,
-    title: "Delete",
-    buttons: {
-      delete: {
-        value: 'delete',
-        text: "Delete expense"
-      },
-      deleteRates: {
-        value: 'andRates',
-        text: "Delete also rates"
-      },
-      cancel: 'Cancel'
-    }
-  }).then(value => {
-    if (value === 'delete') {
-      window.location.assign("/expenses/delete/" + data.id);
-    }
-    if (value === "andRates") {
-      swal({
-        title: 'Delete',
-        text: 'Are you sure you want to delete also the rates ?',
-        dangerMode: true,
-        buttons: {
-          delete: {
-            value: 'delete',
-            text: "Yes Delete ALL"
-          },
-          cancel: 'Cancel'
-        }
-      }).then(value => {
-        if (value === 'delete') {
-          window.location.assign("/expenses/delete-rates/" + data.id);
-        }
-      });
-    }
-  })
-})
-;
-
-$('#expensesTable tbody').on('click', '.ed-exp', function () {
-  const data = table.row($(this).parents('tr')).data();
-  console.log("DATA: ", data);
-  window.location.assign("/expenses/edit/" + data.id);
-});
-
-$('#expensesTable tbody').on('click', '.vw-r', function () {
-  const data = table.row($(this).parents('tr')).data();
-  axios.get("http://localhost:8080/api/rates/get-all/" + data.id)
-  .then(resp => {
-    console.table(resp);
-    if (resp.data && resp.data.length) {
-      let domTable = createTableElementFromArr(resp.data);
-      swal({
-        buttons: {
-          details: {
-            value: 'details',
-            text: "See more details"
-          },
-          add: {
-            value: 'add',
-            text: "Add new"
-          },
-          ok: true
+function setTableDeleteAction(table) {
+  $('#expensesTable tbody').on('click', '.del-exp', function () {
+    const data = table.row($(this).parents('tr')).data();
+    swal({
+      text: 'Delete expense: ' + data.title,
+      icon: "warning",
+      dangerMode: true,
+      title: "Delete",
+      buttons: {
+        delete: {
+          value: 'delete',
+          text: "Delete expense"
         },
-        content: domTable
-      }).then(value => {
-        if (value === 'details') {
-          window.location.assign("rates/" + data.id);
-        }
-        if (value === "add") {
-          window.location.assign("rates/add");
-        }
-      })
-    } else {
-      swal({
-        title: "Rates",
-        text: data.title + " doesn't have any rates attached",
-        buttons: {
-          close: 'Close',
-          add: {
-            text: 'Add new',
-            value: 'add'
+        deleteRates: {
+          value: 'andRates',
+          text: "Delete also rates"
+        },
+        cancel: 'Cancel'
+      }
+    }).then(value => {
+      if (value === 'delete') {
+        window.location.assign("/expenses/delete/" + data.id);
+      }
+      if (value === "andRates") {
+        swal({
+          title: 'Delete',
+          text: 'Are you sure you want to delete also the rates ?',
+          dangerMode: true,
+          buttons: {
+            delete: {
+              value: 'delete',
+              text: "Yes Delete ALL"
+            },
+            cancel: 'Cancel'
           }
-        }
-      }).then(value => {
-        if (value === 'add') {
-          window.location.assign("rates/add");
-        }
-      });
-    }
-  })
-});
+        }).then(value => {
+          if (value === 'delete') {
+            window.location.assign("/expenses/delete-rates/" + data.id);
+          }
+        });
+      }
+    })
+  });
+}
+
+function setTableEdit(table) {
+  $('#expensesTable tbody').on('click', '.ed-exp', function () {
+    const data = table.row($(this).parents('tr')).data();
+    console.log("DATA: ", data);
+    window.location.assign("/expenses/edit/" + data.id);
+  });
+}
+
+function setTableViewRatesAction(table) {
+  $('#expensesTable tbody').on('click', '.vw-r', function () {
+    const data = table.row($(this).parents('tr')).data();
+    axios.get("http://localhost:8080/api/rates/get-all/" + data.id)
+    .then(resp => {
+      console.table(resp);
+      if (resp.data && resp.data.length) {
+        let domTable = createTableElementFromArr(resp.data);
+        swal({
+          buttons: {
+            details: {
+              value: 'details',
+              text: "See more details"
+            },
+            add: {
+              value: 'add',
+              text: "Add new"
+            },
+            ok: true
+          },
+          content: domTable
+        }).then(value => {
+          if (value === 'details') {
+            window.location.assign("rates/" + data.id);
+          }
+          if (value === "add") {
+            window.location.assign("rates/add");
+          }
+        })
+      } else {
+        swal({
+          title: "Rates",
+          text: data.title + " doesn't have any rates attached",
+          buttons: {
+            close: 'Close',
+            add: {
+              text: 'Add new',
+              value: 'add'
+            }
+          }
+        }).then(value => {
+          if (value === 'add') {
+            window.location.assign("rates/add");
+          }
+        });
+      }
+    })
+  });
+}
 
 $("#catId").select2({
   placeholder: "Select category",
@@ -263,9 +270,9 @@ $("#tagId").select2({
   width: "100%"
 });
 
-$(function () {
+function setTableDescriptionPopover() {
   $('[data-toggle="popover"]').popover({container: 'body'})
-});
+}
 
 function openFiltersIfValuesExist() {
   if (isFilterEmpty == false) {
@@ -303,6 +310,14 @@ function initializeDatepickers() {
 }
 
 NOTIFY.display(notificationInfo);
+
+const table = initializeTable();
+setTableAddBtn();
+setTableDescriptionPopover();
+setTableEdit(table);
+setTableViewRatesAction(table);
+setTableDeleteAction(table);
+
 setBehaviourForFiltersDisplay();
 openFiltersIfValuesExist();
 initializeDatepickers();
