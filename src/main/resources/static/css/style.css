@@ -198,12 +198,14 @@ table th {
     margin: 25px 0;
     padding: 10px;
     border-radius: 5px;
+    max-height: 500px;
+    -webkit-transition: all .3s linear 0s;
+    transition: all .3s linear 0s;
 }
 
 .filter.not-shown {
-    height: 45px;
+    max-height: 45px;
     overflow: hidden;
-    transition-duration: 1s;
 }
 
 .row.filter h4,
