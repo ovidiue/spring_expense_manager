@@ -13,11 +13,9 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +29,8 @@ public class ExpenseService {
     EntityManager em;
     @Autowired
     private ExpenseRepository expenseRepository;
+    @Autowired
+    private TagService tagService;
 
     public List<Expense> findAll() {
         return expenseRepository.findAll();
@@ -135,11 +135,16 @@ public class ExpenseService {
             );
         }
 
+        if (filter.getTagIds() != null && filter.getTagIds().size() > 0) {
+            Expression<Collection<Tag>> tags = r.get("tags");
+            filter.getTagIds().forEach(tagId -> {
+                Tag tag = this.tagService.findById(tagId).get();
+                Predicate containsTag = criteriaBuilder.isMember(tag, tags);
+                predicates.add(containsTag);
+            });
+        }
+
         query.select(r).where(predicates.toArray(new Predicate[]{}));
-
-
         return this.em.createQuery(query).getResultList();
     }
-
-
 }

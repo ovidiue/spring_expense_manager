@@ -53,7 +53,8 @@ public class ExpenseController {
         } else {
             expenses = this.expenseService.findAll();
         }
-
+        // TODO just fetch tags id and title
+        model.addAttribute("tags", this.tagService.findAll());
         model.addAttribute("categories", this.categoryService.findAll());
         model.addAttribute("expenses", expenses);
         model.addAttribute("filter", filter == null ? new ExpenseFilter() : filter);

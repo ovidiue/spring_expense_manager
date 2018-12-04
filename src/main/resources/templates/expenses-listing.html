@@ -24,10 +24,10 @@
         <div class="col">
             <form action="expenses" th:object="${filter}" method="post">
                 <div class="form-row">
-                    <div class="col-12 form-group">
+                    <div class="col-6 form-group">
                         <input type="text" class="form-control" placeholder="Title" th:field="*{title}">
                     </div>
-                    <div class="col-12 form-group">
+                    <div class="col-6 form-group">
                         <input type="text" class="form-control" placeholder="Description" th:field="*{description}">
                     </div>
                     <div class="col-6 form-group">
@@ -48,14 +48,20 @@
                     <div class="col-6 form-group">
                         <input id="datepickerToCr" th:field="*{createdTo}" placeholder="Created to"/>
                     </div>
-                    <div class="col-6 form-group">
+                    <div class="col-4 form-group">
                         <input type="checkbox" th:field="*{recurrent}" id="rec"/>
                         <label class="form-check-label" for="rec">Recurrent</label>
                     </div>
-                    <div class="col-6 form-group">
+                    <div class="col-4 form-group">
                         <select th:field="*{categoryId}" id="catId">
                             <option value=""></option>
                             <option th:each="cat :${categories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                        </select>
+                    </div>
+                    <div class="col-4 form-group">
+                        <select th:field="*{tagIds}" id="tagId" multiple="multiple">
+                            <option value=""></option>
+                            <option th:each="tag :${tags}" th:value="${tag.id}" th:text="${tag.name}"></option>
                         </select>
                     </div>
                     <div class="col-12 form-group">

@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -26,4 +27,5 @@ public class ExpenseFilter {
     private String description;
     private boolean recurrent;
     private Long categoryId;
+    private ArrayList<Long> tagIds;
 }

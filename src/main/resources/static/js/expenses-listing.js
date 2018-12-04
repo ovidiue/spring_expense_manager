@@ -253,6 +253,13 @@ $("#catId").select2({
 	width: "100%"
 });
 
+$("#tagId").select2({
+	placeholder: "Select tags",
+	allowClear: true,
+	multiple: true,
+	width: "100%"
+});
+
 $(function () {
 	$('[data-toggle="popover"]').popover({container: 'body'})
 });
