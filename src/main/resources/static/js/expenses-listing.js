@@ -233,7 +233,7 @@ function setTableViewRatesAction(table) {
             window.location.assign("rates/" + data.id);
           }
           if (value === "add") {
-            window.location.assign("rates/add");
+            window.location.assign("rates/add/" + data.id);
           }
         })
       } else {
@@ -249,7 +249,7 @@ function setTableViewRatesAction(table) {
           }
         }).then(value => {
           if (value === 'add') {
-            window.location.assign("rates/add");
+            window.location.assign("rates/add/" + data.id);
           }
         });
       }
