@@ -217,6 +217,7 @@ function setTableViewRatesAction(table) {
         let domTable = createTableElementFromArr(resp.data);
         swal({
           buttons: {
+            close: "Close",
             details: {
               value: 'details',
               text: "See more details"
@@ -224,8 +225,7 @@ function setTableViewRatesAction(table) {
             add: {
               value: 'add',
               text: "Add new"
-            },
-            ok: true
+            }
           },
           content: domTable
         }).then(value => {
