@@ -1,13 +1,18 @@
 package expense.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Table;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Created by Ovidiu on 03-Oct-18.
@@ -19,19 +24,18 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Transactional
 public class Tag {
-    @Column
-    @NotNull(message = "Required")
-    @NotEmpty(message = "Required")
-    private String name;
-    @Column
-    private String color;
-    @Column(columnDefinition = "clob")
-    @Lob
-    private String description;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    /*@ManyToOne
-    @JoinColumn(name = "tag_expense_id")
-    private Expense expense;*/
+
+  @Column
+  @NotNull(message = "Required")
+  @NotEmpty(message = "Required")
+  private String name;
+  @Column
+  private String color;
+  @Column(columnDefinition = "clob")
+  @Lob
+  private String description;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
 }

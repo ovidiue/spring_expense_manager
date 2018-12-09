@@ -15,27 +15,28 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
-    List<Expense> findAll();
 
-    @Query("select e from Expense e where :tag member e.tags")
-    List<Expense> findAllWhereTag(@Param("tag") Tag tag);
+  List<Expense> findAll();
 
-    @Query("select e from Expense e where e.category=:category")
-    List<Expense> findAllWithCategory(@Param("category") Category category);
+  @Query("select e from Expense e where :tag member e.tags")
+  List<Expense> findAllWhereTag(@Param("tag") Tag tag);
 
-    @Query("select e from Expense e")
-    List<ExpenseIdsTitles> getAllNamesWithIds();
+  @Query("select e from Expense e where e.category=:category")
+  List<Expense> findAllWithCategory(@Param("category") Category category);
+
+  @Query("select e from Expense e")
+  List<ExpenseIdsTitles> getAllNamesWithIds();
 
   @Query("select e from Expense e")
   List<ExpenseBasic> getAllBasicExpenses();
 
-    @Query("select e from Expense e where :rate member e.rates")
-    List<Expense> findAllWithRate(@Param("rate") Rate rate);
+  @Query("select e from Expense e where :rate member e.rates")
+  List<Expense> findAllWithRate(@Param("rate") Rate rate);
 
-    Expense findByRatesIs(Rate rate);
+  Expense findByRatesIs(Rate rate);
 
-    @Query("select e from Expense e where id in :ids")
-    List<Expense> findAllByIds(@Param("ids") List<Long> expIds);
+  @Query("select e from Expense e where id in :ids")
+  List<Expense> findAllByIds(@Param("ids") List<Long> expIds);
 
 
 }

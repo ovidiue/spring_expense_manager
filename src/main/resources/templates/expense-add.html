@@ -1,71 +1,73 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Home page</title>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <th:block th:replace="/fragments/styles::styles"></th:block>
-    <link rel="stylesheet" th:href="@{/vendors/colorpicker-2.5.2/bootstrap-colorpicker.css}" type="text/css">
-    <link rel="stylesheet" th:href="@{/vendors/select2-4.0.6-rc.1/select2.css}" type="text/css">
-    <link rel="stylesheet" type="text/css" th:href="@{/vendors/gijgo-datepicker/gijgo.min.css}"/>
+  <title>Home page</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <th:block th:replace="/fragments/styles::styles"></th:block>
+  <link rel="stylesheet" th:href="@{/vendors/colorpicker-2.5.2/bootstrap-colorpicker.css}"
+        type="text/css">
+  <link rel="stylesheet" th:href="@{/vendors/select2-4.0.6-rc.1/select2.css}" type="text/css">
+  <link rel="stylesheet" type="text/css" th:href="@{/vendors/gijgo-datepicker/gijgo.min.css}"/>
 </head>
 <body>
 <div th:replace="index :: navigation"></div>
 <div class="container-fluid">
-    <div class="col-lg-6 col-xs-12 mar-btm20 mar-top20 mx-auto title-container">
-        <h3 th:text="${pageTitle}">Add Category</h3>
-    </div>
-    <div class="col-lg-6 col-xs-12 mx-auto">
-        <form th:action="@{${formAction}}" method="post" th:object="${expense}">
-            <input type="hidden" th:field="*{id}">
-            <div class="form-group">
-                <label>Title</label>
-                <input type="text" class="form-control" th:field="*{title}">
-                <div class="form-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
-            </div>
-            <div class="form-group">
-                <label>Description</label>
-                <textarea rows="5" class="form-control" th:field="*{description}"></textarea>
-            </div>
-            <div class="form-group">
-                <label>Recurrent</label>
-                <input type="checkbox" class="form-control width30" th:field="*{recurrent}">
-            </div>
-            <div class="form-group">
-                <label>Amount</label>
-                <input type="text" class="form-control" th:field="*{amount}">
-                <div class="form-error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
-            </div>
-            <div class="form-group">
-                <label>Due date</label>
-                <input id="datepicker" th:field="*{dueDate}" width="50%" class="width50-p"/>
-            </div>
-            <div class="form-group">
-                <label for="">Category</label>
-                <select name="categoryId" id="selectCat" class="form-control">
-                    <option value=""></option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="">Tag/s</label>
-                <select name="tagsIds" id="selectTag" class="form-control"></select>
-            </div>
+  <div class="col-lg-6 col-xs-12 mar-btm20 mar-top20 mx-auto title-container">
+    <h3 th:text="${pageTitle}">Add Category</h3>
+  </div>
+  <div class="col-lg-6 col-xs-12 mx-auto">
+    <form th:action="@{${formAction}}" method="post" th:object="${expense}">
+      <input type="hidden" th:field="*{id}">
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" class="form-control" th:field="*{title}">
+        <div class="form-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea rows="5" class="form-control" th:field="*{description}"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Recurrent</label>
+        <input type="checkbox" class="form-control width30" th:field="*{recurrent}">
+      </div>
+      <div class="form-group">
+        <label>Amount</label>
+        <input type="text" class="form-control" th:field="*{amount}">
+        <div class="form-error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
+      </div>
+      <div class="form-group">
+        <label>Due date</label>
+        <input id="datepicker" th:field="*{dueDate}" width="50%" class="width50-p"/>
+      </div>
+      <div class="form-group">
+        <label for="">Category</label>
+        <select name="categoryId" id="selectCat" class="form-control">
+          <option value=""></option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="">Tag/s</label>
+        <select name="tagsIds" id="selectTag" class="form-control"></select>
+      </div>
 
-            <div class="col-xs-12">
-                <a th:href="@{/expenses}" class="btn btn-secondary minw-100">Cancel</a>
-                <button class="btn btn-success minw-100 float-right">Save</button>
-            </div>
-        </form>
-    </div>
+      <div class="col-xs-12">
+        <a th:href="@{/expenses}" class="btn btn-secondary minw-100">Cancel</a>
+        <button class="btn btn-success minw-100 float-right">Save</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <script th:inline="javascript">
-    const CATEGORIES = [[${categories}]];
-    const TAGS = [[${tags}]];
-    const existingExpense = [[${expense}]];
+  const CATEGORIES = [[${categories}]];
+  const TAGS = [[${tags}]];
+  const existingExpense = [[${expense}]];
 </script>
 <div th:replace="fragments/scripts::scripts"></div>
-<script type="text/javascript" th:src="@{/vendors/colorpicker-2.5.2/bootstrap-colorpicker.js}"></script>
+<script type="text/javascript"
+        th:src="@{/vendors/colorpicker-2.5.2/bootstrap-colorpicker.js}"></script>
 <script type="text/javascript" th:src="@{/vendors/select2-4.0.6-rc.1/select2.full.js}"></script>
 <script type="text/javascript" th:src="@{/vendors/gijgo-datepicker/gijgo.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/add-expense.js}"></script>

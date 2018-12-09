@@ -1,3 +1,3 @@
 function isSet(obj) {
-    return typeof obj !== 'undefined' && obj !== null;
+  return typeof obj !== 'undefined' && obj !== null;
 }
