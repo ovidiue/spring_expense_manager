@@ -4,20 +4,24 @@ import expense.model.Category;
 import expense.model.Expense;
 import expense.model.Rate;
 import expense.model.Tag;
+import expense.repository.ExpenseBasic;
 import expense.repository.ExpenseIdsTitles;
 import expense.repository.ExpenseRepository;
 import expense.web.controller.ExpenseFilter;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by Ovidiu on 10-Oct-18.
@@ -68,8 +72,12 @@ public class ExpenseService {
         return this.expenseRepository.findByRatesIs(rate);
     }
 
+  public List<ExpenseBasic> getAllBasic() {
+    return this.expenseRepository.getAllBasicExpenses();
+  }
+
     public List<Expense> findAllByIds(List<Long> ids) {
-        return this.expenseRepository.findAllByIds(ids);
+      return this.expenseRepository.findAllByIds(ids);
     }
 
     public List<Expense> findAll(ExpenseFilter filter) {

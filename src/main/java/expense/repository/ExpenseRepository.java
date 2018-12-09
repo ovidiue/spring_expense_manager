@@ -4,12 +4,11 @@ import expense.model.Category;
 import expense.model.Expense;
 import expense.model.Rate;
 import expense.model.Tag;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * Created by Ovidiu on 10-Oct-18.
@@ -26,6 +25,9 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
     @Query("select e from Expense e")
     List<ExpenseIdsTitles> getAllNamesWithIds();
+
+  @Query("select e from Expense e")
+  List<ExpenseBasic> getAllBasicExpenses();
 
     @Query("select e from Expense e where :rate member e.rates")
     List<Expense> findAllWithRate(@Param("rate") Rate rate);

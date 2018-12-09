@@ -2,6 +2,7 @@ package expense.web.controller;
 
 import expense.model.Expense;
 import expense.model.Rate;
+import expense.repository.ExpenseBasic;
 import expense.repository.ExpenseIdsTitles;
 import expense.service.ExpenseService;
 import expense.service.RateService;
@@ -53,7 +54,7 @@ public class RateController {
     if (!model.containsAttribute("rate")) {
       model.addAttribute("rate", new Rate());
     }
-    List<ExpenseIdsTitles> expenses = expenseService.getExpensesNames();
+    List<ExpenseBasic> expenses = expenseService.getAllBasic();
     log.info("rate expenses: {}", expenses);
     model.addAttribute("expenses", expenses);
     model.addAttribute("formAction", "/rates/save");
