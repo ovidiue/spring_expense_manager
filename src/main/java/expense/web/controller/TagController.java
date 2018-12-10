@@ -78,6 +78,14 @@ public class TagController {
       redirectAttributes.addFlashAttribute("tag", tag);
       return "redirect:/tags/edit/" + tag.getId();
     }
+    Tag initialTag = this.tagService.findById(tag.getId()).get();
+    if (!tag.getName().equalsIgnoreCase(initialTag.getName()) && this.tagService
+        .tagNameExists(tag.getName())) {
+      redirectAttributes.addFlashAttribute("tag", tag);
+      redirectAttributes.addFlashAttribute("notification", Notification
+          .build("error", tag.getName() + " already exists<br>Please choose another name"));
+      return "redirect:/tags/edit/" + tag.getId();
+    }
     this.tagService.save(tag);
     Map<String, String> notification = Notification
         .build("success", "Successfully updated tag " + tag.getName());
