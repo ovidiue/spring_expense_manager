@@ -3,9 +3,8 @@ package expense.web.controller;
 import expense.model.Category;
 import expense.service.CategoryService;
 import expense.service.ExpenseService;
-import java.util.HashMap;
+import expense.utils.Notification;
 import java.util.List;
-import java.util.Map;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Slf4j
 @RequestMapping("/categories")
 public class CategoryController {
+
+  private final String ERROR_NAME_EXISTS = " already exists<br>Please choose another name";
+  private final String SUCCESS_SAVED = " category has been successfully saved";
+  private final String SUCCESS_DELETED = " category has been successfully deleted";
+  private final String SUCCESS_DELETED_EXPENSES = " category has been successfully deleted and also the associated expenses";
+  private final String SUCCESS_UPDATED = " category has been successfully updated";
 
   @Autowired
   private CategoryService categoryService;
@@ -82,11 +87,8 @@ public class CategoryController {
                 expenseService.save(expense);
               });
           categoryService.deleteCategory(category);
-          Map<String, String> notification = new HashMap<String, String>() {{
-            put("type", "success");
-            put("text", "Successfully deleted category " + category.getName());
-          }};
-          redirectAttributes.addFlashAttribute("notification", notification);
+          redirectAttributes.addFlashAttribute("notification",
+              Notification.build("success", category.getName() + this.SUCCESS_DELETED));
         });
     return "redirect:/categories";
   }
@@ -99,12 +101,8 @@ public class CategoryController {
         .ifPresent(category -> {
           this.expenseService.deleteAllExpensesWithCategory(category);
           this.categoryService.deleteCategory(category);
-          Map<String, String> notification = new HashMap<String, String>() {{
-            put("type", "success");
-            put("text",
-                "Successfully deleted category " + category.getName() + " and associated expenses");
-          }};
-          redirectAttributes.addFlashAttribute("notification", notification);
+          redirectAttributes.addFlashAttribute("notification",
+              Notification.build("success", category.getName() + this.SUCCESS_DELETED_EXPENSES));
         });
 
     return "redirect:/categories";
@@ -122,12 +120,18 @@ public class CategoryController {
       redirectAttributes.addFlashAttribute("category", category);
       return "redirect:/categories/edit/" + category.getId();
     }
+    Category initialCat = this.categoryService.findById(category.getId()).get();
+    if (!category.getName().equalsIgnoreCase(initialCat.getName()) && this.categoryService
+        .categoryNameExists(category.getName())) {
+      redirectAttributes
+          .addFlashAttribute("notification", Notification.build("error", category.getName() +
+              this.ERROR_NAME_EXISTS));
+      redirectAttributes.addFlashAttribute("category", category);
+      return "redirect:/categories/edit/" + category.getId();
+    }
     this.categoryService.save(category);
-    Map<String, String> notification = new HashMap<String, String>() {{
-      put("type", "success");
-      put("text", "Successfully updated category " + category.getName());
-    }};
-    redirectAttributes.addFlashAttribute("notification", notification);
+    redirectAttributes.addFlashAttribute("notification",
+        Notification.build("success", category.getName() + this.SUCCESS_UPDATED));
     return "redirect:/categories";
   }
 
@@ -146,12 +150,17 @@ public class CategoryController {
       redirectAttributes.addFlashAttribute("category", category);
       return "redirect:/categories/add";
     }
+
+    if (this.categoryService.categoryNameExists(category.getName())) {
+      redirectAttributes
+          .addFlashAttribute("notification", Notification.build("error", category.getName() +
+              this.ERROR_NAME_EXISTS));
+      redirectAttributes.addFlashAttribute("category", category);
+      return "redirect:/categories/add";
+    }
     this.categoryService.save(category);
-    Map<String, String> notification = new HashMap<String, String>() {{
-      put("type", "success");
-      put("text", "Successfully saved category " + category.getName());
-    }};
-    redirectAttributes.addFlashAttribute("notification", notification);
+    redirectAttributes.addFlashAttribute("notification",
+        Notification.build("success", category.getName() + this.SUCCESS_SAVED));
     return "redirect:/categories";
   }
 }

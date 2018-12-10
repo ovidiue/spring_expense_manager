@@ -7,3 +7,5 @@ $("#color").colorpicker()
 if (typeof existingCategory !== 'undefined' && existingCategory !== null) {
   $("#color").change();
 }
+
+NOTIFY.display(notificationInfo);
