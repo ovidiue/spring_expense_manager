@@ -48,15 +48,44 @@ $("div.toolbar").append(
 
 $('#catTable tbody').on('click', '.delete-cat', function () {
   const data = table.row($(this).parents('tr')).data();
-  console.log("DATA: ", data);
-  SWAL.delete('Delete category: ' + data.name)
-  .then((result) => {
-        console.log(result);
-        if (result) {
-          window.location.assign("/categories/delete/" + data.id);
-        }
+
+  swal({
+    title: 'Delete',
+    text: `Delete category: ${data.name}`,
+    buttons: {
+      cancel: 'Cancel',
+      ok: {
+        text: 'Delete',
+        value: 'single'
+      },
+      all: {
+        text: 'Also delete associated expenses',
+        value: 'all'
       }
-  );
+    }
+  }).then(response => {
+    if (response === 'single') {
+      window.location.assign('/categories/delete/' + data.id);
+    }
+
+    if (response === 'all') {
+      swal({
+        title: 'Confirm',
+        text: 'This action is irreversible.\nAre You sure you want to continue?',
+        buttons: {
+          close: 'Cancel',
+          ok: {
+            text: 'Yes - Delete All',
+            value: 'yes'
+          }
+        }
+      }).then(res => {
+        if (res === 'yes') {
+          window.location.assign('/categories/delete/all/' + data.id)
+        }
+      })
+    }
+  });
 });
 
 $('#catTable tbody').on('click', '.edit-cat', function () {

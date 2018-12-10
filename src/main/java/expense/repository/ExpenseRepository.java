@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by Ovidiu on 10-Oct-18.
@@ -38,5 +39,6 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
   @Query("select e from Expense e where id in :ids")
   List<Expense> findAllByIds(@Param("ids") List<Long> expIds);
 
-
+  @Transactional
+  void deleteAllByCategory(Category category);
 }

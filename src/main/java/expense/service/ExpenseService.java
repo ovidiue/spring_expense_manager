@@ -81,6 +81,10 @@ public class ExpenseService {
     return this.expenseRepository.findAllByIds(ids);
   }
 
+  public void deleteAllExpensesWithCategory(Category category) {
+    this.expenseRepository.deleteAllByCategory(category);
+  }
+
   public List<Expense> findAll(ExpenseFilter filter) {
     log.info("findAll with filter called {}", filter);
     CriteriaBuilder criteriaBuilder = this.em.getCriteriaBuilder();

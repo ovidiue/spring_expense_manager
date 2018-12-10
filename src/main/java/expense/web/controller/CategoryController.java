@@ -91,6 +91,25 @@ public class CategoryController {
     return "redirect:/categories";
   }
 
+  @RequestMapping("delete/all/{catId}")
+  public String deleteCatAndAssociatedExpenses(@PathVariable Long catId,
+      RedirectAttributes redirectAttributes) {
+    log.info("CAT DELETE WITH ALL EXPENSES CALLED");
+    this.categoryService.findById(catId)
+        .ifPresent(category -> {
+          this.expenseService.deleteAllExpensesWithCategory(category);
+          this.categoryService.deleteCategory(category);
+          Map<String, String> notification = new HashMap<String, String>() {{
+            put("type", "success");
+            put("text",
+                "Successfully deleted category " + category.getName() + " and associated expenses");
+          }};
+          redirectAttributes.addFlashAttribute("notification", notification);
+        });
+
+    return "redirect:/categories";
+  }
+
   @RequestMapping(
       value = {"/update"},
       method = {RequestMethod.POST})
