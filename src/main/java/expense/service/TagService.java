@@ -32,6 +32,10 @@ public class TagService {
     return Optional.ofNullable(this.tagRepository.findAllByIds(ids));
   }
 
+  public boolean tagNameExists(String name) {
+    return this.tagRepository.findByName(name) != null;
+  }
+
   public Optional<Tag> findById(Long id) {
     return tagRepository.findById(id);
   }

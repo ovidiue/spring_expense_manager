@@ -3,7 +3,7 @@ package expense.web.controller;
 import expense.model.Tag;
 import expense.service.ExpenseService;
 import expense.service.TagService;
-import java.util.HashMap;
+import expense.utils.Notification;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
@@ -79,10 +79,8 @@ public class TagController {
       return "redirect:/tags/edit/" + tag.getId();
     }
     this.tagService.save(tag);
-    Map<String, String> notification = new HashMap<String, String>() {{
-      put("type", "success");
-      put("text", "Successfully updated tag " + tag.getName());
-    }};
+    Map<String, String> notification = Notification
+        .build("success", "Successfully updated tag " + tag.getName());
     redirectAttributes.addFlashAttribute("notification", notification);
     return "redirect:/tags";
   }
@@ -103,10 +101,9 @@ public class TagController {
             expenseService.save(expense);
           });
           tagService.deleteTag(tag);
-          Map<String, String> notification = new HashMap<String, String>() {{
-            put("type", "success");
-            put("text", "Successfully deleted tag " + tag.getName());
-          }};
+
+          Map<String, String> notification = Notification
+              .build("success", "Successfully deleted tag " + tag.getName());
           redirectAttributes.addFlashAttribute("notification", notification);
         });
 
@@ -119,8 +116,8 @@ public class TagController {
   public String addNewTag(@Valid Tag tag,
       BindingResult result,
       RedirectAttributes redirectAttributes) {
-    log.info("save tag called");
-    log.info("Saving called for tag: {}", tag);
+    log.info("SAVE TAG CALLED");
+    log.info("SAVING CALLED FOR TAG: {}", tag);
     if (result.hasErrors()) {
       log.info("in has errors");
       redirectAttributes
@@ -128,11 +125,20 @@ public class TagController {
       redirectAttributes.addFlashAttribute("tag", tag);
       return "redirect:/tags/add";
     }
+    log.info("TAG EXISTS {}", this.tagService.tagNameExists(tag.getName()));
+    if (this.tagService.tagNameExists(tag.getName())) {
+      log.info("IN tagNameExists");
+      Map<String, String> notficationError = Notification
+          .build("error", tag.getName() + " already exists<br>Please choose another name");
+      redirectAttributes.addFlashAttribute("notification", notficationError);
+      redirectAttributes.addFlashAttribute("tag", tag);
+      return "redirect:/tags/add";
+    }
+
     this.tagService.save(tag);
-    Map<String, String> notification = new HashMap<String, String>() {{
-      put("type", "success");
-      put("text", "Successfully added tag " + tag.getName());
-    }};
+    Map<String, String> notification = Notification
+        .build("success", "Successfully added tag " + tag.getName());
+
     redirectAttributes.addFlashAttribute("notification", notification);
     return "redirect:/tags";
   }

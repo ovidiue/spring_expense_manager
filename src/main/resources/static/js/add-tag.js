@@ -7,3 +7,5 @@ $("#color").colorpicker()
 if (typeof existingTag !== 'undefined' && existingTag !== null) {
   $("#color").change();
 }
+
+NOTIFY.display(notificationInfo);

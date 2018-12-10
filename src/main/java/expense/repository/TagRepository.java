@@ -15,4 +15,6 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
 
   @Query("select t from Tag t where id in :ids")
   List<Tag> findAllByIds(@Param("ids") List<Long> tagIds);
+
+  Tag findByName(String name);
 }
