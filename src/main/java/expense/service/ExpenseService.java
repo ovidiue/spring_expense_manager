@@ -97,18 +97,50 @@ public class ExpenseService {
           ));
     }
 
-    if (filter.getDueDateFrom() != null && filter.getDueDateTo() != null) {
+    if (filter.getDueDateFrom() != null) {
       predicates.add(
-          criteriaBuilder.between(
-              r.get("dueDate"), filter.getDueDateFrom(), filter.getDueDateTo()
+          criteriaBuilder.greaterThanOrEqualTo(
+              r.get("dueDate"), filter.getDueDateFrom()
           )
       );
     }
 
-    if (filter.getCreatedFrom() != null && filter.getCreatedTo() != null) {
+    if (filter.getDueDateTo() != null) {
       predicates.add(
-          criteriaBuilder.between(
-              r.get("createdOn"), filter.getCreatedFrom(), filter.getCreatedTo()
+          criteriaBuilder.lessThanOrEqualTo(
+              r.get("dueDate"), filter.getDueDateTo()
+          )
+      );
+    }
+
+    if (filter.getAmountFrom() != null) {
+      predicates.add(
+          criteriaBuilder.greaterThanOrEqualTo(
+              r.get("amount"), filter.getAmountFrom()
+          )
+      );
+    }
+
+    if (filter.getAmountTo() != null) {
+      predicates.add(
+          criteriaBuilder.lessThanOrEqualTo(
+              r.get("amount"), filter.getAmountTo()
+          )
+      );
+    }
+
+    if (filter.getCreatedFrom() != null) {
+      predicates.add(
+          criteriaBuilder.greaterThanOrEqualTo(
+              r.get("createdOn"), filter.getCreatedFrom()
+          )
+      );
+    }
+
+    if (filter.getCreatedTo() != null) {
+      predicates.add(
+          criteriaBuilder.lessThanOrEqualTo(
+              r.get("createdOn"), filter.getCreatedTo()
           )
       );
     }
@@ -124,14 +156,6 @@ public class ExpenseService {
       predicates.add(
           criteriaBuilder.equal(
               r.get("recurrent"), filter.isRecurrent()
-          )
-      );
-    }
-
-    if (filter.getAmountFrom() != null && filter.getAmountTo() != null) {
-      predicates.add(
-          criteriaBuilder.between(
-              r.get("amount"), filter.getAmountFrom(), filter.getAmountTo()
           )
       );
     }
