@@ -48,7 +48,9 @@ let columnDefs = [
   {
     targets: 6,
     render: function (data, type, row, meta) {
-      return data ? data.name : ""
+      return data ? "<span class='category-mark' style='border: 3px double "
+          + data.color
+          + "'>" + data.name + "</span>" : ""
     }
   }, {
     targets: -1,

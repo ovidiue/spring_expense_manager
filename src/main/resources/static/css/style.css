@@ -217,3 +217,8 @@ table th {
   line-height: 30px;
   cursor: pointer;
 }
+
+.category-mark {
+  padding: 1px 7px;
+  border-radius: 10px;
+}
