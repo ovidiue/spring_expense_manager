@@ -21,23 +21,42 @@ function initializeDatepicker(id) {
   })
 }
 
+function isSameExpense() {
+  if (typeof previousExpense !== 'undefined' && previousExpense !== null
+      && previousExpense.id) {
+    return previousExpense.id.toString() === getSelectedExpense().id.toString();
+  }
+
+  return false;
+}
+
+function isExceeding() {
+  let rateAmount = getAmountValue(),
+      expense = getSelectedExpense(),
+      projected = isSameExpense() ? (Number(expense.payed) - Number(rateValue))
+          + Number(rateAmount)
+          : expense.payed + Number(rateAmount);
+
+  console.log("projected", projected);
+  console.log("isSameExpense()", isSameExpense());
+
+  return Number(projected) > expense.amount;
+}
+
 function setOnSubmitBehaviour() {
   let $form = $("#formRate");
 
   $form.submit(function (event) {
     if (getSelectedExpense()) {
       let expense = getSelectedExpense(),
-          rateAmount = getAmountValue(),
-          projectedValue = Number(rateAmount) + expense.payed,
-          exceeds = projectedValue > expense.amount;
+          exceeds = isExceeding();
 
       if (exceeds === true) {
         NOTIFY.display({
           type: 'warning',
           text: `Seems like this rate value will exceed total amount needed for this expense
           <br>Expense amount: ${expense.amount}
-          <br>Expense payed: ${expense.payed}
-          <br>Total value will be: <b>${projectedValue}</b>`
+          <br>Expense payed: ${expense.payed}`
         });
         event.preventDefault();
       }

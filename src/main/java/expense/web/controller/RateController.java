@@ -3,7 +3,6 @@ package expense.web.controller;
 import expense.model.Expense;
 import expense.model.Rate;
 import expense.repository.ExpenseBasic;
-import expense.repository.ExpenseIdsTitles;
 import expense.service.ExpenseService;
 import expense.service.RateService;
 import java.util.HashMap;
@@ -39,12 +38,12 @@ public class RateController {
   @GetMapping(value = {"/{expId}", ""})
   public String getRatesByExpense(@PathVariable(required = false) Long expId, Model model,
       HttpServletRequest request) {
-    log.info("rate for expId {}", expId);
+    log.info("RATE_FOR_EXP_ID {}", expId);
     String uri = request.getRequestURI();
     List<Rate> rates = uri.equalsIgnoreCase("/rates") ?
         this.rateService.findAll() :
         this.rateService.findByExpenseId(expId);
-    log.info("rate for expId {}", rates);
+    log.info("RATE_FOR_EXP_ID {}", rates);
     model.addAttribute("rates", rates);
     return "rates-listing";
   }
@@ -73,7 +72,8 @@ public class RateController {
     if (!model.containsAttribute("rate")) {
       model.addAttribute("rate", rate);
     }
-    List<ExpenseIdsTitles> expenses = expenseService.getExpensesNames();
+    model.addAttribute("rateValue", rate.getAmount());
+    List<ExpenseBasic> expenses = expenseService.getAllBasic();
     Expense previousSetExpense = this.expenseService.findExpenseByRate(rate);
     log.info("previousExpense: {}", previousSetExpense);
     model.addAttribute("expense", previousSetExpense);
@@ -125,11 +125,13 @@ public class RateController {
       @Valid Rate rate,
       BindingResult result,
       RedirectAttributes redirectAttributes) {
-    log.info("rate: {}", rate);
+    log.info("UPDATE RATE: {}", rate);
+    log.info("UPDATE EXP_ID: {}", expId);
     Expense newChosenExpense = null;
     if (expId != null) {
       newChosenExpense = this.expenseService.findById(expId).get();
     }
+    log.info("NEW_CHOSEN__EXPENSE {}", newChosenExpense);
     if (result.hasErrors()) {
       log.info("in has errors newChosenExpense {}", newChosenExpense);
       redirectAttributes
@@ -139,16 +141,22 @@ public class RateController {
       return "redirect:/rates/edit/" + rate.getId();
     }
     Rate initialRate = this.rateService.findById(rate.getId()).get();
+    log.info("INITIAL_RATE {}", initialRate);
 
     Expense previousSetExpense = this.expenseService.findExpenseByRate(rate);
-    log.info("previousSetExpense: {}", previousSetExpense);
+    log.info("PREVIOUSE_SET_EXPENSE {}", previousSetExpense);
     if (expId != null && previousSetExpense != null) {
-      log.info("expId not null: {}", expId);
-      if (expId == previousSetExpense.getId()) {
-        log.info("in equal ids");
+      log.info("PREVIOUSE_SET_EXPENSE_ID {}", previousSetExpense.getId());
+      log.info("EXP_ID_NOT_NULL: {}", expId);
+      if (expId.equals(previousSetExpense.getId())) {
+        log.info("IN_EQUAL_IDS");
+        previousSetExpense.removeRate(initialRate);
+        previousSetExpense.addRate(rate);
+        this.expenseService.save(previousSetExpense);
+        rate.setExpense(previousSetExpense);
         this.rateService.save(rate);
-      } else if (expId != previousSetExpense.getId()) {
-        log.info("in different ids");
+      } else if (!expId.equals(previousSetExpense.getId())) {
+        log.info("IN_DIFFERENT_IDS");
         previousSetExpense.removeRate(initialRate);
         this.expenseService.save(previousSetExpense);
         newChosenExpense.addRate(rate);
@@ -157,12 +165,13 @@ public class RateController {
         this.rateService.save(rate);
       }
     } else if (expId != null && previousSetExpense == null) {
+      log.info("IN EXP_ID NOT NULL AND PREVIVOUSE_SET_EXPENSE NULL");
       newChosenExpense.addRate(rate);
       rate.setExpense(newChosenExpense);
       this.expenseService.save(newChosenExpense);
       this.rateService.save(rate);
     } else {
-      log.info("expId is null");
+      log.info("EXP_ID_IS_NULL");
       if (previousSetExpense != null) {
         previousSetExpense.removeRate(initialRate);
         this.expenseService.save(previousSetExpense);

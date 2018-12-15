@@ -124,12 +124,21 @@ function createTableElementFromArr(arr) {
   let tBody = table.appendChild(getDomEl("tBody"));
   arr.forEach(el => {
     let tr = tBody.appendChild(getDomEl("tr"));
+    tr.setAttribute('data-id', el.id);
+    tr.setAttribute('title', 'Click to edit');
+    tr.style.cursor = 'pointer';
     for (let key in el) {
       if (key === 'amount' || key === 'payedOn') {
         let td = tr.appendChild(getDomEl("td"));
         td.textContent = el[key];
       }
     }
+    tr.onclick = function (ev) {
+      return (function () {
+        let id = ev.target.parentElement.getAttribute('data-id');
+        window.location.assign('rates/edit/' + id);
+      })()
+    };
   });
 
   return table;
