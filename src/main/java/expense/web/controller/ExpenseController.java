@@ -6,6 +6,7 @@ import expense.service.CategoryService;
 import expense.service.ExpenseService;
 import expense.service.RateService;
 import expense.service.TagService;
+import expense.utils.Notification;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/expenses")
 public class ExpenseController {
 
+  private final String NAME_EXISTS = " already exists. Please choose another title";
   @Autowired
   private ExpenseService expenseService;
   @Autowired
@@ -108,6 +110,15 @@ public class ExpenseController {
       return "redirect:/expenses/edit/" + expense.getId();
     }
 
+    Expense initialExpense = this.expenseService.findById(expense.getId()).get();
+    if (!expense.getTitle().equalsIgnoreCase(initialExpense.getTitle()) && this.expenseService
+        .nameExists(expense.getTitle())) {
+      redirectAttributes.addFlashAttribute("expense", expense);
+      redirectAttributes.addFlashAttribute("notification",
+          Notification.build("error", expense.getTitle() + this.NAME_EXISTS));
+      return "redirect:/expenses/edit/" + expense.getId();
+    }
+
     log.info("expense to update: {}", expense);
 
     this.expenseService.save(expense);
@@ -164,6 +175,14 @@ public class ExpenseController {
       redirectAttributes.addFlashAttribute("tagIds", tagIds);
       return "redirect:/expenses/add";
     }
+
+    if (this.expenseService.nameExists(expense.getTitle())) {
+      redirectAttributes.addFlashAttribute("expense", expense);
+      redirectAttributes.addFlashAttribute("notification",
+          Notification.build("error", expense.getTitle() + this.NAME_EXISTS));
+      return "redirect:/expenses/add";
+    }
+
     log.info("EXPENSE TO SAVE: {}", expense);
 
     expenseService.save(expense);

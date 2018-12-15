@@ -1,6 +1,7 @@
 initializeSelect("selectTag", TAGS, true, formatEntryDisplay);
 initializeSelect("selectCat", CATEGORIES, false, formatEntryDisplay);
 initializeDatepicker("datepicker");
+NOTIFY.display(notificationInfo);
 
 if (typeof existingExpense !== 'undefined') {
   if (existingExpense.category && existingExpense.category.id) {

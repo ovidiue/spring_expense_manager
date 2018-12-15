@@ -184,4 +184,8 @@ public class ExpenseService {
     query.select(r).where(predicates.toArray(new Predicate[]{}));
     return this.em.createQuery(query).getResultList();
   }
+
+  public boolean nameExists(String title) {
+    return this.expenseRepository.findByTitle(title) != null;
+  }
 }

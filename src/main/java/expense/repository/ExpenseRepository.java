@@ -41,4 +41,6 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
   @Transactional
   void deleteAllByCategory(Category category);
+
+  Expense findByTitle(String title);
 }
