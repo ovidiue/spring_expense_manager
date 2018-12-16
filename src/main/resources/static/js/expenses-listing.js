@@ -105,7 +105,7 @@ function extractArrAsSpan(arr) {
   return "";
 }
 
-function createTableElementFromArr(arr) {
+function createTableElementFromArr(arr, expId) {
   let getDomEl = function (el) {
     return document.createElement(el);
   };
@@ -136,7 +136,7 @@ function createTableElementFromArr(arr) {
     tr.onclick = function (ev) {
       return (function () {
         let id = ev.target.parentElement.getAttribute('data-id');
-        window.location.assign('rates/edit/' + id);
+        window.location.assign('rates/edit/' + id + "/" + expId);
       })()
     };
   });
@@ -174,6 +174,7 @@ function setTableDeleteAction(table) {
       dangerMode: true,
       title: "Delete",
       buttons: {
+        cancel: 'Cancel',
         delete: {
           value: 'delete',
           text: "Delete expense"
@@ -181,8 +182,7 @@ function setTableDeleteAction(table) {
         deleteRates: {
           value: 'andRates',
           text: "Delete also rates"
-        },
-        cancel: 'Cancel'
+        }
       }
     }).then(value => {
       if (value === 'delete') {
@@ -194,11 +194,11 @@ function setTableDeleteAction(table) {
           text: 'Are you sure you want to delete also the rates ?',
           dangerMode: true,
           buttons: {
+            cancel: 'Cancel',
             delete: {
               value: 'delete',
               text: "Yes Delete ALL"
-            },
-            cancel: 'Cancel'
+            }
           }
         }).then(value => {
           if (value === 'delete') {
@@ -225,7 +225,7 @@ function setTableViewRatesAction(table) {
     .then(resp => {
       console.table(resp);
       if (resp.data && resp.data.length) {
-        let domTable = createTableElementFromArr(resp.data);
+        let domTable = createTableElementFromArr(resp.data, data.id);
         swal({
           buttons: {
             close: "Close",

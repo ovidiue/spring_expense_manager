@@ -63,7 +63,7 @@ public class RateController {
     return "rate-add";
   }
 
-  @GetMapping("/edit/{rateId}")
+  @GetMapping({"/edit/{rateId}", "/edit/{rateId}/{expId}"})
   public String getEditRateRoute(@PathVariable Long rateId, Model model) {
     //Rate rate = this.rateService.findById(rateId).get();
     Rate rate = model.containsAttribute("rate") ?
@@ -85,10 +85,12 @@ public class RateController {
 
   @RequestMapping(value = {"/save"}, method = {RequestMethod.POST})
   public String saveRate(@RequestParam(required = false) Long expId,
+      @RequestParam(required = false) boolean comesFromExpenses,
       @Valid Rate rate,
       BindingResult result,
       RedirectAttributes redirectAttributes) {
     log.info("rate: {}", rate);
+    log.info("TEST: {}", comesFromExpenses);
 
     Expense expense = null;
 
@@ -117,11 +119,13 @@ public class RateController {
       put("text", "Successfully saved rate " + rate.getAmount());
     }};
     redirectAttributes.addFlashAttribute("notification", notification);
-    return "redirect:/rates";
+    String redirectValue = comesFromExpenses == true ? "redirect:/expenses" : "redirect:/rates";
+    return redirectValue;
   }
 
   @RequestMapping(value = {"/update"}, method = {RequestMethod.POST})
   public String updateRate(@RequestParam(required = false) Long expId,
+      @RequestParam(required = false) boolean comesFromExpenses,
       @Valid Rate rate,
       BindingResult result,
       RedirectAttributes redirectAttributes) {
@@ -184,7 +188,8 @@ public class RateController {
       put("text", "Successfully updated rate " + rate.getAmount());
     }};
     redirectAttributes.addFlashAttribute("notification", notification);
-    return "redirect:/rates";
+    String redirectValue = comesFromExpenses == true ? "redirect:/expenses" : "redirect:/rates";
+    return redirectValue;
   }
 
   @RequestMapping(value = "/delete/{rateId}",

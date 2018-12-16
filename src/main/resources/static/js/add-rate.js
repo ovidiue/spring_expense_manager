@@ -21,6 +21,44 @@ function initializeDatepicker(id) {
   })
 }
 
+function getDefinedElements(arr) {
+  let result = [];
+  arr.forEach(el => {
+    if (el) {
+      result.push(el)
+    }
+  });
+  return result;
+}
+
+/** checks that expense id contained in the window location path is
+ the same as the one user selected */
+function isSelectedExpenseSameAsOrigin() {
+  let arrPathIds = window.location.pathname.replace(/[a-z]/g, "").split(
+      '/').filter(el => el),
+      currentSelectedExpId = getSelectedExpense(),
+      pathExpenseId = null;
+
+  if (arrPathIds.length) {
+
+    if (arrPathIds.length === 2) {
+      pathExpenseId = arrPathIds[1];
+    } else {
+      pathExpenseId = arrPathIds[0];
+    }
+
+    return (pathExpenseId !== null && currentSelectedExpId !== null
+    && pathExpenseId === currentSelectedExpId.id);
+  }
+
+  return false;
+}
+
+function setFlagForRedirect() {
+  let comesFromExpenses = isSelectedExpenseSameAsOrigin();
+  $('#redirectInput').val(comesFromExpenses);
+}
+
 function isSameExpense() {
   if (typeof previousExpense !== 'undefined' && previousExpense !== null
       && previousExpense.id) {
@@ -36,9 +74,6 @@ function isExceeding() {
       projected = isSameExpense() ? (Number(expense.payed) - Number(rateValue))
           + Number(rateAmount)
           : expense.payed + Number(rateAmount);
-
-  console.log("projected", projected);
-  console.log("isSameExpense()", isSameExpense());
 
   return Number(projected) > expense.amount;
 }
@@ -61,6 +96,7 @@ function setOnSubmitBehaviour() {
         event.preventDefault();
       }
     }
+    setFlagForRedirect();
   });
 }
 

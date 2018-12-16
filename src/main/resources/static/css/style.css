@@ -14,6 +14,10 @@ body {
   width: 100%;
 }
 
+.half-width {
+  width: 50%;
+}
+
 .height100 {
   height: 100px;
 }
@@ -97,6 +101,7 @@ table .fa-trash-alt {
 
 table .fa-info {
   color: cornflowerblue;
+  line-height: 24px;
 }
 
 i {
@@ -219,6 +224,10 @@ table th {
   max-height: 500px;
   -webkit-transition: all .3s linear 0s;
   transition: all .3s linear 0s;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 .filter.not-shown {

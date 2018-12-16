@@ -5,7 +5,13 @@ const SWAL = {
       icon: "warning",
       dangerMode: true,
       title: "Delete",
-      buttons: true
+      buttons: {
+        cancel: "Cancel",
+        delete: {
+          text: 'Delete',
+          value: true
+        }
+      }
     });
   }
 };

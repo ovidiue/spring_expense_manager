@@ -48,6 +48,16 @@ let columnDefs = [
       let value = data ? moment(data).format(DATE_FORMAT) : "";
       return value;
     }
+  }, {
+    targets: 1,
+    render: function (data) {
+      if (data.length > 60) {
+        let short = data.substring(0, 60) + "...";
+        return `<span class="pointer">${short}<i class='fas fa-info float-right'></i></span>`;
+      } else {
+        return data;
+      }
+    }
   }
   ,
   {
@@ -86,6 +96,12 @@ $('#ratesTable tbody').on('click', '.edit-rate', function () {
   const data = table.row($(this).parents('tr')).data();
   console.log("DATA: ", data);
   window.location.assign("/rates/edit/" + data.id);
+});
+
+$('#ratesTable tbody').on('click', '.pointer', function () {
+  const data = table.row($(this).parents('tr')).data();
+  console.log("DATA: ", data);
+  NOTIFY.previewDescription(data.observation);
 });
 
 NOTIFY.display(notificationInfo);
