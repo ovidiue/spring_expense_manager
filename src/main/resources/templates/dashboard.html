@@ -8,79 +8,148 @@
 </head>
 
 <div th:replace="index :: navigation"></div>
-<div class="container">
-  <div class="tabs">
+<div class="container fadeIn animated mb-5">
+  <div class="tabs mt-3">
     <ul class="nav nav-pills nav-fill">
       <li class="nav-item">
-        <a class="nav-link active" href="#">Category</a>
+        <a class="nav-link active" href="#categories" data-toggle="tab">Categories</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Expenses</a>
+        <a class="nav-link" href="#expenses" data-toggle="tab">Expenses</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Tags</a>
+        <a class="nav-link" href="#tags" data-toggle="tab">Tags</a>
       </li>
     </ul>
   </div>
-  <div class="row">
-    <th:block th:each="cat: ${categoryStats}">
-      <div class="col-3">
-        <div class="card">
-          <div class="card-image-top" th:style="'height:40px; background:' +${cat.color}"></div>
-          <div class="card-body">
-            <h5 class="card-title" th:text="${cat.name}">Card title</h5>
-            <div class="card-indicator">
-              <span>No of expenses: </span>
-              <span class="card-text" th:text="${cat.noOfExpenses}"></span>
-            </div>
-            <div class="card-indicator">
-              <span>Total amount: </span>
-              <span class="card-text" th:text="${cat.total}"></span>
-            </div>
-            <div class="card-indicator">
-              <span>Amount payed: </span>
-              <span class="card-text" th:text="${cat.payed}"></span>
-            </div>
-            <div class="card-indicator">
-              <span>Largest expense: </span>
-              <span class="card-text" th:text="${cat.max}"></span>
-            </div>
-            <div class="card-indicator">
-              <span>Lowest expense: </span>
-              <span class="card-text" th:text="${cat.min}"></span>
-            </div>
-            <div class="card-indicator">
-              <span>Recurrent: </span>
-              <span class="card-text" th:text="${cat.totalRecurrent}"></span>
-            </div>
-            <div class="card-indicator">
-              <span>Non Recurrent: </span>
-              <span class="card-text" th:text="${cat.nonRecurrent}"></span>
-            </div>
-            <div class="card-indicator">
-              <span>Payed expenses: </span>
-              <span class="card-text" th:text="${cat.closed}"></span>
+  <div class="tab-content">
+    <!--TAB CATEGORY START-->
+    <div id="categories" class="tab-pane fade in active show">
+      <div class="row">
+        <th:block th:each="cat: ${categoryStats}">
+          <div class="col-3">
+            <div class="card">
+              <div class="card-image-top" th:style="'height:40px; background:' +${cat.color}"></div>
+              <div class="card-body">
+                <h5 class="card-title" th:text="${cat.name}">Card title</h5>
+                <div class="card-indicator">
+                  <span>No of expenses: </span>
+                  <span class="card-text" th:text="${cat.noOfExpenses}"></span>
+                </div>
+                <div class="card-indicator">
+                  <span>Total amount: </span>
+                  <span class="card-text" th:text="${cat.total}"></span>
+                </div>
+                <div class="card-indicator">
+                  <span>Amount payed: </span>
+                  <span class="card-text" th:text="${cat.payed}"></span>
+                </div>
+                <div class="card-indicator">
+                  <span>Largest expense: </span>
+                  <span class="card-text" th:text="${cat.max}"></span>
+                </div>
+                <div class="card-indicator">
+                  <span>Lowest expense: </span>
+                  <span class="card-text" th:text="${cat.min}"></span>
+                </div>
+                <div class="card-indicator">
+                  <span>Recurrent: </span>
+                  <span class="card-text" th:text="${cat.totalRecurrent}"></span>
+                </div>
+                <div class="card-indicator">
+                  <span>Non Recurrent: </span>
+                  <span class="card-text" th:text="${cat.nonRecurrent}"></span>
+                </div>
+                <div class="card-indicator">
+                  <span>Payed expenses: </span>
+                  <span class="card-text" th:text="${cat.closed}"></span>
+                </div>
+              </div>
             </div>
           </div>
+        </th:block>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <div id="pieHolder" class="chart-style"></div>
+        </div>
+        <div class="col-6">
+          <div id="barHolder" class="chart-style"></div>
         </div>
       </div>
-    </th:block>
-  </div>
-  <div class="row">
-    <div class="col-6">
-      <div id="pieHolder" class="chart-style"></div>
     </div>
-    <div class="col-6">
-      <div id="barHolder" class="chart-style"></div>
+    <!--TAB CATEGORY END-->
+    <!--TAB EXPENSES START-->
+    <div id="expenses" class="tab-pane fade in"></div>
+    <!--TAB EXPENSES END-->
+    <!--TAB TAGS START-->
+    <div id="tags" class="tab-pane fade in">
+      <div class="row">
+        <th:block th:each="tag: ${tagStats}">
+          <div class="col-3">
+            <div class="card">
+              <div class="card-image-top" th:style="'height:40px; background:' +${tag.color}"></div>
+              <div class="card-body">
+                <h5 class="card-title" th:text="${tag.name}">Card title</h5>
+                <div class="card-indicator">
+                  <span>No of expenses: </span>
+                  <span class="card-text" th:text="${tag.noOfExpenses}"></span>
+                </div>
+                <div class="card-indicator">
+                  <span>Total amount: </span>
+                  <span class="card-text" th:text="${tag.total}"></span>
+                </div>
+                <div class="card-indicator">
+                  <span>Amount payed: </span>
+                  <span class="card-text" th:text="${tag.payed}"></span>
+                </div>
+                <div class="card-indicator">
+                  <span>Largest expense: </span>
+                  <span class="card-text" th:text="${tag.max}"></span>
+                </div>
+                <div class="card-indicator">
+                  <span>Lowest expense: </span>
+                  <span class="card-text" th:text="${tag.min}"></span>
+                </div>
+                <div class="card-indicator">
+                  <span>Recurrent: </span>
+                  <span class="card-text" th:text="${tag.totalRecurrent}"></span>
+                </div>
+                <div class="card-indicator">
+                  <span>Non Recurrent: </span>
+                  <span class="card-text" th:text="${tag.nonRecurrent}"></span>
+                </div>
+                <div class="card-indicator">
+                  <span>Payed expenses: </span>
+                  <span class="card-text" th:text="${tag.closed}"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </th:block>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <div id="pieTagHolder" class="chart-style"></div>
+        </div>
+        <div class="col-6">
+          <div id="barTagHolder" class="chart-style"></div>
+        </div>
+      </div>
     </div>
+    <!--TAB TAGS END-->
   </div>
+
+
 </div>
 
 <script th:inline="javascript">
   const categoryCount = [[${categoryCount}]];
   const categoryStats = [[${categoryStats}]];
+  const tagStats = [[${tagStats}]];
   console.log('categoryCount', categoryCount);
   console.log('categoryStats', categoryStats);
+  console.log('tagStats', tagStats);
 </script>
 <div th:replace="fragments/scripts::scripts"></div>
 <script th:src="@{vendors/am-charts_4.0.13/core.js}" type="text/javascript"></script>
