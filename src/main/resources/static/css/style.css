@@ -271,3 +271,10 @@ table th {
 .card-indicator span:first-child {
   font-style: italic;
 }
+
+.sticky-menu {
+  position: sticky;
+  top: 60px;
+  left: 0;
+  height: 100%;
+}
