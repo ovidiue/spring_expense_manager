@@ -249,3 +249,25 @@ table th {
   padding: 1px 7px;
   border-radius: 10px;
 }
+
+.card {
+  margin: 10px;
+  min-width: 200px;
+}
+
+.chart-style {
+  height: 400px;
+}
+
+.card-indicator {
+  width: 100%;
+  clear: both;
+}
+
+.card-indicator span:last-child {
+  float: right;
+}
+
+.card-indicator span:first-child {
+  font-style: italic;
+}
