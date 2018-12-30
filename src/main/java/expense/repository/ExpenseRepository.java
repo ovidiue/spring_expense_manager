@@ -4,6 +4,7 @@ import expense.model.Category;
 import expense.model.Expense;
 import expense.model.Rate;
 import expense.model.Tag;
+import expense.model.dashboard.ExpenseSimplified;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,6 +26,8 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
   @Query("select e from Expense e where e.category=:category")
   List<Expense> findAllWithCategory(@Param("category") Category category);
 
+  int countAllByCategory(Category category);
+
   @Query("select e from Expense e")
   List<ExpenseIdsTitles> getAllNamesWithIds();
 
@@ -43,4 +46,7 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
   void deleteAllByCategory(Category category);
 
   Expense findByTitle(String title);
+
+  @Query("select e.id, e.title, e.recurrent, e.createdOn, e.amount, e.payed, e.dueDate from Expense e")
+  List<ExpenseSimplified> findAllSimplified();
 }

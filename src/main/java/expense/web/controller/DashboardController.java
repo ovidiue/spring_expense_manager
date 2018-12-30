@@ -1,7 +1,11 @@
 package expense.web.controller;
 
-import expense.repository.CategoryStats;
+import expense.model.dashboard.CategoryStats;
+import expense.model.dashboard.ExpenseSimplified;
+import expense.model.dashboard.ExpenseStats;
 import expense.service.CategoryService;
+import expense.service.ExpenseService;
+import expense.service.TagService;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +24,10 @@ public class DashboardController {
 
   @Autowired
   private CategoryService categoryService;
-
+  @Autowired
+  private TagService tagService;
+  @Autowired
+  private ExpenseService expenseService;
 
   @RequestMapping("")
   public String getDasboardRoute(Model model) {
@@ -28,9 +35,13 @@ public class DashboardController {
     model.addAttribute("categoryCount", categoryCount);
     List<CategoryStats> categoryStats = this.categoryService.getCategoryInfo();
     model.addAttribute("categoryStats", categoryStats);
-    log.info("categoryStats {}", categoryStats);
+    List<CategoryStats> tagStats = this.tagService.getTagInfo();
+    model.addAttribute("tagStats", tagStats);
+    List<ExpenseSimplified> simpleExp = this.expenseService.findAllSimple();
+    model.addAttribute("expenses", simpleExp);
+    ExpenseStats exInfo = this.expenseService.getStatsInfo();
+    model.addAttribute("expenseInfo", exInfo);
     return "dashboard";
   }
-
 
 }

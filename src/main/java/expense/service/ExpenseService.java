@@ -4,6 +4,8 @@ import expense.model.Category;
 import expense.model.Expense;
 import expense.model.Rate;
 import expense.model.Tag;
+import expense.model.dashboard.ExpenseSimplified;
+import expense.model.dashboard.ExpenseStats;
 import expense.repository.ExpenseBasic;
 import expense.repository.ExpenseIdsTitles;
 import expense.repository.ExpenseRepository;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -188,4 +191,45 @@ public class ExpenseService {
   public boolean nameExists(String title) {
     return this.expenseRepository.findByTitle(title) != null;
   }
+
+  public int countWithCategory(Category category) {
+    return this.expenseRepository.countAllByCategory(category);
+  }
+
+  public List<ExpenseSimplified> findAllSimple() {
+    List<ExpenseSimplified> result = new ArrayList<>();
+    return this.expenseRepository.findAll().stream()
+        .map(ex -> new ExpenseSimplified(ex.getTitle(), ex.isRecurrent(), ex.getCreatedOn(),
+            ex.getDueDate(), ex.getAmount(), ex.getId(), ex.getPayed(), ex.getCreatedOn().getMonth()))
+        .collect(Collectors.toList());
+  }
+
+  public ExpenseStats getStatsInfo() {
+    List<ExpenseSimplified> expenses = this.findAllSimple();
+    double min = expenses.stream().mapToDouble(ex -> ex.getAmount()).min().orElse(0);
+    double max = expenses.stream().mapToDouble(ex -> ex.getAmount()).max().orElse(0);
+    double averageReccurent = expenses.stream()
+        .filter(ex -> ex.isRecurrent() == true)
+        .mapToDouble(ex -> ex.getAmount()).average()
+        .orElse(0);
+    double averageNonReccurent = expenses.stream()
+        .filter(ex -> ex.isRecurrent() == false)
+        .mapToDouble(ex -> ex.getAmount()).average()
+        .orElse(0);
+    long noOfExpenses = expenses.stream().count();
+    long partialPayed = expenses.stream()
+        .filter(ex -> {
+          return ex.getPayed() != 0.0 && Double.compare(ex.getAmount(), ex.getPayed()) != 0;
+        }).count();
+    long payed = expenses.stream()
+        .filter(ex -> {
+          return Double.compare(ex.getAmount(), ex.getPayed()) == 0;
+        }).count();
+
+    return new ExpenseStats(noOfExpenses, max, min, averageNonReccurent, averageReccurent,
+        partialPayed, payed);
+
+  }
+
+
 }
