@@ -3,7 +3,6 @@ initializePieCategory();
 initializeBarchartCategory();
 initializePieTags();
 initializeBarchartTags();
-initializeClusteredBarChartExpenses();
 initializeClusteredBarChartExpensesByDate();
 
 // *********************************************************
@@ -167,96 +166,127 @@ function initializeClusteredBarChartExpensesByDate() {
 }
 
 function initializeBarchartTags() {
-  am4core.useTheme(am4themes_animated);
 
+  am4core.useTheme(am4themes_animated);
+// Themes end
+
+// Create chart instance
   var chart = am4core.create("barTagHolder", am4charts.XYChart);
+  chart.scrollbarX = new am4core.Scrollbar();
+
+// Add data
   chart.data = tagStats;
 
-  chart.legend = new am4charts.Legend();
-
-  chart.padding(40, 40, 40, 40);
-
+// Create axes
   var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-  categoryAxis.renderer.grid.template.location = 0;
   categoryAxis.dataFields.category = "name";
-  categoryAxis.renderer.minGridDistance = 60;
+  categoryAxis.renderer.grid.template.location = 0;
+  categoryAxis.renderer.minGridDistance = 30;
+  categoryAxis.renderer.labels.template.horizontalCenter = "right";
+  categoryAxis.renderer.labels.template.verticalCenter = "middle";
+  categoryAxis.renderer.labels.template.rotation = 0;
+  categoryAxis.tooltip.disabled = true;
+  categoryAxis.renderer.minHeight = 110;
 
   var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-  valueAxis.min = 0;
-  valueAxis.max = 24000;
-  valueAxis.strictMinMax = true;
-  valueAxis.renderer.minGridDistance = 30;
+  valueAxis.renderer.minWidth = 50;
 
-  valueAxis.renderer.labels.template.hiddenState.transitionDuration = 2000;
-  valueAxis.renderer.labels.template.defaultState.transitionDuration = 2000;
-
-// axis break
-  var axisBreak = valueAxis.axisBreaks.create();
-  axisBreak.startValue = 2100;
-  axisBreak.endValue = 22900;
-  axisBreak.breakSize = 0.01;
-
-// make break expand on hover
-  var hoverState = axisBreak.states.create("hover");
-  hoverState.properties.breakSize = 1;
-  hoverState.properties.opacity = 0.1;
-  hoverState.transitionDuration = 1500;
-
-  axisBreak.defaultState.transitionDuration = 1000;
-
+// Create series
   var series = chart.series.push(new am4charts.ColumnSeries());
-  series.dataFields.categoryX = "name";
+  series.sequencedInterpolation = true;
   series.dataFields.valueY = "total";
-  series.columns.template.tooltipText = "{valueY.payed}";
-  series.columns.template.tooltipY = 0;
-  series.columns.template.strokeOpacity = 0;
+  series.dataFields.categoryX = "name";
+  series.tooltipText = "[{categoryX}: bold]{valueY}[/]";
+  series.columns.template.strokeWidth = 0;
+
+  series.tooltip.pointerOrientation = "vertical";
+
+  series.columns.template.column.cornerRadiusTopLeft = 10;
+  series.columns.template.column.cornerRadiusTopRight = 10;
+  series.columns.template.column.fillOpacity = 0.8;
+
+// on hover, make corner radiuses bigger
+  let hoverState = series.columns.template.column.states.create("hover");
+  hoverState.properties.cornerRadiusTopLeft = 0;
+  hoverState.properties.cornerRadiusTopRight = 0;
+  hoverState.properties.fillOpacity = 1;
+
+  series.columns.template.adapter.add("fill", (fill, target) => {
+    return chart.colors.getIndex(target.dataItem.index);
+  })
+
+// Cursor
+  chart.cursor = new am4charts.XYCursor();
 
 }
 
 function initializeBarchartCategory() {
-  am4core.useTheme(am4themes_animated);
 
+  am4core.useTheme(am4themes_animated);
+// Themes end
+
+// Create chart instance
   var chart = am4core.create("barHolder", am4charts.XYChart);
+  chart.scrollbarX = new am4core.Scrollbar();
+
+// Add data
   chart.data = categoryStats;
 
-  chart.legend = new am4charts.Legend();
-
-  chart.padding(40, 40, 40, 40);
-
+// Create axes
   var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-  categoryAxis.renderer.grid.template.location = 0;
   categoryAxis.dataFields.category = "name";
-  categoryAxis.renderer.minGridDistance = 60;
+  categoryAxis.renderer.grid.template.location = 0;
+  categoryAxis.renderer.minGridDistance = 30;
+  categoryAxis.renderer.labels.template.horizontalCenter = "right";
+  categoryAxis.renderer.labels.template.verticalCenter = "middle";
+  categoryAxis.renderer.labels.template.rotation = 0;
+  categoryAxis.tooltip.disabled = true;
+  categoryAxis.renderer.minHeight = 110;
 
   var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-  valueAxis.min = 0;
-  valueAxis.max = 24000;
-  valueAxis.strictMinMax = true;
-  valueAxis.renderer.minGridDistance = 30;
+  valueAxis.renderer.minWidth = 50;
 
-  valueAxis.renderer.labels.template.hiddenState.transitionDuration = 2000;
-  valueAxis.renderer.labels.template.defaultState.transitionDuration = 2000;
-
-// axis break
-  var axisBreak = valueAxis.axisBreaks.create();
-  axisBreak.startValue = 2100;
-  axisBreak.endValue = 22900;
-  axisBreak.breakSize = 0.01;
-
-// make break expand on hover
-  var hoverState = axisBreak.states.create("hover");
-  hoverState.properties.breakSize = 1;
-  hoverState.properties.opacity = 0.1;
-  hoverState.transitionDuration = 1500;
-
-  axisBreak.defaultState.transitionDuration = 1000;
-
+// Create series
   var series = chart.series.push(new am4charts.ColumnSeries());
-  series.dataFields.categoryX = "name";
+  series.sequencedInterpolation = true;
   series.dataFields.valueY = "total";
-  series.columns.template.tooltipText = "{valueY.payed}";
-  series.columns.template.tooltipY = 0;
-  series.columns.template.strokeOpacity = 0;
+  series.dataFields.categoryX = "name";
+  series.tooltipText = "[{categoryX}: bold]{valueY}[/]";
+  series.columns.template.strokeWidth = 0;
+
+  series.tooltip.pointerOrientation = "vertical";
+
+  series.columns.template.column.cornerRadiusTopLeft = 10;
+  series.columns.template.column.cornerRadiusTopRight = 10;
+  series.columns.template.column.fillOpacity = 0.8;
+
+// on hover, make corner radiuses bigger
+  let hoverState = series.columns.template.column.states.create("hover");
+  hoverState.properties.cornerRadiusTopLeft = 0;
+  hoverState.properties.cornerRadiusTopRight = 0;
+  hoverState.properties.fillOpacity = 1;
+
+  series.columns.template.adapter.add("fill", (fill, target) => {
+    return chart.colors.getIndex(target.dataItem.index);
+  })
+
+// Cursor
+  chart.cursor = new am4charts.XYCursor();
+
+}
+
+function extractMaxValue(arr, field) {
+  if (arr.length) {
+    let max = arr[0][field];
+    arr.forEach(e => {
+      if (max < e[field]) {
+        max = e[field];
+      }
+    });
+    return max;
+  }
+
+  return 0;
 
 }
 
