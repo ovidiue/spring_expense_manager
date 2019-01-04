@@ -11,7 +11,7 @@
 
 <!--SIDE MENU START-->
 <div class="row fadeIn animated mx-3">
-  <div class="col-2 sticky-menu">
+  <div class="col-sm-2 col-xs-12 sticky-menu pb-4">
     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
          aria-orientation="vertical">
       <a class="nav-link active" href="#expenses" data-toggle="tab">Expenses</a>
@@ -19,17 +19,15 @@
       <a class="nav-link" href="#tags" data-toggle="tab">Tags</a>
     </div>
   </div>
-  <div class="col-10">
+  <div class="col-sm-10">
     <div class="tab-content">
       <!--TAB CATEGORY START-->
       <div id="categories" class="tab-pane fade">
         <div class="row">
           <th:block th:each="cat: ${categoryStats}">
-            <div class="col-3">
-              <div class="card">
-                <div class="card-image-top"
-                     th:style="'height:40px; background:' +${cat.color}"></div>
-                <div class="card-body">
+            <div class="col-sm-3 card">
+              <div>
+                <div class="card-body" th:style="'border-top: 40px solid ' +${cat.color}">
                   <h5 class="card-title" th:text="${cat.name}">Card title</h5>
                   <div class="card-indicator">
                     <span>No of expenses: </span>
@@ -83,8 +81,8 @@
       <!--TAB EXPENSES START-->
       <div id="expenses" class="tab-pane fade active show">
         <div class="row">
-          <div class="col-3">
-            <div class="card">
+          <div class="col-sm-3 card">
+            <div>
               <div class="card-body">
                 <div class="card-indicator">
                   <span>Number of expenses: </span>
@@ -93,8 +91,8 @@
               </div>
             </div>
           </div>
-          <div class="col-3">
-            <div class="card">
+          <div class="col-sm-3 card">
+            <div>
               <div class="card-body">
                 <div class="card-indicator">
                   <span>Biggest amount: </span>
@@ -103,8 +101,8 @@
               </div>
             </div>
           </div>
-          <div class="col-3">
-            <div class="card">
+          <div class="col-sm-3 card">
+            <div>
               <div class="card-body">
                 <div class="card-indicator">
                   <span>Smallest amount: </span>
@@ -113,8 +111,8 @@
               </div>
             </div>
           </div>
-          <div class="col-3">
-            <div class="card">
+          <div class="col-sm-3 card">
+            <div>
               <div class="card-body">
                 <div class="card-indicator">
                   <span>Full payed: </span>
@@ -123,8 +121,8 @@
               </div>
             </div>
           </div>
-          <div class="col-3">
-            <div class="card">
+          <div class="col-sm-3 card">
+            <div>
               <div class="card-body">
                 <div class="card-indicator">
                   <span>Partial payed: </span>
@@ -133,8 +131,8 @@
               </div>
             </div>
           </div>
-          <div class="col-3">
-            <div class="card">
+          <div class="col-sm-3 card">
+            <div>
               <div class="card-body">
                 <div class="card-indicator">
                   <span>Average value recurrent: </span>
@@ -143,8 +141,8 @@
               </div>
             </div>
           </div>
-          <div class="col-3">
-            <div class="card">
+          <div class="col-sm-3 card">
+            <div>
               <div class="card-body">
                 <div class="card-indicator">
                   <span>Average value non-recurrent: </span>
@@ -165,11 +163,9 @@
       <div id="tags" class="tab-pane fade">
         <div class="row">
           <th:block th:each="tag: ${tagStats}">
-            <div class="col-3">
-              <div class="card">
-                <div class="card-image-top"
-                     th:style="'height:40px; background:' +${tag.color}"></div>
-                <div class="card-body">
+            <div class="col-sm-3 card">
+              <div>
+                <div class="card-body" th:style="'border-top: 40px solid ' +${tag.color}">
                   <h5 class="card-title" th:text="${tag.name}">Card title</h5>
                   <div class="card-indicator">
                     <span>No of expenses: </span>

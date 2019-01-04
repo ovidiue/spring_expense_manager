@@ -216,6 +216,10 @@ table th {
   transition-duration: .3s;
 }
 
+.navbar-collapse .navbar-nav .nav-link {
+  padding-left: 10px;
+}
+
 .filter {
   background: lightgray;
   margin: 25px 0;
@@ -277,4 +281,7 @@ table th {
   top: 60px;
   left: 0;
   height: 100%;
+  width: 100%;
+  background: #fff;
+  z-index: 10;
 }
